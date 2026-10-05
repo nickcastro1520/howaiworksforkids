@@ -2,16 +2,16 @@ import type { ThemeId } from "@/lib/types";
 
 const ART: Record<ThemeId, { src: string; alt: string }> = {
   space: {
-    src: "/art/starship.svg",
-    alt: "A steel ship descending on bright landing flames",
+    src: "/art/starship.jpg",
+    alt: "A space rocket launching",
   },
   dinosaurs: {
-    src: "/art/trex.svg",
-    alt: "A roaring cartoon Tyrannosaurus running",
+    src: "/art/trex.jpg",
+    alt: "A roaring T-Rex",
   },
   ebikes: {
-    src: "/art/wheelie.svg",
-    alt: "A helmeted rider popping a wheelie on a dirt electric bike",
+    src: "/art/wheelie.jpg",
+    alt: "An electric dirt bike wheelie",
   },
 };
 
@@ -28,9 +28,15 @@ export function ThemeArt({
 }: ArtProps & { theme: ThemeId }) {
   const art = ART[theme];
   return (
-    // SVGs in /public stay sharp at any card size without a raster step.
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={art.src} alt={title ?? ""} className={className} draggable={false} />
+    <img
+      src={art.src}
+      alt={title ?? ""}
+      width={1376}
+      height={768}
+      className={className}
+      draggable={false}
+    />
   );
 }
 
@@ -48,7 +54,9 @@ export function ThemeArtSwap({ className }: { className?: string }) {
             src={art.src}
             alt={art.alt}
             draggable={false}
-            className={`${swap} h-full w-full object-contain`}
+            width={1376}
+            height={768}
+            className={`${swap} h-full w-full object-cover`}
           />
         );
       })}

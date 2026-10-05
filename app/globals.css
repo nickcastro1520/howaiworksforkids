@@ -325,8 +325,9 @@ html[data-needs-welcome] body {
 
 .world-pick img {
   width: 100%;
-  height: 12.5rem;
-  object-fit: contain;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
   border-radius: 1.2rem;
 }
 
@@ -515,7 +516,11 @@ dialog.theme-dialog::backdrop {
 }
 
 .hero-art {
-  height: 18rem;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  overflow: hidden;
+  border-radius: 1.6rem;
 }
 
 .hero-title {
@@ -613,8 +618,10 @@ dialog.theme-dialog::backdrop {
 
 .world-band-art {
   width: 100%;
-  height: 16rem;
-  object-fit: contain;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+  border-radius: 1.4rem;
 }
 
 .world-band h3 {
@@ -934,10 +941,6 @@ dialog.theme-dialog::backdrop {
     align-items: end;
   }
 
-  .world-pick img {
-    height: 14rem;
-  }
-
   .play-stage {
     padding: 1.35rem 1.4rem 1.5rem;
   }
@@ -952,10 +955,6 @@ dialog.theme-dialog::backdrop {
 
   .world-band-flip .world-band-copy {
     order: -1;
-  }
-
-  .world-band-art {
-    height: 22rem;
   }
 
   .family-close {
@@ -975,10 +974,6 @@ dialog.theme-dialog::backdrop {
     min-height: 68vh;
     gap: 2rem;
     padding-top: 1rem;
-  }
-
-  .hero-art {
-    height: 32rem;
   }
 
   .header-bar {
