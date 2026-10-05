@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ThemeArtSwap } from "@/components/Art";
+import { ThemeArt, ThemeArtSwap } from "@/components/Art";
 import { JsonLd } from "@/components/JsonLd";
 import { LessonTrail } from "@/components/LessonTrail";
 import { LESSONS } from "@/lib/lessons";
@@ -48,7 +48,7 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <ThemeArtSwap className="mx-auto h-48 w-48 md:h-64 md:w-64" />
+          <ThemeArtSwap className="mx-auto h-80 w-full max-w-md md:h-[28rem]" />
         </section>
 
         <section className="mt-12 grid gap-3 sm:grid-cols-3" aria-label="Promises">
@@ -84,7 +84,8 @@ export default function HomePage() {
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {THEMES.map((theme) => (
               <article key={theme.id} className="sticker p-4">
-                <h3 className="font-display text-2xl font-bold">{theme.name}</h3>
+                <ThemeArt theme={theme.id} className="h-48 w-full object-contain" />
+                <h3 className="mt-3 font-display text-2xl font-bold">{theme.name}</h3>
                 <p className="mt-2 text-sm text-muted">{theme.blurb}</p>
               </article>
             ))}

@@ -207,6 +207,13 @@ html[data-theme="ebikes"] .swap-ebikes {
   display: revert;
 }
 
+html:not([data-theme]) img.swap-space,
+html[data-theme="space"] img.swap-space,
+html[data-theme="dinosaurs"] img.swap-dinos,
+html[data-theme="ebikes"] img.swap-ebikes {
+  display: block;
+}
+
 .age-kids,
 .age-tweens {
   display: none;

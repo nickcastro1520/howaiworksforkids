@@ -48,7 +48,7 @@ export function Welcome() {
               aria-pressed={theme === item.id}
               onClick={() => preview(item.id)}
             >
-              <ThemeArt theme={item.id} className="h-20 w-20 text-accent" />
+              <ThemeArt theme={item.id} className="h-48 w-full object-contain sm:h-44" />
               <span className="font-display text-2xl font-bold">{item.name}</span>
               <span className="text-sm text-muted">{item.blurb}</span>
             </button>

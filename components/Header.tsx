@@ -84,7 +84,7 @@ export function Header() {
               className="sticker flex flex-col items-start gap-2 p-3 text-left"
               onClick={() => chooseTheme(theme.id)}
             >
-              <ThemeArt theme={theme.id} className="h-16 w-16 text-accent" />
+              <ThemeArt theme={theme.id} className="h-40 w-full object-contain" />
               <span className="font-display text-xl font-bold">{theme.name}</span>
               <span className="text-sm text-muted">{theme.blurb}</span>
             </button>
