@@ -1,0 +1,30 @@
+# How AI Works for Kids
+
+> Free, ad-free games that show kids ages 6–14 how AI works. No accounts, no ads, and no live chatbot. Built by Nick Castro in Chicago.
+
+This site teaches with local mini-games. It does not open a chat with an AI model. Kid-facing titles avoid jargon. Tweens can see a small grown-up name on each lesson (patterns, training, context, correlation, attention, RAG, AI safety).
+
+## Pages
+
+- [Home](https://howaiworksforkids.com/): What the site is and the lesson path
+- [Lessons](https://howaiworksforkids.com/lessons): All seven games
+- [For parents and teachers](https://howaiworksforkids.com/parents): How to use the lessons. Lessons stay free; no checkout or teacher login
+- [About Nick Castro](https://howaiworksforkids.com/about): Portfolio context and links
+- [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Placeholder only. No invented quotes
+- [Privacy](https://howaiworksforkids.com/privacy): COPPA-friendly notice
+
+## Lessons
+
+- [AI isn't magic](https://howaiworksforkids.com/lessons/not-magic): It finds patterns
+- [Learn by trying](https://howaiworksforkids.com/lessons/learn-by-trying): Practice and feedback
+- [Words need context](https://howaiworksforkids.com/lessons/words-need-context): The same word can change meaning
+- [Tricky look-alikes](https://howaiworksforkids.com/lessons/tricky-look-alikes): False patterns and correlation traps
+- [What it pays attention to](https://howaiworksforkids.com/lessons/what-it-notices): The question picks the clue
+- [Check a source](https://howaiworksforkids.com/lessons/check-a-source): Look it up before answering
+- [Be safe and honest](https://howaiworksforkids.com/lessons/be-safe-and-honest): AI can be wrong, privacy, ask a grown-up
+
+## Optional
+
+- Worlds: Rockets & space, Dinosaurs, E-bikes. Stored in the browser only.
+- Operator: Nick Castro, Chicago. https://nickcastrobuilds.com and https://www.linkedin.com/in/nicolas-castro-4081545b
+- Contact for parents: nickcastro1520@gmail.com
