@@ -49,11 +49,11 @@ export function LessonGame({ lesson }: { lesson: Lesson }) {
   return (
     <div className="mt-6">
       <p className="text-sm font-extrabold text-muted">{localOnlyLine}</p>
-      <div className="grownup-chip mt-4 rounded-2xl border-2 border-dashed border-ink p-3">
+      <div className="grownup-chip mt-4 max-w-xl border-t border-[var(--line)] pt-3">
         <span className="chip">{lesson.grownup.chip}</span>
         <span className="mt-2 block text-sm">{lesson.grownup.note}</span>
       </div>
-      <div className="sticker mt-4 p-4 sm:p-6">
+      <div className="play-stage">
         {ready ? (
           <Game key={prefs.theme} theme={prefs.theme} age={prefs.age} onComplete={finish} />
         ) : (

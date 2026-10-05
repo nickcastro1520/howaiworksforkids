@@ -34,18 +34,25 @@ export default async function LessonPage({ params }: Props) {
   if (!lesson) notFound();
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
+    <div className="lesson-shell">
       <JsonLd data={lessonJsonLd(lesson)} />
-      <p className="text-sm font-extrabold text-muted">
-        <Link className="underline decoration-2 underline-offset-4" href="/lessons">
-          Lessons
-        </Link>{" "}
-        · {lesson.number} of {LESSONS.length} · about {lesson.minutes} min
-      </p>
-      <h1 className="mt-2 font-display text-5xl leading-none font-bold">{lesson.title}</h1>
-      <p className="mt-3 text-xl font-extrabold">{lesson.subtitle}</p>
-      <p className="mt-3 text-lg">{lesson.summary}</p>
-      <p className="mt-2 text-muted">{lesson.does}</p>
+      <header className="poster">
+        <p className="poster-index" aria-hidden="true">
+          {String(lesson.number).padStart(2, "0")}
+        </p>
+        <div>
+          <p className="text-sm font-extrabold text-muted">
+            <Link className="underline decoration-2 underline-offset-4" href="/lessons">
+              Lessons
+            </Link>{" "}
+            · {lesson.number} of {LESSONS.length} · about {lesson.minutes} min
+          </p>
+          <h1 className="mt-2 font-bold">{lesson.title}</h1>
+          <p className="mt-3 text-xl font-extrabold">{lesson.subtitle}</p>
+          <p className="mt-3 text-lg">{lesson.summary}</p>
+          <p className="mt-2 text-muted">{lesson.does}</p>
+        </div>
+      </header>
       <LessonGame lesson={lesson} />
     </div>
   );

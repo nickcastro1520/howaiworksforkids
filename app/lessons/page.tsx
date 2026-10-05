@@ -16,16 +16,18 @@ export const metadata: Metadata = {
 
 export default function LessonsPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <p className="text-sm font-extrabold tracking-wide text-accent uppercase">All lessons</p>
-      <h1 className="mt-2 font-display text-5xl font-bold">Play the path</h1>
-      <p className="mt-3 text-lg text-muted">
-        Start anywhere. The first game is the easiest door in. Tweens can turn on reading level
-        “Tweens 11–14” to see a small grown-up name on each lesson. Kids stay on plain language.
-      </p>
-      <div className="mt-6">
-        <LessonTrail />
+    <div className="lessons-index">
+      <div className="lessons-intro">
+        <p className="kicker">The index</p>
+        <h1 className="mt-2 font-bold">
+          Play in order, <em>or hop.</em>
+        </h1>
+        <p className="mt-4 text-lg text-muted">
+          Every lesson is unlocked. Tweens can switch the reading level to see a small grown-up name.
+          Kids stay on plain language.
+        </p>
       </div>
+      <LessonTrail />
     </div>
   );
 }

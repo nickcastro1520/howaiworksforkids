@@ -27,34 +27,30 @@ export function Welcome() {
 
   return (
     <div className="welcome-gate">
-      <div className="mx-auto flex min-h-full max-w-3xl flex-col gap-6 px-4 py-8">
-        <p className="text-sm font-extrabold tracking-wide text-muted uppercase">
-          How AI Works for Kids
+      <div className="welcome-inner">
+        <p className="kicker">How AI Works for Kids</p>
+        <h1 className="welcome-title mt-3 font-bold">
+          Pick a world <em>to play in.</em>
+        </h1>
+        <p className="mt-4 max-w-xl text-lg text-muted">
+          Free games about how AI works. No account. No ads. You can change this later.
         </p>
-        <div>
-          <h1 className="font-display text-5xl leading-none font-bold sm:text-6xl">
-            Pick a world
-          </h1>
-          <p className="mt-3 max-w-xl text-lg text-muted">
-            Free games about how AI works. No account. No ads. You can change this later.
-          </p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-3" role="group" aria-label="World">
+        <div className="world-grid mt-6" role="group" aria-label="World">
           {THEMES.map((item) => (
             <button
               key={item.id}
               type="button"
-              className="sticker flex flex-col items-start gap-2 p-4 text-left"
+              className="world-pick"
               aria-pressed={theme === item.id}
               onClick={() => preview(item.id)}
             >
-              <ThemeArt theme={item.id} className="h-48 w-full object-contain sm:h-44" />
-              <span className="font-display text-2xl font-bold">{item.name}</span>
-              <span className="text-sm text-muted">{item.blurb}</span>
+              <ThemeArt theme={item.id} />
+              <span className="px-2 font-display text-2xl font-bold">{item.name}</span>
+              <span className="px-2 text-sm text-muted">{item.blurb}</span>
             </button>
           ))}
         </div>
-        <div>
+        <div className="mt-8">
           <h2 className="font-display text-3xl font-bold">Who’s learning?</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2" role="group" aria-label="Reading level">
             <button
@@ -81,11 +77,18 @@ export function Welcome() {
             </button>
           </div>
         </div>
-        <button type="button" className="btn btn-primary text-lg" disabled={!theme || !age} onClick={start}>
+        <button
+          type="button"
+          className="btn btn-primary mt-6 text-lg"
+          disabled={!theme || !age}
+          onClick={start}
+        >
           Start learning
         </button>
         {!theme || !age ? (
-          <p className="text-sm text-muted">Pick a world and who’s learning. Then this button turns on.</p>
+          <p className="mt-3 text-sm text-muted">
+            Pick a world and who’s learning. Then this button turns on.
+          </p>
         ) : null}
       </div>
     </div>

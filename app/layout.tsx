@@ -16,6 +16,7 @@ const body = Nunito({
 const display = Fraunces({
   subsets: ["latin"],
   weight: ["600", "700"],
+  style: ["normal", "italic"],
   variable: "--font-display-family",
   display: "swap",
 });

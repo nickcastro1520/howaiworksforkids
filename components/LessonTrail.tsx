@@ -4,23 +4,38 @@ import Link from "next/link";
 import { usePrefs } from "@/components/Preferences";
 import { LESSONS } from "@/lib/lessons";
 
-export function LessonTrail() {
+export function LessonTrail({ variant = "index" }: { variant?: "index" | "stepper" }) {
   const { prefs, ready } = usePrefs();
+
+  if (variant === "stepper") {
+    return (
+      <ol className="stepper">
+        {LESSONS.map((lesson) => {
+          const done = ready && prefs.completed.includes(lesson.slug);
+          return (
+            <li key={lesson.slug}>
+              <Link href={`/lessons/${lesson.slug}`} className="step-link">
+                <span className="step-num">{String(lesson.number).padStart(2, "0")}</span>
+                <span className="step-title">{lesson.title}</span>
+                <span className="step-meta">{done ? "Finished" : `${lesson.minutes} min`}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ol>
+    );
+  }
+
   return (
-    <ol className="grid gap-3">
+    <ol className="trail">
       {LESSONS.map((lesson) => {
         const done = ready && prefs.completed.includes(lesson.slug);
         return (
           <li key={lesson.slug}>
-            <Link
-              href={`/lessons/${lesson.slug}`}
-              className="sticker flex items-start gap-3 p-4 no-underline"
-            >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border-2 border-ink bg-sun text-xl font-extrabold">
-                {lesson.number}
-              </span>
+            <Link href={`/lessons/${lesson.slug}`} className="trail-link">
+              <span className="trail-num">{String(lesson.number).padStart(2, "0")}</span>
               <span>
-                <span className="block font-display text-2xl font-bold text-ink">{lesson.title}</span>
+                <span className="trail-title">{lesson.title}</span>
                 <span className="mt-1 block text-sm text-muted">
                   {lesson.subtitle} · about {lesson.minutes} min
                   {done ? " · finished" : ""}
@@ -28,6 +43,9 @@ export function LessonTrail() {
                 <span className="grownup-chip mt-2">
                   <span className="chip">{lesson.grownup.chip}</span>
                 </span>
+              </span>
+              <span className="trail-go" aria-hidden="true">
+                →
               </span>
             </Link>
           </li>

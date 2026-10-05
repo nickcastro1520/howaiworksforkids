@@ -63,8 +63,8 @@ export function ShareCard({ lesson, age }: { lesson: Lesson; age: AgeId }) {
   }
 
   return (
-    <section id="finish-card" className="sticker mt-8 scroll-mt-24 p-5" aria-labelledby="finish-title">
-      <p className="text-sm font-extrabold tracking-wide text-accent uppercase">You finished</p>
+    <section id="finish-card" className="finish-banner" aria-labelledby="finish-title">
+      <p className="kicker">You finished</p>
       <h2 id="finish-title" className="mt-1 font-display text-4xl font-bold">
         {lesson.title}
       </h2>

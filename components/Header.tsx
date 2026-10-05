@@ -17,7 +17,7 @@ const NAV = [
 export function Header() {
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const { setTheme, setAge } = usePrefs();
+  const { prefs, setTheme, setAge } = usePrefs();
 
   function openThemes() {
     dialogRef.current?.showModal();
@@ -28,65 +28,75 @@ export function Header() {
     dialogRef.current?.close();
   }
 
+  function onDialogClick(event: React.MouseEvent<HTMLDialogElement>) {
+    if (event.target === dialogRef.current) dialogRef.current?.close();
+  }
+
   return (
-    <header className="site-header sticky top-0 z-40 border-b-2 border-ink">
-      <div className="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-3">
-        <div className="flex items-center justify-between gap-3">
-          <Link href="/" className="font-display text-2xl leading-none font-bold text-ink">
-            How AI Works
-          </Link>
-          <button type="button" className="btn btn-ghost" onClick={openThemes}>
-            <span className="swap-space">Space</span>
-            <span className="swap-dinos">Dinos</span>
-            <span className="swap-ebikes">E-bikes</span>
-            <span aria-hidden="true">▾</span>
-            <span className="sr-only">Change world</span>
-          </button>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <div
-            role="group"
-            aria-label="Reading level"
-            className="flex rounded-full border-2 border-ink bg-card p-1"
-          >
-            <AgeButton age="kids" label="Kids 6–10" onPick={setAge} />
-            <AgeButton age="tweens" label="Tweens 11–14" onPick={setAge} />
-          </div>
-          <nav aria-label="Site" className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-extrabold">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={pathname === item.href ? "page" : undefined}
-                className="underline decoration-2 underline-offset-4"
-              >
+    <header className="site-header">
+      <div className="header-bar">
+        <Link href="/" className="brand">
+          <span className="brand-mark" aria-hidden="true">
+            A
+          </span>
+          <span>
+            <span className="brand-name">How AI Works</span>
+            <span className="brand-sub">for kids</span>
+          </span>
+        </Link>
+        <button type="button" className="world-switch" onClick={openThemes}>
+          <span className="swap-space">Space</span>
+          <span className="swap-dinos">Dinos</span>
+          <span className="swap-ebikes">E-bikes</span>
+          <span aria-hidden="true">▾</span>
+          <span className="sr-only">Change world</span>
+        </button>
+        <nav aria-label="Site" className="nav-links">
+          {NAV.map((item) => {
+            const current =
+              item.href === "/lessons" ? pathname.startsWith("/lessons") : pathname === item.href;
+            return (
+              <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined}>
                 {item.label}
               </Link>
-            ))}
-          </nav>
+            );
+          })}
+        </nav>
+        <div role="group" aria-label="Reading level" className="age-switch">
+          <AgeButton age="kids" label="Kids 6–10" onPick={setAge} />
+          <AgeButton age="tweens" label="Tweens 11–14" onPick={setAge} />
         </div>
       </div>
-      <dialog ref={dialogRef} className="theme-dialog" aria-labelledby="world-title">
+      <dialog
+        ref={dialogRef}
+        className="theme-dialog"
+        aria-labelledby="world-title"
+        onClick={onDialogClick}
+      >
         <div className="mb-3 flex items-start justify-between gap-3">
-          <h2 id="world-title" className="font-display text-3xl font-bold">
-            Pick a world
-          </h2>
+          <div>
+            <p className="kicker">Worlds</p>
+            <h2 id="world-title" className="mt-1 font-display text-4xl font-bold">
+              Pick a world
+            </h2>
+          </div>
           <button type="button" className="btn btn-ghost" onClick={() => dialogRef.current?.close()}>
             Close
           </button>
         </div>
-        <p className="mb-4 text-muted">Same lessons. New examples and pictures.</p>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <p className="mb-4 max-w-xl text-muted">Same lessons. The pictures and examples change.</p>
+        <div className="world-grid">
           {THEMES.map((theme) => (
             <button
               key={theme.id}
               type="button"
-              className="sticker flex flex-col items-start gap-2 p-3 text-left"
+              className="world-pick"
+              aria-pressed={prefs.theme === theme.id}
               onClick={() => chooseTheme(theme.id)}
             >
-              <ThemeArt theme={theme.id} className="h-40 w-full object-contain" />
-              <span className="font-display text-xl font-bold">{theme.name}</span>
-              <span className="text-sm text-muted">{theme.blurb}</span>
+              <ThemeArt theme={theme.id} />
+              <span className="px-2 font-display text-2xl font-bold">{theme.name}</span>
+              <span className="px-2 text-sm text-muted">{theme.blurb}</span>
             </button>
           ))}
         </div>
