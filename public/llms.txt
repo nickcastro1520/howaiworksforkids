@@ -1,30 +1,29 @@
 # How AI Works for Kids
 
-> Free, ad-free games that show kids ages 6–10 how AI works. No accounts, no ads, and no live chatbot. Built by Nick Castro in Chicago.
+> Free, hands-on lessons that show kids ages 6–10 how AI works. Kids teach a tiny AI named Pip, then test it and fix its mistakes. No ads, no accounts, no live chatbot. Built by Nick Castro in Chicago.
 
-This site teaches with local mini-games. It does not open a chat with an AI model. The lessons use plain language for ages 6–10.
+Every game runs a small model inside the web page (a nearest-neighbor sorter, a decision stump, and a word-counting next-word model). Nothing a child does is sent to an AI service. Progress is stored in the browser only.
 
 ## Pages
 
-- [Home](https://howaiworksforkids.com/): What the site is and the lesson path
-- [Lessons](https://howaiworksforkids.com/lessons): All seven games
-- [For parents and teachers](https://howaiworksforkids.com/parents): How to use the lessons. Lessons stay free; no checkout or teacher login
-- [About Nick Castro](https://howaiworksforkids.com/about): Portfolio context and links
-- [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Placeholder only. No invented quotes
+- [Home](https://howaiworksforkids.com/): What the site is and the 7 games
+- [Lesson trail](https://howaiworksforkids.com/lessons): All lessons with progress
+- [Pip's Word Book](https://howaiworksforkids.com/glossary): 12 AI words in kid language
+- [For parents and teachers](https://howaiworksforkids.com/parents): What kids learn, how to use it at home or in class, safety
+- [About Nick Castro](https://howaiworksforkids.com/about): Who built it, with portfolio links
+- [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Test pilots Nathan (8) and Nolan (11). No invented quotes
 - [Privacy](https://howaiworksforkids.com/privacy): COPPA-friendly notice
 
 ## Lessons
 
-- [AI isn't magic](https://howaiworksforkids.com/lessons/not-magic): It finds patterns
-- [Learn by trying](https://howaiworksforkids.com/lessons/learn-by-trying): Practice and feedback
-- [Words need context](https://howaiworksforkids.com/lessons/words-need-context): The same word can change meaning
-- [Tricky look-alikes](https://howaiworksforkids.com/lessons/tricky-look-alikes): False patterns and correlation traps
-- [What it pays attention to](https://howaiworksforkids.com/lessons/what-it-notices): The question picks the clue
-- [Check a source](https://howaiworksforkids.com/lessons/check-a-source): Look it up before answering
-- [Be safe and honest](https://howaiworksforkids.com/lessons/be-safe-and-honest): AI can be wrong, privacy, ask a grown-up
+1. [Meet Pip: What is AI?](https://howaiworksforkids.com/lessons/what-is-ai): AI learns patterns from examples, then guesses. Game: AI Detective
+2. [Teach by Showing](https://howaiworksforkids.com/lessons/learning-from-examples): Learning from examples. Game: Sort the Glorbs (a real nearest-neighbor model)
+3. [How Chatbots Talk](https://howaiworksforkids.com/lessons/guess-the-next-word): Chatbots guess the next word. Game: Next Word! and Story Builder
+4. [Good Examples In, Good Guesses Out](https://howaiworksforkids.com/lessons/sneaky-clues): Lopsided data teaches the wrong clue. Game: Fix Pip's Mix-up
+5. [Sure Doesn't Mean Right](https://howaiworksforkids.com/lessons/ai-can-be-wrong): AI can sound sure and be wrong. Game: Fact or Fib?
+6. [Real or Made by AI?](https://howaiworksforkids.com/lessons/real-or-made-up): AI-made pictures and videos. Game: Spot the Glitches
+7. [Be the Boss of AI](https://howaiworksforkids.com/lessons/smart-and-safe): Privacy, AI isn't a person, ask a grown-up. Game: Go, Ask, or Stop
 
-## Optional
+## Contact
 
-- Worlds: Rockets & space, Dinosaurs, E-bikes. Stored in the browser only.
-- Operator: Nick Castro, Chicago. https://nickcastrobuilds.com and https://www.linkedin.com/in/nicolas-castro-4081545b
-- Contact for parents: nickcastro1520@gmail.com
+Nick Castro: https://nickcastrobuilds.com · https://www.linkedin.com/in/nicolas-castro-4081545b
