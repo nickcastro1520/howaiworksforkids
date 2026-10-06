@@ -156,14 +156,14 @@ export function FixMixup({ onDone }: GameProps) {
             <div className="guess-bar-row">
               <span>Color</span>
               <span className="guess-bar">
-                <span style={{ width: `${colorScore}%`, background: "#e2513a" }} />
+                <span style={{ width: `${colorScore}%`, background: "#cb4834" }} />
               </span>
               <b>{colorScore}%</b>
             </div>
             <div className="guess-bar-row">
               <span>Shape</span>
               <span className="guess-bar">
-                <span style={{ width: `${shapeScore}%`, background: "#2a7de1" }} />
+                <span style={{ width: `${shapeScore}%`, background: "#2774d1" }} />
               </span>
               <b>{shapeScore}%</b>
             </div>

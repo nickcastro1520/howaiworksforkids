@@ -52,11 +52,11 @@ function Icon({ id }: { id: string }) {
         <svg viewBox="0 0 64 74" aria-hidden="true">
           <rect x="14" y="2" width="38" height="70" rx="8" fill="#231d4f" stroke={OUT} strokeWidth="3" />
           <rect x="18" y="8" width="30" height="58" rx="5" fill="#bfe6ff" />
-          <circle cx="33" cy="30" r="10" fill="none" stroke="#2a7de1" strokeWidth="3" strokeDasharray="5 4" />
+          <circle cx="33" cy="30" r="10" fill="none" stroke="#2774d1" strokeWidth="3" strokeDasharray="5 4" />
           <circle cx="29.5" cy="28" r="1.8" fill={OUT} />
           <circle cx="36.5" cy="28" r="1.8" fill={OUT} />
           <path d="M29 34 q4 3 8 0" stroke={OUT} strokeWidth="2" fill="none" strokeLinecap="round" />
-          <rect x="24" y="48" width="18" height="5" rx="2.5" fill="#2a7de1" />
+          <rect x="24" y="48" width="18" height="5" rx="2.5" fill="#2774d1" />
         </svg>
       );
     case "vacuum":

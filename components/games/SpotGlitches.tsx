@@ -29,7 +29,7 @@ function GlitchArt({ id }: { id: string }) {
               textAnchor="middle"
               fontSize="40"
               fontWeight="700"
-              fill="#d1408f"
+              fill="#c83d89"
               fontFamily="var(--font-display), system-ui, sans-serif"
               transform={i === 3 ? `translate(${2 * (48 + i * 36)} 0) scale(-1 1)` : i === 5 ? `rotate(20 ${48 + i * 36} 30)` : undefined}
             >
@@ -114,7 +114,7 @@ function Scene() {
       <circle cx="600" cy="230" r="44" fill="#57c97a" stroke={OUT} strokeWidth="5" />
       <circle cx="690" cy="236" r="40" fill="#57c97a" stroke={OUT} strokeWidth="5" />
       <path d="M666 428 Q706 414 704 372" stroke={OUT} strokeWidth="16" strokeLinecap="round" fill="none" />
-      <path d="M666 428 Q706 414 704 372" stroke="#2a7de1" strokeWidth="9" strokeLinecap="round" fill="none" />
+      <path d="M666 428 Q706 414 704 372" stroke="#2774d1" strokeWidth="9" strokeLinecap="round" fill="none" />
       <rect x="40" y="396" width="130" height="14" rx="6" fill="#ff6b5b" stroke={OUT} strokeWidth="4" />
       <path d="M105 410 V500 M80 500 h50" stroke={OUT} strokeWidth="7" strokeLinecap="round" />
       <ellipse cx="107" cy="400" rx="18" ry="4" fill={OUT} opacity="0.25" />
@@ -165,7 +165,7 @@ export function SpotGlitches({ onDone }: GameProps) {
       >
         <Scene />
         <div className="scene-person" aria-hidden="true">
-          <Person grown size={92} shirt="#2a7de1" hair="#2b1d14" skin="#c98b62" />
+          <Person grown size={92} shirt="#2774d1" hair="#2b1d14" skin="#c98b62" />
         </div>
         {GLITCHES.map((g) => {
           const [x, y, w, h] = g.box;

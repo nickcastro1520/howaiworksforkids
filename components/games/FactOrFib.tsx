@@ -67,7 +67,7 @@ export function FactOrFib({ onDone }: GameProps) {
           ) : (
             <div className="factbook pop">
               <div className="factbook-head">
-                <Book size={54} color="#c97a00" />
+                <Book size={54} color="#a66500" />
                 <span>The Fact Book says&hellip;</span>
               </div>
               <p className={`factbook-verdict ${c.fact ? "is-fact" : "is-fib"}`}>{c.fact ? "FACT" : "FIB"}</p>

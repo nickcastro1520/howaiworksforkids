@@ -17,6 +17,7 @@ import { NextWord } from "./games/NextWord";
 import { SortGlorbs } from "./games/SortGlorbs";
 import { SpotGlitches } from "./games/SpotGlitches";
 import type { GameProps } from "./games/ui";
+import { trackEvent } from "@/lib/analytics";
 
 const GAMES: Record<string, (p: GameProps) => React.ReactNode> = {
   "what-is-ai": AIDetective,
@@ -322,7 +323,10 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <QuickCheck
           lesson={lesson}
           onPass={() => {
+            const firstTime = !isDone(lesson.slug);
             markDone(lesson.slug);
+            // Anonymous GA event (no-op unless NEXT_PUBLIC_GA_MEASUREMENT_ID is set). No personal data.
+            trackEvent("lesson_complete", { lesson_number: lesson.number, lesson_slug: lesson.slug, first_time: firstTime });
             moveTo("badge");
           }}
         />

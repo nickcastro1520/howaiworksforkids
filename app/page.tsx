@@ -5,7 +5,7 @@ import { HeroPip } from "@/components/HeroPip";
 import { JsonLd } from "@/components/JsonLd";
 import { LessonTiles } from "@/components/LessonTiles";
 import { Pip } from "@/components/Pip";
-import { siteGraph } from "@/lib/seo";
+import { courseJsonLd } from "@/lib/seo";
 
 const STEPS = [
   { n: 1, title: "Read", text: "A short picture story with Pip. Tap to hear it read out loud." },
@@ -37,7 +37,7 @@ function StepIcon({ n }: { n: number }) {
 export default function Home() {
   return (
     <>
-      <JsonLd data={siteGraph()} />
+      <JsonLd data={courseJsonLd()} />
 
       <section className="hero">
         <div className="stars" aria-hidden="true" />
@@ -135,8 +135,8 @@ export default function Home() {
           <p className="section-sub">Our first test pilots are trying every lesson right now. Their real notes will go here.</p>
           <div className="tester-row">
             {[
-              { name: "Nathan", age: 8, color: "#2a7de1" },
-              { name: "Nolan", age: 11, color: "#23914a" },
+              { name: "Nathan", age: 8, color: "#2774d1" },
+              { name: "Nolan", age: 11, color: "#208644" },
             ].map((t) => (
               <div key={t.name} className="tester" style={{ "--tc": t.color } as React.CSSProperties}>
                 <span className="tester-badge">Test pilot</span>

@@ -1,19 +1,24 @@
 import type { Metadata } from "next";
 import { Pip } from "@/components/Pip";
 import { NICK, SITE_NAME } from "@/lib/site";
+import { ogAlt } from "@/lib/og";
+import { pageMeta } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
-  title: "About Nick Castro",
-  description: `${SITE_NAME} is a free teaching site by Nick Castro in Chicago, who builds tools that explain AI in plain language.`,
-  alternates: { canonical: "/about" },
-  openGraph: { title: "About Nick Castro", url: "/about" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "About Nick Castro, Creator",
+  description: `${SITE_NAME} is a free AI-literacy site for kids ages 6–10, made by Nick Castro in Chicago, who builds tools that explain AI in plain language.`,
+  path: "/about",
+  ogKey: "about",
+  ogAlt: ogAlt("about"),
+});
 
 export default function AboutPage() {
   return (
     <div className="about">
       <div className="wrap about-inner">
         <div className="about-card">
+          <Breadcrumbs items={[{ name: "About", path: "/about" }]} />
           <p className="small-cap">Who made this</p>
           <h1 className="page-title">Hi, I&rsquo;m {NICK.name}.</h1>
           <p className="about-lead">
