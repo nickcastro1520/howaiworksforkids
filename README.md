@@ -28,8 +28,22 @@ The machine-learning bits in `lib/ml.ts` are real (tiny) models that run in the 
 - No live chatbot. Every game runs right in the page.
 - Progress is saved only in the browser's `localStorage` (`hawfk.progress.v2`).
 - The certificate's name stays on screen only. The "email a grown-up" option opens the family's own mail app (`mailto:`); nothing is sent to us.
-- Google Analytics loads **only** if `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set (it is not set by default).
+- Google Analytics 4 loads **only** if `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set (off by default). When on: ad storage, ad user data, and ad personalization consent are denied; Google signals and ad personalization signals are off; IP anonymization is requested. The only custom event is `lesson_complete` (`lesson_number`, `lesson_slug`, `first_time`).
 - Respects `prefers-reduced-motion`, works with touch and keyboard.
+
+## SEO, analytics, and Search Console
+
+| Env var (Vercel → Settings → Environment Variables) | What it does |
+|---|---|
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 measurement ID (`G-XXXXXXX`). GA script renders only when set and valid. |
+| `NEXT_PUBLIC_GSC_VERIFICATION` | Google Search Console HTML-tag token. Renders `<meta name="google-site-verification">` only when set. |
+
+Both are read at build time, so redeploy after setting them. The Privacy and Parents pages automatically describe analytics as on or off based on `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
+
+- Per-page metadata, canonical URLs, Open Graph and Twitter cards via `pageMeta()` in `lib/seo.ts`.
+- Per-page/per-lesson share images at `/og/[key]` (`app/og/[key]/route.tsx`, rendered with `next/og` at build time).
+- JSON-LD: Organization + Person (Nick Castro) + WebSite on every page; Course with each lesson as a LearningResource; BreadcrumbList; FAQPage on Parents & Teachers; DefinedTermSet on the Word Book.
+- `sitemap.xml`, `robots.txt`, `llms.txt`, web manifest with PNG + maskable icons, `favicon.ico`, apple-touch icon, custom 404.
 
 ## Stack
 

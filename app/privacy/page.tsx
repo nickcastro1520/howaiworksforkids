@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
+import { GA_ENABLED } from "@/lib/analytics";
 import { NICK, PROGRESS_KEY, SITE_NAME, SITE_URL } from "@/lib/site";
+import { ogAlt } from "@/lib/og";
+import { pageMeta } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
-  title: "Privacy",
+export const metadata: Metadata = pageMeta({
+  title: "Privacy Policy: No Ads, No Kid Accounts",
   description:
-    "COPPA-friendly privacy notice for How AI Works for Kids. No ads, no kid accounts, no kid personal information, and no live AI chat.",
-  alternates: { canonical: "/privacy" },
-  openGraph: { title: "Privacy", url: "/privacy" },
-};
+    "We collect no personal information from children: no ads, no accounts, no chatbot. Lesson progress stays in your browser. Here's exactly what we do.",
+  path: "/privacy",
+  ogKey: "privacy",
+  ogAlt: ogAlt("privacy"),
+});
 
 export default function PrivacyPage() {
   return (
     <article className="wrap narrow privacy">
+      <Breadcrumbs items={[{ name: "Privacy", path: "/privacy" }]} />
       <p className="small-cap">Updated October 2026</p>
       <h1 className="page-title">Privacy</h1>
       <p className="page-lead">
@@ -27,7 +33,7 @@ export default function PrivacyPage() {
 
       <h2>What we collect</h2>
       <p>
-        Nothing from children. We do not ask for a child&rsquo;s name, email, school, photo, address, or phone number. There are no
+        Nothing personal from children. We do not ask for a child&rsquo;s name, email, school, photo, address, or phone number. There are no
         accounts, no ads, and we do not sell or share personal information.
       </p>
 
@@ -59,10 +65,37 @@ export default function PrivacyPage() {
         <code>mailto:</code> link. The address is not sent to us or saved, and the field is cleared right away.
       </p>
 
-      <h2>Analytics</h2>
+      <h2 id="analytics">Analytics</h2>
+      {GA_ENABLED ? (
+        <>
+          <p>
+            We use Google Analytics 4 to see anonymous usage stats: how many visits the site gets, which pages are viewed, roughly what
+            country and type of device visitors use, and how many lessons are finished. This helps us see which lessons work and which need
+            fixing.
+          </p>
+          <ul>
+            <li>No ads. Advertising features, Google signals, and ad personalization are turned off, and ad consent is set to &ldquo;denied.&rdquo;</li>
+            <li>We ask Google to anonymize IP addresses. We never send names, emails, certificate nicknames, or anything a child types.</li>
+            <li>The only custom event is &ldquo;lesson finished,&rdquo; with the lesson number and name. Nothing about who finished it.</li>
+            <li>Google Analytics sets first-party cookies to count visits. You can block them with your browser&rsquo;s settings or a
+              content blocker, and the lessons will still work the same.</li>
+          </ul>
+          <p>
+            Google processes this data under its own terms; see{" "}
+            <a href="https://policies.google.com/technologies/partner-sites">how Google uses data from sites that use its services</a>.
+          </p>
+        </>
+      ) : (
+        <p>
+          Analytics are off right now. If we turn on Google Analytics, it will only count anonymous visits and finished lessons, with ads,
+          Google signals, and ad personalization turned off, and we will update this notice when we do.
+        </p>
+      )}
+
+      <h2>Search Console</h2>
       <p>
-        Analytics are off. If the site owner ever turns on Google Analytics (by setting <code>NEXT_PUBLIC_GA_MEASUREMENT_ID</code>), it
-        would be set to anonymize IP addresses with ad features and Google signals turned off, and this notice would be updated first.
+        We may use Google Search Console to see how people find the site in Google Search (for example, which searches show our pages).
+        It uses search data Google already has and does not add any tracking to this site.
       </p>
 
       <h2>Hosting</h2>

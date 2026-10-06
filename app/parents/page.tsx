@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
+import { GA_ENABLED } from "@/lib/analytics";
 import { LESSONS } from "@/lib/lessons";
+import { faqJsonLd, pageMeta } from "@/lib/seo";
+import { ogAlt } from "@/lib/og";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
-  title: "For parents and teachers",
+export const metadata: Metadata = pageMeta({
+  title: "Teach Kids About AI: Free Guide for Parents & Teachers",
   description:
-    "What kids learn in each lesson, how to use How AI Works for Kids at home or in class, conversation starters, and our safety and privacy promises.",
-  alternates: { canonical: "/parents" },
-  openGraph: { title: "For parents and teachers", url: "/parents" },
-};
+    "How to teach kids about AI at home or in an elementary classroom: what the 7 free lessons cover, how to use them, safety, privacy, and FAQ.",
+  path: "/parents",
+  ogKey: "parents",
+  ogAlt: ogAlt("parents"),
+  keywords: ["teach kids about AI", "AI lesson plans for elementary", "AI for elementary students", "AI literacy for kids", "AI curriculum for kids"],
+});
 
 const FAQ = [
   {
@@ -28,6 +35,18 @@ const FAQ = [
     a: "No. Progress (which lessons are done) is saved in this browser only, using localStorage. Clearing site data, or tapping \u201cStart over\u201d on the lesson trail, erases it.",
   },
   {
+    q: "How long does it take?",
+    a: "Each lesson takes about 5 to 6 minutes, and all 7 take about 40 minutes. Kids can do one a day or several in a row, in any order.",
+  },
+  {
+    q: "Can I use it in my classroom?",
+    a: "Yes, and it's free for classrooms. Project a lesson for the whole class, or let students work on their own devices. There are no logins, so it works on shared tablets and Chromebooks. The “What kids learn” table above lists the big idea and a discussion question for each lesson.",
+  },
+  {
+    q: "Is it really how AI works, or just a cartoon?",
+    a: "The games use real (very small) versions of real ideas. Sort the Glorbs uses a nearest-neighbor classifier that learns from the examples your child gives it. Story Builder counts which words come next in a pile of short stories. Fix Pip's Mix-up picks the clue that best fits its training examples, so lopsided examples really do teach it the wrong rule.",
+  },
+  {
     q: "Does it work on tablets?",
     a: "Yes. Everything works with touch, a mouse, or a keyboard, on phones, tablets, Chromebooks, and computers.",
   },
@@ -36,8 +55,10 @@ const FAQ = [
 export default function ParentsPage() {
   return (
     <div className="parents">
+      <JsonLd data={faqJsonLd(FAQ)} />
       <header className="page-hero parents-hero">
         <div className="wrap">
+          <Breadcrumbs items={[{ name: "Parents & Teachers", path: "/parents" }]} />
           <p className="small-cap">For parents &amp; teachers</p>
           <h1 className="page-title">Kids learn AI by teaching one.</h1>
           <p className="page-lead">
@@ -111,7 +132,10 @@ export default function ParentsPage() {
           </h2>
           <ul className="safe-list">
             <li>
-              <b>No ads, no trackers.</b> We don&rsquo;t run ads or ad trackers. Basic site analytics are off.
+              <b>No ads, no ad trackers.</b> We don&rsquo;t run ads or ad trackers.{" "}
+              {GA_ENABLED
+                ? "We use Google Analytics only to count anonymous visits and finished lessons, with ad features turned off."
+                : "Site analytics are off."}
             </li>
             <li>
               <b>No kid data.</b> We never ask for a child&rsquo;s name, email, school, photo, or location.

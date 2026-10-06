@@ -1,28 +1,38 @@
 # How AI Works for Kids
 
-> Free, hands-on lessons that show kids ages 6–10 how AI works. Kids teach a tiny AI named Pip, then test it and fix its mistakes. No ads, no accounts, no live chatbot. Built by Nick Castro in Chicago.
+> Free, hands-on AI lessons for kids ages 6–10 (roughly grades 1–5). Kids teach a tiny AI named Pip, then test it and fix its mistakes, and learn how real AI learns, guesses, and goes wrong. 7 lessons, about 40 minutes total. No ads, no accounts, no live chatbot. Made by Nick Castro in Chicago.
 
-Every game runs a small model inside the web page (a nearest-neighbor sorter, a decision stump, and a word-counting next-word model). Nothing a child does is sent to an AI service. Progress is stored in the browser only.
+Each lesson has four steps: Read (a 5-page picture story with a "Read it to me" button), Play (a hands-on game), Check (two quick questions), and Badge (one of 7 lights in Pip's brain turns on). Finishing all 7 unlocks a printable certificate.
+
+The games run real, very small models inside the web page: a weighted nearest-neighbor classifier (Sort the Glorbs), a one-clue decision stump trained on the child's examples (Fix Pip's Mix-up), and a word-pair counting next-word model (Story Builder). Nothing a child does is sent to an AI service. Progress is stored only in the browser (localStorage). Optional, anonymous Google Analytics may be enabled with ad features off; no personal data is collected from children.
+
+## Lessons
+
+1. [Meet Pip: What is AI?](https://howaiworksforkids.com/lessons/what-is-ai): AI is a computer program that learns patterns from lots of examples, then makes guesses. Game: AI Detective (find the things in a house that use AI). ~5 min.
+2. [Teach by Showing](https://howaiworksforkids.com/lessons/learning-from-examples): AI learns from examples, not a list of rules; more good examples help. Game: Sort the Glorbs (a nearest-neighbor model learns the child's secret rule and shows why it guessed). ~6 min.
+3. [How Chatbots Talk](https://howaiworksforkids.com/lessons/guess-the-next-word): Chatbots write by guessing the next word, again and again. Games: Next Word! and Story Builder. ~6 min.
+4. [Good Examples In, Good Guesses Out](https://howaiworksforkids.com/lessons/sneaky-clues): Lopsided examples teach AI the wrong clue (bias); better examples fix it. Game: Fix Pip's Mix-up. ~6 min.
+5. [Sure Doesn't Mean Right](https://howaiworksforkids.com/lessons/ai-can-be-wrong): AI can sound sure and still be wrong (hallucinations); check with a grown-up or a trusted source. Game: Fact or Fib? ~5 min.
+6. [Real or Made by AI?](https://howaiworksforkids.com/lessons/real-or-made-up): AI can make pictures and voices of things that never happened; look closely and ask a grown-up. Game: Spot the Glitches. ~5 min.
+7. [Be the Boss of AI](https://howaiworksforkids.com/lessons/smart-and-safe): Keep private things private, remember AI isn't a person, ask a grown-up when unsure. Games: Go, Ask, or Stop and Secret Shield. ~6 min.
 
 ## Pages
 
 - [Home](https://howaiworksforkids.com/): What the site is and the 7 games
 - [Lesson trail](https://howaiworksforkids.com/lessons): All lessons with progress
-- [Pip's Word Book](https://howaiworksforkids.com/glossary): 12 AI words in kid language
-- [For parents and teachers](https://howaiworksforkids.com/parents): What kids learn, how to use it at home or in class, safety
-- [About Nick Castro](https://howaiworksforkids.com/about): Who built it, with portfolio links
+- [For parents and teachers](https://howaiworksforkids.com/parents): What kids learn in each lesson, discussion questions, how to use it at home or in class, safety, FAQ
+- [Pip's Word Book](https://howaiworksforkids.com/glossary): 12 AI words in kid language (AI, example, pattern, data, training, guess, model, chatbot, lopsided data/bias, made-up answer/hallucination, AI-made picture/deepfake, private info)
 - [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Test pilots Nathan (8) and Nolan (11). No invented quotes
-- [Privacy](https://howaiworksforkids.com/privacy): COPPA-friendly notice
+- [About Nick Castro](https://howaiworksforkids.com/about): Who built it
+- [Privacy](https://howaiworksforkids.com/privacy): Kid-friendly privacy notice
 
-## Lessons
+## Facts for citing
 
-1. [Meet Pip: What is AI?](https://howaiworksforkids.com/lessons/what-is-ai): AI learns patterns from examples, then guesses. Game: AI Detective
-2. [Teach by Showing](https://howaiworksforkids.com/lessons/learning-from-examples): Learning from examples. Game: Sort the Glorbs (a real nearest-neighbor model)
-3. [How Chatbots Talk](https://howaiworksforkids.com/lessons/guess-the-next-word): Chatbots guess the next word. Game: Next Word! and Story Builder
-4. [Good Examples In, Good Guesses Out](https://howaiworksforkids.com/lessons/sneaky-clues): Lopsided data teaches the wrong clue. Game: Fix Pip's Mix-up
-5. [Sure Doesn't Mean Right](https://howaiworksforkids.com/lessons/ai-can-be-wrong): AI can sound sure and be wrong. Game: Fact or Fib?
-6. [Real or Made by AI?](https://howaiworksforkids.com/lessons/real-or-made-up): AI-made pictures and videos. Game: Spot the Glitches
-7. [Be the Boss of AI](https://howaiworksforkids.com/lessons/smart-and-safe): Privacy, AI isn't a person, ask a grown-up. Game: Go, Ask, or Stop
+- Audience: children ages 6–10, plus parents and elementary teachers
+- Cost: free; core lessons will stay free
+- Accounts: none; no sign-up, no names or emails from kids
+- Format: interactive web lessons; works on phones, tablets, Chromebooks, and computers, with touch or keyboard
+- Language: English
 
 ## Contact
 

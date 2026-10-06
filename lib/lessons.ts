@@ -79,7 +79,7 @@ export const LESSONS: Lesson[] = [
     gameBlurb: "Make up a secret rule. Teach Pip. See if Pip can figure it out.",
     badge: "Pip's Teacher",
     minutes: 6,
-    color: "#0f9d84",
+    color: "#0c836e",
     tint: "#e2f7f1",
     summary:
       "Kids sort made-up creatures into two teams using their own secret rule. A real nearest-neighbor model in the browser learns from their examples and guesses new ones.",
@@ -118,7 +118,7 @@ export const LESSONS: Lesson[] = [
     gameBlurb: "Guess the next word, then build a silly story with Pip.",
     badge: "Word Wizard",
     minutes: 6,
-    color: "#2a7de1",
+    color: "#2774d1",
     tint: "#e4f0ff",
     summary:
       "Kids guess the next word in familiar phrases and compare with Pip's guess bars, then build a story with a tiny word-counting model.",
@@ -157,7 +157,7 @@ export const LESSONS: Lesson[] = [
     gameBlurb: "Pip thinks every red thing is a bird. Find out why, then fix it.",
     badge: "Clue Fixer",
     minutes: 6,
-    color: "#e2513a",
+    color: "#cb4834",
     tint: "#ffe9e4",
     summary:
       "Pip learns fish vs. birds from lopsided examples and picks up a shortcut (color). Kids find the sneaky clue and fix it by adding better examples.",
@@ -196,7 +196,7 @@ export const LESSONS: Lesson[] = [
     gameBlurb: "Pip sounds sure every time. Can you catch the fibs?",
     badge: "Fib Finder",
     minutes: 5,
-    color: "#c97a00",
+    color: "#a66500",
     tint: "#fff3d6",
     summary:
       "Pip states facts and fibs with the same confidence. Kids decide, then check the Fact Book, and learn that sounding sure is not the same as being right.",
@@ -235,7 +235,7 @@ export const LESSONS: Lesson[] = [
     gameBlurb: "This picture was made by AI. Find the 6 goofs!",
     badge: "Glitch Spotter",
     minutes: 5,
-    color: "#d1408f",
+    color: "#c83d89",
     tint: "#ffe6f3",
     summary:
       "Kids learn that AI can make realistic pictures, voices, and videos of things that never happened, then hunt for the telltale goofs in an AI-style picture.",
@@ -274,7 +274,7 @@ export const LESSONS: Lesson[] = [
     gameBlurb: "Use the traffic light to make smart choices. Then guard your secrets.",
     badge: "AI Boss",
     minutes: 6,
-    color: "#23914a",
+    color: "#208644",
     tint: "#e3f6e8",
     summary:
       "Kids sort real-life AI situations with a traffic light (go, ask a grown-up, stop) and practice keeping private information private.",

@@ -1,12 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { GLOSSARY } from "@/lib/glossary";
+import { useEffect, useState } from "react";
+import { GLOSSARY, termId } from "@/lib/glossary";
+import { LESSONS } from "@/lib/lessons";
 
 export function WordBook() {
   const [open, setOpen] = useState<string[]>([]);
   const all = open.length === GLOSSARY.length;
+
+  // Linked from a lesson (e.g. /glossary#pattern)? Flip that card open.
+  useEffect(() => {
+    const openFromHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const hit = GLOSSARY.find((g) => termId(g.word) === id);
+      if (hit) setOpen((o) => (o.includes(hit.word) ? o : [...o, hit.word]));
+    };
+    const t = window.setTimeout(openFromHash, 0);
+    window.addEventListener("hashchange", openFromHash);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("hashchange", openFromHash);
+    };
+  }, []);
   return (
     <>
       <p className="center">
@@ -18,7 +34,7 @@ export function WordBook() {
         {GLOSSARY.map((g, i) => {
           const isOpen = open.includes(g.word);
           return (
-            <li key={g.word}>
+            <li key={g.word} id={termId(g.word)}>
               <button
                 type="button"
                 className={`flip ${isOpen ? "is-open" : ""}`}
@@ -38,11 +54,9 @@ export function WordBook() {
                   </span>
                 </span>
               </button>
-              {isOpen && (
-                <Link href={`/lessons/${g.lesson}`} className="flip-link">
-                  See it in a lesson &rarr;
-                </Link>
-              )}
+              <Link href={`/lessons/${g.lesson}`} className="flip-link">
+                See it in Lesson {LESSONS.find((l) => l.slug === g.lesson)?.number} &rarr;
+              </Link>
             </li>
           );
         })}

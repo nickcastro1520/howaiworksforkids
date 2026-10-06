@@ -29,7 +29,7 @@ export function BookStack({ size = 140, className = "" }: S) {
 export function Shield({ size = 130, className = "" }: S) {
   return (
     <svg viewBox="0 0 120 140" width={size} height={size * (140 / 120)} className={className} aria-hidden="true">
-      <path d="M60 6 L108 24 V66 C108 100 86 122 60 134 C34 122 12 100 12 66 V24 Z" fill="#23914a" stroke={OUT} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M60 6 L108 24 V66 C108 100 86 122 60 134 C34 122 12 100 12 66 V24 Z" fill="#208644" stroke={OUT} strokeWidth="5" strokeLinejoin="round" />
       <path d="M60 18 L96 32 V66 C96 92 80 110 60 120 Z" fill="#3fb866" />
       <rect x="40" y="62" width="40" height="34" rx="8" fill="#ffd34d" stroke={OUT} strokeWidth="4" />
       <path d="M48 62 v-10 a12 12 0 0 1 24 0 v10" fill="none" stroke={OUT} strokeWidth="5" />

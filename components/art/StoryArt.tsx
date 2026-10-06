@@ -138,7 +138,7 @@ function Lesson2({ page }: { page: number }) {
       return (
         <div className="art-col">
           <Row gap="1rem">
-            <Basket label="Team Star" color="#0f9d84">
+            <Basket label="Team Star" color="#0c836e">
               <Glorb g={crowd[0]} size={58} />
               <Glorb g={crowd[2]} size={58} />
             </Basket>
@@ -149,7 +149,7 @@ function Lesson2({ page }: { page: number }) {
           </Row>
           {page === 2 && (
             <Row gap="0.5rem">
-              <Chip color="#0f9d84" className="pop">all teal</Chip>
+              <Chip color="#0c836e" className="pop">all teal</Chip>
               <Chip color="#c25a0c" className="pop">all orange</Chip>
             </Row>
           )}
@@ -351,11 +351,11 @@ function Lesson5({ page }: { page: number }) {
       return (
         <Row gap="1rem" className="align-end">
           <div className="art-col tight pop">
-            <Person grown size={100} shirt="#c97a00" />
+            <Person grown size={100} shirt="#a66500" />
             <span className="art-label">a grown-up</span>
           </div>
           <div className="art-col tight pop">
-            <Book size={110} color="#c97a00" />
+            <Book size={110} color="#a66500" />
             <span className="art-label">a good book</span>
           </div>
         </Row>
@@ -450,7 +450,7 @@ function Lesson7({ page }: { page: number }) {
     case 1:
       return (
         <Row gap="1rem" className="align-end">
-          <Person size={120} shirt="#23914a" />
+          <Person size={120} shirt="#208644" />
           <span className="art-neq">&ne;</span>
           <Pip size={110} mood="think" bob={false} />
         </Row>
@@ -460,9 +460,9 @@ function Lesson7({ page }: { page: number }) {
         <div className="art-col">
           <Shield size={120} className="pop" />
           <Row gap="0.4rem">
-            <Chip color="#23914a">my address</Chip>
-            <Chip color="#23914a">my school</Chip>
-            <Chip color="#23914a">passwords</Chip>
+            <Chip color="#208644">my address</Chip>
+            <Chip color="#208644">my school</Chip>
+            <Chip color="#208644">passwords</Chip>
           </Row>
         </div>
       );
@@ -472,7 +472,7 @@ function Lesson7({ page }: { page: number }) {
       return (
         <Row gap="0.5rem" className="align-end">
           <Person grown size={120} shirt="#ff8fc7" hair="#2b1d14" skin="#c98b62" />
-          <Person size={120} shirt="#23914a" hair="#f2c14e" />
+          <Person size={120} shirt="#208644" hair="#f2c14e" />
           <Sparkle size={34} className="twinkle" />
         </Row>
       );
