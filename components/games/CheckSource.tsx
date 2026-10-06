@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { sourceShelves } from "@/lib/game-data";
-import { pickAge, type AgeId, type ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function CheckSource({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const shelf = sourceShelves[theme];
@@ -98,11 +96,7 @@ export function CheckSource({
       {mode === "answered" && !question.factId ? (
         <div className="mt-4">
           <p className="why-box" role="status">
-            {pickAge(age, {
-              kids: "It is not on the shelf. The honest answer is “I don’t know,” not a made-up name or address.",
-              tweens:
-                "No source, no answer. Inventing a password, address, or name is worse than saying the shelf does not have it.",
-            })}
+            It is not on the shelf. The honest answer is “I don’t know,” not a made-up name or address.
           </p>
           <button type="button" className="btn btn-primary mt-3" onClick={resetForNext}>
             Finish

@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { ChoiceButton, RoundLabel, WhyBox } from "@/components/games/bits";
 import { notMagicRounds } from "@/lib/game-data";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function NotMagic({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const rounds = notMagicRounds[theme];
@@ -47,7 +45,7 @@ export function NotMagic({
           </ChoiceButton>
         ))}
       </div>
-      {picked && correct ? <WhyBox age={age} copy={round.why} /> : null}
+      {picked && correct ? <WhyBox copy={round.why} /> : null}
       {picked && !correct ? (
         <p className="why-box mt-3" role="status">
           Not quite. Look at the examples again.

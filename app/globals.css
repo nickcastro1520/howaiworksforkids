@@ -220,14 +220,6 @@ h1 em {
   letter-spacing: 0.02em;
 }
 
-.grownup-chip {
-  display: none;
-}
-
-html[data-age="tweens"] .grownup-chip {
-  display: block;
-}
-
 .swap-space,
 .swap-dinos,
 .swap-ebikes {
@@ -246,30 +238,6 @@ html[data-theme="space"] img.swap-space,
 html[data-theme="dinosaurs"] img.swap-dinos,
 html[data-theme="ebikes"] img.swap-ebikes {
   display: block;
-}
-
-.age-kids,
-.age-tweens {
-  display: none;
-}
-
-html:not([data-age="tweens"]) .age-kids,
-html[data-age="tweens"] .age-tweens {
-  display: revert;
-}
-
-.age-btn {
-  min-height: 2.75rem;
-  border-radius: 999px;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.92rem;
-  font-weight: 800;
-}
-
-html:not([data-age="tweens"]) .age-btn[data-age-choice="kids"],
-html[data-age="tweens"] .age-btn[data-age-choice="tweens"] {
-  background: var(--ink);
-  color: var(--sun);
 }
 
 .welcome-gate {
@@ -357,7 +325,7 @@ html[data-needs-welcome] body {
   grid-template-columns: 1fr auto;
   grid-template-areas:
     "brand world"
-    "nav age";
+    "nav nav";
   align-items: center;
   gap: 0.35rem 0.75rem;
   width: min(72rem, calc(100% - 1.5rem));
@@ -438,15 +406,6 @@ html[data-needs-welcome] body {
 
 .nav-links a[aria-current="page"] {
   background: var(--sun);
-}
-
-.age-switch {
-  grid-area: age;
-  justify-self: end;
-  display: flex;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ink) 7%, transparent);
-  padding: 0.15rem;
 }
 
 dialog.theme-dialog {
@@ -977,8 +936,8 @@ dialog.theme-dialog::backdrop {
   }
 
   .header-bar {
-    grid-template-columns: auto 1fr auto auto;
-    grid-template-areas: "brand nav age world";
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "brand nav world";
     gap: 0.75rem 1rem;
   }
 }

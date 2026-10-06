@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { WhyBox } from "@/components/games/bits";
 import { attentionScenes } from "@/lib/game-data";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function AttentionGame({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const scenes = attentionScenes[theme];
@@ -64,7 +62,7 @@ export function AttentionGame({
           That detail is in the scene, but it does not answer this question.
         </p>
       ) : null}
-      {picked && correct ? <WhyBox age={age} copy={question.why} /> : null}
+      {picked && correct ? <WhyBox copy={question.why} /> : null}
       {correct && !last ? (
         <button type="button" className="btn btn-primary mt-4" onClick={next}>
           {questionIndex === 0 ? "Same scene, new question" : "Next scene"}

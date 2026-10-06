@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "For parents and teachers",
     description:
-      "A free lesson path for ages 6–14. No accounts, no ads, and no paywall.",
+      "A free lesson path for ages 6–10. No accounts, no ads, and no paywall.",
     url: "/parents",
   },
 };
@@ -28,8 +28,7 @@ export default function ParentsPage() {
           Nothing is sent to an AI model.
         </p>
         <p className="mt-4 text-muted">
-          Kids (6–10) get short sentences and almost no jargon. Tweens (11–14) play the same games
-          and see a small grown-up name — a label, not the title.
+          The lessons are for ages 6–10. Short sentences, and almost no jargon.
         </p>
       </aside>
 
@@ -47,10 +46,7 @@ export default function ParentsPage() {
                   </span>
                   <span>
                     <strong>{lesson.title}</strong>
-                    <span className="mt-1 block">{lesson.takeaway.kids}</span>
-                    <span className="mt-2 block text-sm text-muted">
-                      Tween note: {lesson.takeaway.tweens} Grown-up label: {lesson.grownup.chip}.
-                    </span>
+                    <span className="mt-1 block">{lesson.takeaway}</span>
                   </span>
                 </Link>
               </li>
@@ -80,7 +76,7 @@ export default function ParentsPage() {
               “Tell a parent” asks for a parent email only, then opens the device email app. The
               address is not stored.
             </li>
-            <li>World and reading level stay in this browser. Clearing site data removes them.</li>
+            <li>The chosen world stays in this browser. Clearing site data removes it.</li>
           </ul>
           <p className="mt-4">
             <Link className="font-extrabold underline decoration-2 underline-offset-4" href="/privacy">

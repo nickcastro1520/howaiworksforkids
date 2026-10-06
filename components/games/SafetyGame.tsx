@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { WhyBox } from "@/components/games/bits";
 import { safetyDecks, type SafetyItem } from "@/lib/game-data";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 const STEPS = [
   {
@@ -37,11 +37,9 @@ const STEPS = [
 
 export function SafetyGame({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const deck = safetyDecks[theme];
@@ -94,7 +92,7 @@ export function SafetyGame({
           pick the careful answer.
         </p>
       ) : null}
-      {picked && correct ? <WhyBox age={age} copy={item.why} /> : null}
+      {picked && correct ? <WhyBox copy={item.why} /> : null}
       {correct ? (
         <button type="button" className="btn btn-primary mt-4" onClick={next}>
           {stepIndex === STEPS.length - 1 && itemIndex === items.length - 1 ? "Finish" : "Next"}

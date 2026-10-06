@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "How AI Works for Kids — seven free games, no ads, no accounts";
+export const alt = "How AI Works for Kids — ages 6–10, seven free games, no ads, no accounts";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -29,7 +29,7 @@ export default function OpenGraphImage() {
             How AI works for kids
           </div>
           <div style={{ marginTop: 24, fontSize: 32 }}>
-            Seven free games. No ads. No accounts. No live chatbot.
+            Ages 6–10. Seven free games. No ads. No accounts. No live chatbot.
           </div>
         </div>
         <div style={{ fontSize: 28 }}>howaiworksforkids.com · Nick Castro, Chicago</div>

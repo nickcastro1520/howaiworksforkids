@@ -1,8 +1,8 @@
 # How AI Works for Kids
 
-> Free, ad-free games that show kids ages 6–14 how AI works. No accounts, no ads, and no live chatbot. Built by Nick Castro in Chicago.
+> Free, ad-free games that show kids ages 6–10 how AI works. No accounts, no ads, and no live chatbot. Built by Nick Castro in Chicago.
 
-This site teaches with local mini-games. It does not open a chat with an AI model. Kid-facing titles avoid jargon. Tweens can see a small grown-up name on each lesson (patterns, training, context, correlation, attention, RAG, AI safety).
+This site teaches with local mini-games. It does not open a chat with an AI model. The lessons use plain language for ages 6–10.
 
 ## Pages
 

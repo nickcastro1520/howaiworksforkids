@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { ChoiceButton, RoundLabel, WhyBox } from "@/components/games/bits";
 import { lookRounds } from "@/lib/game-data";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function LookAlikes({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const rounds = lookRounds[theme];
@@ -64,7 +62,7 @@ export function LookAlikes({
           Look again. Alike, or rising together, is not the same as the real reason.
         </p>
       ) : null}
-      {picked && correct ? <WhyBox age={age} copy={round.why} /> : null}
+      {picked && correct ? <WhyBox copy={round.why} /> : null}
       {correct && index < rounds.length - 1 ? (
         <button
           type="button"

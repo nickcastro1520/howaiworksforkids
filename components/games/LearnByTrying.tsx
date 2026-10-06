@@ -3,15 +3,13 @@
 import { useMemo, useState } from "react";
 import { nearestMemory, otherLabel, type Memory } from "@/lib/engine";
 import { trainSets, type TrainCard } from "@/lib/game-data";
-import { pickAge, type AgeId, type ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function LearnByTrying({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const set = trainSets[theme];
@@ -47,11 +45,7 @@ export function LearnByTrying({
   function teach(label: string) {
     if (phase === "twist") return;
     if (label !== card.label) {
-      setNote(
-        age === "kids"
-          ? "Check the clues, then pick the other bin."
-          : "That label does not match the clues. The buddy should only remember the matching bin.",
-      );
+      setNote("Check the clues, then pick the other bin.");
       return;
     }
     const nextMemory = { id: card.id, vec: card.vec, label };
@@ -106,7 +100,7 @@ export function LearnByTrying({
         </div>
       ) : (
         <div className="mt-3">
-          <WhyBoxText text={pickAge(age, set.twist.why)} />
+          <WhyBoxText text={set.twist.why} />
           <p className="mt-2 font-extrabold">
             {set.buddy} now says “{guessName}” for {card.name}. That guess is wrong.
           </p>

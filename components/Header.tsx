@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { ThemeArt } from "@/components/Art";
 import { usePrefs } from "@/components/Preferences";
 import { THEMES } from "@/lib/themes";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 const NAV = [
   { href: "/lessons", label: "Lessons" },
@@ -17,7 +17,7 @@ const NAV = [
 export function Header() {
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const { prefs, setTheme, setAge } = usePrefs();
+  const { prefs, setTheme } = usePrefs();
 
   function openThemes() {
     dialogRef.current?.showModal();
@@ -62,10 +62,6 @@ export function Header() {
             );
           })}
         </nav>
-        <div role="group" aria-label="Reading level" className="age-switch">
-          <AgeButton age="kids" label="Kids 6–10" onPick={setAge} />
-          <AgeButton age="tweens" label="Tweens 11–14" onPick={setAge} />
-        </div>
       </div>
       <dialog
         ref={dialogRef}
@@ -102,28 +98,5 @@ export function Header() {
         </div>
       </dialog>
     </header>
-  );
-}
-
-function AgeButton({
-  age,
-  label,
-  onPick,
-}: {
-  age: AgeId;
-  label: string;
-  onPick: (age: AgeId) => void;
-}) {
-  const { prefs } = usePrefs();
-  return (
-    <button
-      type="button"
-      className="age-btn"
-      data-age-choice={age}
-      aria-pressed={prefs.age === age}
-      onClick={() => onPick(age)}
-    >
-      {label}
-    </button>
   );
 }

@@ -1,5 +1,3 @@
-import { pickAge, type AgeCopy, type AgeId } from "@/lib/types";
-
 export function RoundLabel({ current, total }: { current: number; total: number }) {
   return (
     <p className="text-sm font-extrabold tracking-wide text-muted uppercase">
@@ -8,10 +6,10 @@ export function RoundLabel({ current, total }: { current: number; total: number 
   );
 }
 
-export function WhyBox({ age, copy }: { age: AgeId; copy: AgeCopy }) {
+export function WhyBox({ copy }: { copy: string }) {
   return (
     <p className="why-box mt-3" role="status">
-      {pickAge(age, copy)}
+      {copy}
     </p>
   );
 }

@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { ChoiceButton, RoundLabel, WhyBox } from "@/components/games/bits";
 import { contextRounds } from "@/lib/game-data";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function WordsContext({
   theme,
-  age,
   onComplete,
 }: {
   theme: ThemeId;
-  age: AgeId;
   onComplete: () => void;
 }) {
   const rounds = contextRounds[theme];
@@ -60,7 +58,7 @@ export function WordsContext({
           The letters stayed the same. Read the other words and try the other meaning.
         </p>
       ) : null}
-      {picked && correct ? <WhyBox age={age} copy={round.why} /> : null}
+      {picked && correct ? <WhyBox copy={round.why} /> : null}
       {correct && !(roundIndex === rounds.length - 1 && sentenceIndex === round.sentences.length - 1) ? (
         <button type="button" className="btn btn-primary mt-4" onClick={next}>
           {sentenceIndex === 0 ? "Same word, next sentence" : "Next word"}

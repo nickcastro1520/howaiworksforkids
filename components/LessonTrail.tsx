@@ -40,9 +40,6 @@ export function LessonTrail({ variant = "index" }: { variant?: "index" | "steppe
                   {lesson.subtitle} · about {lesson.minutes} min
                   {done ? " · finished" : ""}
                 </span>
-                <span className="grownup-chip mt-2">
-                  <span className="chip">{lesson.grownup.chip}</span>
-                </span>
               </span>
               <span className="trail-go" aria-hidden="true">
                 →

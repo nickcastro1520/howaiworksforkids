@@ -22,7 +22,7 @@ const display = Fraunces({
 });
 
 const description =
-  "Free, ad-free games that show kids ages 6–14 how AI works: patterns, practice, context, false patterns, attention, checking a source, and safety. No accounts and no live chatbot.";
+  "Free, ad-free games that show kids ages 6–10 how AI works: patterns, practice, context, false patterns, attention, checking a source, and safety. No accounts and no live chatbot.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

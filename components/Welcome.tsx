@@ -4,31 +4,26 @@ import { useEffect, useState } from "react";
 import { ThemeArt } from "@/components/Art";
 import { usePrefs } from "@/components/Preferences";
 import { THEMES } from "@/lib/themes";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export function Welcome() {
   const { saveWelcome } = usePrefs();
   const [theme, setTheme] = useState<ThemeId | null>(null);
-  const [age, setAge] = useState<AgeId | null>(null);
 
   useEffect(() => {
     if (theme) document.documentElement.dataset.theme = theme;
   }, [theme]);
 
-  function preview(next: ThemeId) {
-    setTheme(next);
-  }
-
   function start() {
-    if (!theme || !age) return;
-    saveWelcome({ theme, age });
+    if (!theme) return;
+    saveWelcome({ theme });
     document.getElementById("content")?.focus();
   }
 
   return (
     <div className="welcome-gate">
       <div className="welcome-inner">
-        <p className="kicker">How AI Works for Kids</p>
+        <p className="kicker">Ages 6–10 · free · no sign-up</p>
         <h1 className="welcome-title mt-3 font-bold">
           Pick a world <em>to play in.</em>
         </h1>
@@ -42,7 +37,7 @@ export function Welcome() {
               type="button"
               className="world-pick"
               aria-pressed={theme === item.id}
-              onClick={() => preview(item.id)}
+              onClick={() => setTheme(item.id)}
             >
               <ThemeArt theme={item.id} />
               <span className="px-2 font-display text-2xl font-bold">{item.name}</span>
@@ -50,45 +45,11 @@ export function Welcome() {
             </button>
           ))}
         </div>
-        <div className="mt-8">
-          <h2 className="font-display text-3xl font-bold">Who’s learning?</h2>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2" role="group" aria-label="Reading level">
-            <button
-              type="button"
-              className="choice"
-              aria-pressed={age === "kids"}
-              onClick={() => setAge("kids")}
-            >
-              Kids, ages 6–10
-              <span className="mt-1 block text-sm font-semibold text-muted">
-                Short words. Almost no jargon.
-              </span>
-            </button>
-            <button
-              type="button"
-              className="choice"
-              aria-pressed={age === "tweens"}
-              onClick={() => setAge("tweens")}
-            >
-              Tweens, ages 11–14
-              <span className="mt-1 block text-sm font-semibold text-muted">
-                Same games, plus a small grown-up name.
-              </span>
-            </button>
-          </div>
-        </div>
-        <button
-          type="button"
-          className="btn btn-primary mt-6 text-lg"
-          disabled={!theme || !age}
-          onClick={start}
-        >
+        <button type="button" className="btn btn-primary mt-6 text-lg" disabled={!theme} onClick={start}>
           Start learning
         </button>
-        {!theme || !age ? (
-          <p className="mt-3 text-sm text-muted">
-            Pick a world and who’s learning. Then this button turns on.
-          </p>
+        {!theme ? (
+          <p className="mt-3 text-sm text-muted">Pick a world. Then this button turns on.</p>
         ) : null}
       </div>
     </div>

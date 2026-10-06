@@ -1,12 +1,12 @@
 # How AI Works for Kids
 
-Free, mobile-first games that show kids ages 6–14 how AI works. The live site is [howaiworksforkids.com](https://howaiworksforkids.com).
+Free, mobile-first games that show kids ages 6–10 how AI works. The live site is [howaiworksforkids.com](https://howaiworksforkids.com).
 
 Built by [Nick Castro](https://nickcastrobuilds.com) in Chicago as a portfolio piece for AI enablement and training. No ads, no kid accounts, and no open chat with an AI model. The games run in the browser.
 
 ## Lessons
 
-Kid titles come first. Tweens (11–14) can turn on a reading level that adds a small grown-up name. Kids (6–10) do not see that jargon.
+The lessons use plain language for ages 6–10.
 
 1. **AI isn't magic** — it finds patterns
 2. **Learn by trying** — practice and feedback
@@ -16,7 +16,7 @@ Kid titles come first. Tweens (11–14) can turn on a reading level that adds a 
 6. **Check a source** — look it up before you answer
 7. **Be safe and honest** — AI can be wrong, privacy, ask a grown-up
 
-Worlds (Rockets & space, Dinosaurs, E-bikes) change examples and art. The lesson mechanics stay the same. The choice is saved in `localStorage` on the device, along with the reading level and finished lessons. Nothing there is sent to a server.
+Worlds (Rockets & space, Dinosaurs, E-bikes) change examples and art. The lesson mechanics stay the same. The choice is saved in `localStorage` on the device, along with finished lessons. Nothing there is sent to a server.
 
 “Tell a parent” asks for a parent email only and opens the device mail app (`mailto:`). The address is not stored. There is no child name or child email field.
 

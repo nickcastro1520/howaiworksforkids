@@ -44,9 +44,9 @@ const SECTIONS = [
         </p>
         <p className="mt-2">
           The site stores a few settings in this browser only, under the localStorage key{" "}
-          <code>{PREFS_KEY}</code>: the chosen world (space, dinosaurs, or e-bikes), the reading
-          level, and which lessons were finished. That stays on the device. Clearing the browser’s
-          site data deletes it. We do not receive a copy.
+          <code>{PREFS_KEY}</code>: the chosen world (space, dinosaurs, or e-bikes) and which
+          lessons were finished. That stays on the device. Clearing the browser’s site data deletes
+          it. We do not receive a copy.
         </p>
       </>
     ),

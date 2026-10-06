@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { nextLesson, type Lesson } from "@/lib/lessons";
 import { absoluteUrl } from "@/lib/site";
-import { pickAge, type AgeId } from "@/lib/types";
-
-export function ShareCard({ lesson, age }: { lesson: Lesson; age: AgeId }) {
+export function ShareCard({ lesson }: { lesson: Lesson }) {
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
   const [emailNote, setEmailNote] = useState("");
@@ -68,7 +66,7 @@ export function ShareCard({ lesson, age }: { lesson: Lesson; age: AgeId }) {
       <h2 id="finish-title" className="mt-1 font-display text-4xl font-bold">
         {lesson.title}
       </h2>
-      <p className="mt-3 text-lg">{pickAge(age, lesson.takeaway)}</p>
+      <p className="mt-3 text-lg">{lesson.takeaway}</p>
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">
         <button type="button" className="btn btn-primary" onClick={copyLink}>
           {copied ? "Link copied" : "Copy link"}

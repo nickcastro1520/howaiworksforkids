@@ -6,7 +6,7 @@ const audience = {
   "@type": "EducationalAudience",
   educationalRole: "student",
   suggestedMinAge: 6,
-  suggestedMaxAge: 14,
+  suggestedMaxAge: 10,
 };
 
 export function siteGraph() {
@@ -19,7 +19,7 @@ export function siteGraph() {
         name: SITE_NAME,
         url: SITE_URL,
         description:
-          "Free lessons that show kids ages 6 to 14 how AI works, with no ads, no accounts, and no live chatbot.",
+          "Free lessons that show kids ages 6 to 10 how AI works, with no ads, no accounts, and no live chatbot.",
         inLanguage: "en",
         publisher: { "@id": `${SITE_URL}/#person` },
       },
@@ -96,7 +96,7 @@ export function lessonJsonLd(lesson: Lesson) {
     learningResourceType: "Interactive game",
     educationalLevel: "Beginner",
     audience,
-    teaches: lesson.takeaway.tweens,
+    teaches: lesson.takeaway,
     provider: {
       "@type": "Person",
       name: NICK.name,

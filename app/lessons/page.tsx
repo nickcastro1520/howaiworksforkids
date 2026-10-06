@@ -23,8 +23,7 @@ export default function LessonsPage() {
           Play in order, <em>or hop.</em>
         </h1>
         <p className="mt-4 text-lg text-muted">
-          Every lesson is unlocked. Tweens can switch the reading level to see a small grown-up name.
-          Kids stay on plain language.
+          Every lesson is unlocked. The words stay plain for ages 6–10.
         </p>
       </div>
       <LessonTrail />

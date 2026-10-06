@@ -25,21 +25,16 @@ export default function HomePage() {
       <div className="shell pb-8">
         <section className="hero-home rise">
           <div>
-            <p className="kicker">Ages 6–14 · free · no sign-up</p>
+            <p className="kicker">Ages 6–10 · free · no sign-up</p>
             <h1 className="hero-title mt-3 font-bold">
               How AI works, <em>so a kid can teach it back.</em>
             </h1>
-            <p className="age-kids mt-4 max-w-xl text-lg">
+            <p className="mt-4 max-w-xl text-lg">
               Seven short games. No ads. No account. No chatting with a live AI.
-            </p>
-            <p className="age-tweens mt-4 max-w-xl text-lg">
-              Seven games, one reading level up. Grown-up names stay in small chips. Still no ads, no
-              account, and no live model.
             </p>
             {THEMES.map((theme) => (
               <p key={theme.id} className={`${swapClass[theme.id]} mt-3 max-w-xl text-muted`}>
-                <span className="age-kids">{theme.hero.kids}</span>
-                <span className="age-tweens">{theme.hero.tweens}</span>
+                {theme.hero}
               </p>
             ))}
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">

@@ -1,4 +1,4 @@
-import type { AgeCopy, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 export type Choice = { id: string; label: string };
 
@@ -7,7 +7,7 @@ export type PatternRound = {
   sequence: { emoji: string; label: string }[];
   choices: Choice[];
   answer: string;
-  why: AgeCopy;
+  why: string;
 };
 
 export type TrainCard = {
@@ -28,7 +28,7 @@ export type TrainSet = {
   twist: {
     flipId: string;
     card: TrainCard;
-    why: AgeCopy;
+    why: string;
   };
 };
 
@@ -36,7 +36,7 @@ export type ContextRound = {
   word: string;
   sentences: { text: string; answer: string }[];
   meanings: Choice[];
-  why: AgeCopy;
+  why: string;
 };
 
 export type LookRound = {
@@ -46,13 +46,13 @@ export type LookRound = {
   question: string;
   choices: Choice[];
   answer: string;
-  why: AgeCopy;
+  why: string;
 };
 
 export type AttentionScene = {
   title: string;
   details: Choice[];
-  questions: { ask: string; answer: string; why: AgeCopy }[];
+  questions: { ask: string; answer: string; why: string }[];
 };
 
 export type FactCard = {
@@ -74,7 +74,7 @@ export type SafetyItem = {
   id: string;
   text: string;
   answer: string;
-  why: AgeCopy;
+  why: string;
 };
 
 export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
@@ -94,11 +94,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "pizza", label: "Pizza" },
       ],
       answer: "moon",
-      why: {
-        kids: "Rocket, moon, rocket, moon. The next one is a moon. You found the pattern.",
-        tweens:
-          "The examples alternate. A pattern-finder copies that rhythm. It is a guess from examples, not a spell.",
-      },
+      why: "Rocket, moon, rocket, moon. The next one is a moon. You found the pattern.",
     },
     {
       prompt: "The piles keep growing. What comes next?",
@@ -113,10 +109,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "zero", label: "No stars" },
       ],
       answer: "four",
-      why: {
-        kids: "1, then 2, then 3. The pattern adds one star each time.",
-        tweens: "This is a count going up by one. More examples made the rule easier to see.",
-      },
+      why: "1, then 2, then 3. The pattern adds one star each time.",
     },
     {
       prompt: "Now be careful. What comes next?",
@@ -131,11 +124,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "unsure", label: "I can’t tell yet" },
       ],
       answer: "unsure",
-      why: {
-        kids: "Two planets and a pizza is not a real rule. It is okay to say you can’t tell yet. That is smarter than magic.",
-        tweens:
-          "Two repeats and a break are not enough to claim a rule. Sounding sure too early is how a pattern-finder makes things up.",
-      },
+      why: "Two planets and a pizza is not a real rule. It is okay to say you can’t tell yet. That is smarter than magic.",
     },
   ],
   dinosaurs: [
@@ -154,10 +143,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "cake", label: "Cake" },
       ],
       answer: "rex",
-      why: {
-        kids: "They take turns. After a long-neck comes a T. rex shape.",
-        tweens: "Alternating examples are a pattern you can check. The guess comes from the line, not from magic.",
-      },
+      why: "They take turns. After a long-neck comes a T. rex shape.",
     },
     {
       prompt: "The footprints grow. What comes next?",
@@ -172,10 +158,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "feather", label: "A feather" },
       ],
       answer: "huge",
-      why: {
-        kids: "Small, medium, large. The next print is huge.",
-        tweens: "The size goes up each step. You are matching the change, not naming a real dinosaur species.",
-      },
+      why: "Small, medium, large. The next print is huge.",
     },
     {
       prompt: "Now be careful. What comes next?",
@@ -190,11 +173,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "unsure", label: "I can’t tell yet" },
       ],
       answer: "unsure",
-      why: {
-        kids: "Fossil, fossil, cupcake is a mess, not a rule. Saying “I can’t tell yet” is the honest guess.",
-        tweens:
-          "A model can still blurt an answer here. You don’t have to. Not enough pattern means not enough to guess.",
-      },
+      why: "Fossil, fossil, cupcake is a mess, not a rule. Saying “I can’t tell yet” is the honest guess.",
     },
   ],
   ebikes: [
@@ -213,10 +192,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "fish", label: "Fish" },
       ],
       answer: "wheel",
-      why: {
-        kids: "Helmet, wheel, helmet, wheel. A wheel comes next.",
-        tweens: "You used the repeating pair. That is the whole trick: find the pattern, then guess.",
-      },
+      why: "Helmet, wheel, helmet, wheel. A wheel comes next.",
     },
     {
       prompt: "The ride gets longer. What comes next?",
@@ -231,10 +207,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "helmet", label: "A helmet" },
       ],
       answer: "four",
-      why: {
-        kids: "The blocks go 1, 2, 3. Next is 4.",
-        tweens: "A steady step-up is a pattern. It does not mean a real ride has to be four blocks.",
-      },
+      why: "The blocks go 1, 2, 3. Next is 4.",
     },
     {
       prompt: "Now be careful. What comes next?",
@@ -249,11 +222,7 @@ export const notMagicRounds: Record<ThemeId, PatternRound[]> = {
         { id: "unsure", label: "I can’t tell yet" },
       ],
       answer: "unsure",
-      why: {
-        kids: "Two bikes and an ice cream do not make a rule. It is brave and smart to say you can’t tell yet.",
-        tweens:
-          "AI isn’t magic, so it should not invent a rule from junk examples. “I can’t tell yet” is a real answer.",
-      },
+      why: "Two bikes and an ice cream do not make a rule. It is brave and smart to say you can’t tell yet.",
     },
   ],
 };
@@ -292,11 +261,7 @@ export const trainSets: Record<ThemeId, TrainSet> = {
     twist: {
       flipId: "cookie",
       card: snack("granola", "Granola bite", "🥣"),
-      why: {
-        kids: "You cheered a wrong label for the cookie. Nova copied that closest example, so the granola got called a moon rock.",
-        tweens:
-          "The granola is closest to the cookie. Flip the cookie’s label and the next yummy thing inherits the mistake. That is bad training data, not a smarter buddy.",
-      },
+      why: "You cheered a wrong label for the cookie. Nova copied that closest example, so the granola got called a moon rock.",
     },
   },
   dinosaurs: {
@@ -316,11 +281,7 @@ export const trainSets: Record<ThemeId, TrainSet> = {
     twist: {
       flipId: "cupcake",
       card: snack("gummy", "Gummy dino", "🍬"),
-      why: {
-        kids: "Fern remembered the cupcake toy as a fossil because of a wrong cheer. The gummy dino was closest to that toy, so the guess went wrong.",
-        tweens:
-          "Nearest example wins. A single mislabeled toy can pull later look-alikes into the wrong bin.",
-      },
+      why: "Fern remembered the cupcake toy as a fossil because of a wrong cheer. The gummy dino was closest to that toy, so the guess went wrong.",
     },
   },
   ebikes: {
@@ -340,11 +301,7 @@ export const trainSets: Record<ThemeId, TrainSet> = {
     twist: {
       flipId: "bar",
       card: snack("cracker", "Cracker", "🍘"),
-      why: {
-        kids: "Pip was told the oat bar was safety gear. The cracker was closest to that bar, so Pip called food a helmet.",
-        tweens:
-          "Feedback is the lesson. Praise the wrong try and the next similar try copies it. The motor does not fix a bad label — you do, by correcting it.",
-      },
+      why: "Pip was told the oat bar was safety gear. The cracker was closest to that bar, so Pip called food a helmet.",
     },
   },
 };
@@ -361,11 +318,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "That star is a giant sun, very far away.", answer: "sun" },
         { text: "She is the star of the space play.", answer: "person" },
       ],
-      why: {
-        kids: "Star did not change its letters. The other words did the job. Sky words mean a sun. Play words mean a person.",
-        tweens:
-          "Same spelling, two senses. Context picks the sense. A computer that always takes the first dictionary meaning will grab the wrong star.",
-      },
+      why: "Star did not change its letters. The other words did the job. Sky words mean a sun. Play words mean a person.",
     },
     {
       word: "space",
@@ -377,11 +330,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "The rocket flies into space.", answer: "sky" },
         { text: "Make space in the bag for the helmet.", answer: "room" },
       ],
-      why: {
-        kids: "“Into space” means the sky above Earth. “Make space” means room in the bag.",
-        tweens:
-          "Little words around the target word change the job it is doing. That is context.",
-      },
+      why: "“Into space” means the sky above Earth. “Make space” means room in the bag.",
     },
     {
       word: "rock",
@@ -393,11 +342,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "We found a moon rock in the photo.", answer: "stone" },
         { text: "Don’t rock the model rocket. It might tip.", answer: "shake" },
       ],
-      why: {
-        kids: "A moon rock is a stone. “Don’t rock it” means don’t shake it.",
-        tweens:
-          "If a helper grabs only the word rock, it might pack a stone when you meant “don’t shake the model.” The sentence has to come along.",
-      },
+      why: "A moon rock is a stone. “Don’t rock it” means don’t shake it.",
     },
   ],
   dinosaurs: [
@@ -411,10 +356,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "The dino club meets on Saturday.", answer: "group" },
         { text: "The toy dinosaur holds a heavy club.", answer: "stick" },
       ],
-      why: {
-        kids: "A club can be friends who meet, or a heavy stick. The sentence tells you which.",
-        tweens: "One word, two meanings. The nearby words are the decider.",
-      },
+      why: "A club can be friends who meet, or a heavy stick. The sentence tells you which.",
     },
     {
       word: "date",
@@ -426,11 +368,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "The sign shows the date of the fossil find.", answer: "when" },
         { text: "We have a play date at the museum.", answer: "plan" },
       ],
-      why: {
-        kids: "A date on a sign is a when. A play date is a plan with someone.",
-        tweens:
-          "Both uses are normal English. Context, not the word alone, picks the meaning.",
-      },
+      why: "A date on a sign is a when. A play date is a plan with someone.",
     },
     {
       word: "point",
@@ -442,11 +380,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "The fossil tooth has a sharp point.", answer: "tip" },
         { text: "Her point was that birds are dinosaur relatives.", answer: "idea" },
       ],
-      why: {
-        kids: "A sharp point is a tip. “Her point” is the idea she wanted you to get.",
-        tweens:
-          "A literal grab would look for a sharp tooth in the second sentence. The context says she is sharing an idea. (Most scientists do treat birds as living dinosaur relatives.)",
-      },
+      why: "A sharp point is a tip. “Her point” is the idea she wanted you to get.",
     },
   ],
   ebikes: [
@@ -460,10 +394,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "Park the e-bike by the rack.", answer: "leave" },
         { text: "We ride to the park.", answer: "place" },
       ],
-      why: {
-        kids: "Park the bike means put it somewhere and stop. The park is a place.",
-        tweens: "Same word, verb or place. The sentence frame tells them apart.",
-      },
+      why: "Park the bike means put it somewhere and stop. The park is a place.",
     },
     {
       word: "light",
@@ -475,11 +406,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "Turn on your bike light before dusk.", answer: "lamp" },
         { text: "This helmet is light, not heavy.", answer: "weight" },
       ],
-      why: {
-        kids: "A bike light is a lamp. A light helmet means it is not heavy.",
-        tweens:
-          "If you only match the word light, you might look for a lamp when the sentence is about weight.",
-      },
+      why: "A bike light is a lamp. A light helmet means it is not heavy.",
     },
     {
       word: "trip",
@@ -491,11 +418,7 @@ export const contextRounds: Record<ThemeId, ContextRound[]> = {
         { text: "Our bike trip is two blocks long.", answer: "ride" },
         { text: "Don’t trip on the curb.", answer: "stumble" },
       ],
-      why: {
-        kids: "A bike trip is a ride. “Don’t trip” means don’t stumble.",
-        tweens:
-          "Context keeps a helper from treating a curb warning like a travel plan. A grown-up still sets the riding rules.",
-      },
+      why: "A bike trip is a ride. “Don’t trip” means don’t stumble.",
     },
   ],
 };
@@ -513,11 +436,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "both", label: "If it looks like a rocket, it is one" },
       ],
       answer: "real",
-      why: {
-        kids: "A pointy toy can look like a rocket. Fuel and a real launch crew are the clues that matter. Looks are not enough.",
-        tweens:
-          "Shape is a weak pattern. The job it does — burning fuel to leave the ground — is the real category.",
-      },
+      why: "A pointy toy can look like a rocket. Fuel and a real launch crew are the clues that matter. Looks are not enough.",
     },
     {
       kicker: "They go up together",
@@ -536,11 +455,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "sun", label: "No. The sunny day is the reason." },
       ],
       answer: "sun",
-      why: {
-        kids: "Popsicles and sunscreen show up together because the day is sunny. The popsicle does not cause the sunscreen.",
-        tweens:
-          "This is a correlation trap. A hidden third thing — sunshine — pushes both counts up.",
-      },
+      why: "Popsicles and sunscreen show up together because the day is sunny. The popsicle does not cause the sunscreen.",
     },
     {
       kicker: "Hidden reason",
@@ -552,11 +467,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "no", label: "No. A helmet is just one piece of gear." },
       ],
       answer: "no",
-      why: {
-        kids: "Astronauts wear helmets because space has no air to breathe. The helmet does not turn someone into an astronaut.",
-        tweens:
-          "The helmet is associated with the job. Association is not the job. Training, a spacecraft, and a crew are the rest of the story.",
-      },
+      why: "Astronauts wear helmets because space has no air to breathe. The helmet does not turn someone into an astronaut.",
     },
   ],
   dinosaurs: [
@@ -570,11 +481,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "no", label: "No. Looking close is not the same group." },
       ],
       answer: "no",
-      why: {
-        kids: "Crocodiles are not dinosaurs. A look-alike can trick a pattern that only checks “scaly.”",
-        tweens:
-          "Shared features are not a category. Scientists use a family tree, not just a vibe.",
-      },
+      why: "Crocodiles are not dinosaurs. A look-alike can trick a pattern that only checks “scaly.”",
     },
     {
       kicker: "They go up together",
@@ -593,10 +500,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "rain", label: "No. Rain is the hidden reason." },
       ],
       answer: "rain",
-      why: {
-        kids: "Rain brings people inside and makes them want umbrellas. The dinosaurs are not causing the umbrellas.",
-        tweens: "Visitors and umbrellas correlate. Rain is the confound — the third thing that moves both.",
-      },
+      why: "Rain brings people inside and makes them want umbrellas. The dinosaurs are not causing the umbrellas.",
     },
     {
       kicker: "Hidden reason",
@@ -608,11 +512,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "no", label: "No. The toys copy the fossils." },
       ],
       answer: "no",
-      why: {
-        kids: "The shop copies the famous fossils. Toys do not make bones appear in the rock.",
-        tweens:
-          "The arrow can point the wrong way. The display explains the toys. The toys do not explain the fossils.",
-      },
+      why: "The shop copies the famous fossils. Toys do not make bones appear in the rock.",
     },
   ],
   ebikes: [
@@ -626,11 +526,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "no", label: "No. Wheels are only a look-alike." },
       ],
       answer: "no",
-      why: {
-        kids: "Lots of things have wheels. An e-bike has pedals and a helper motor. A scooter is a different ride.",
-        tweens:
-          "One shared part is a false pattern. The category needs the parts that actually change how it works.",
-      },
+      why: "Lots of things have wheels. An e-bike has pedals and a helper motor. A scooter is a different ride.",
     },
     {
       kicker: "They go up together",
@@ -649,10 +545,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "ride", label: "No. The long ride explains both." },
       ],
       answer: "ride",
-      why: {
-        kids: "A long ride collects bugs and makes legs tired. The bugs are not pedaling.",
-        tweens: "Bugs and tired legs correlate because both come from distance. Neither causes the other.",
-      },
+      why: "A long ride collects bugs and makes legs tired. The bugs are not pedaling.",
     },
     {
       kicker: "Hidden reason",
@@ -664,11 +557,7 @@ export const lookRounds: Record<ThemeId, LookRound[]> = {
         { id: "practice", label: "No. More practice rides explain it." },
       ],
       answer: "practice",
-      why: {
-        kids: "Stickers are decoration. Practice, brakes, and a grown-up’s rules are what matter. Stickers do not push the bike.",
-        tweens:
-          "Stickers tag along with kids who ride a lot. The riding is the cause you almost missed.",
-      },
+      why: "Stickers are decoration. Practice, brakes, and a grown-up’s rules are what matter. Stickers do not push the bike.",
     },
   ],
 };
@@ -687,18 +576,12 @@ export const attentionScenes: Record<ThemeId, AttentionScene[]> = {
         {
           ask: "Which clue matters for a helmet that fits?",
           answer: "size",
-          why: {
-            kids: "Size tells you if it fits. The sticker and the song do not.",
-            tweens: "The question is about fit, so size gets the attention. The other details are noise for this question.",
-          },
+          why: "Size tells you if it fits. The sticker and the song do not.",
         },
         {
           ask: "Same table. Which clue matters for a snack they will actually eat?",
           answer: "snack",
-          why: {
-            kids: "New question, new clue. Snack flavor matters now. Helmet size can sit this one out.",
-            tweens: "Attention moved. The scene did not change. The question did.",
-          },
+          why: "New question, new clue. Snack flavor matters now. Helmet size can sit this one out.",
         },
       ],
     },
@@ -714,18 +597,12 @@ export const attentionScenes: Record<ThemeId, AttentionScene[]> = {
         {
           ask: "Which clue matters to know if the rocket can lift off?",
           answer: "fuel",
-          why: {
-            kids: "A rocket needs fuel to push it up. Shoe color does not lift anything.",
-            tweens: "Pay attention to the clue that can change the outcome. Decoration cannot.",
-          },
+          why: "A rocket needs fuel to push it up. Shoe color does not lift anything.",
         },
         {
           ask: "New question: which clue matters for a weather delay?",
           answer: "clouds",
-          why: {
-            kids: "Clouds tell you about the sky. The mascot is cute and not the weather.",
-            tweens: "Same photo, different question, different clue. That is attention.",
-          },
+          why: "Clouds tell you about the sky. The mascot is cute and not the weather.",
         },
       ],
     },
@@ -743,18 +620,12 @@ export const attentionScenes: Record<ThemeId, AttentionScene[]> = {
         {
           ask: "Which clue matters to find the T. rex hall?",
           answer: "map",
-          why: {
-            kids: "The map shows the way. A joke will not get you there.",
-            tweens: "Navigation is the task, so the map is the clue to attend to.",
-          },
+          why: "The map shows the way. A joke will not get you there.",
         },
         {
           ask: "Same lobby. Which clue matters to read the right fossil?",
           answer: "name",
-          why: {
-            kids: "The name on the sign tells you which fossil it is. The bag color does not.",
-            tweens: "The question changed, so attention moved from the map to the sign.",
-          },
+          why: "The name on the sign tells you which fossil it is. The bag color does not.",
         },
       ],
     },
@@ -770,18 +641,12 @@ export const attentionScenes: Record<ThemeId, AttentionScene[]> = {
         {
           ask: "Which clue matters for cleaning a fossil gently?",
           answer: "brush",
-          why: {
-            kids: "A soft brush is the careful tool. Hat color does not clean the bone.",
-            tweens: "The action is “clean gently,” so the tool is the relevant clue.",
-          },
+          why: "A soft brush is the careful tool. Hat color does not clean the bone.",
         },
         {
           ask: "New question: which clue matters for how buried it is?",
           answer: "depth",
-          why: {
-            kids: "Depth tells you how buried the bone is. Lunch can wait.",
-            tweens: "Irrelevant details stay in the picture. Attention leaves them alone.",
-          },
+          why: "Depth tells you how buried the bone is. Lunch can wait.",
         },
       ],
     },
@@ -799,19 +664,12 @@ export const attentionScenes: Record<ThemeId, AttentionScene[]> = {
         {
           ask: "Which clue matters to stop safely?",
           answer: "brakes",
-          why: {
-            kids: "Brakes help you stop. Spoke color does not. A grown-up should check real brakes.",
-            tweens:
-              "Stopping is the question, so brake condition gets attention. Style details are distractors.",
-          },
+          why: "Brakes help you stop. Spoke color does not. A grown-up should check real brakes.",
         },
         {
           ask: "Same bike. Which clue matters for how hard the ride will feel?",
           answer: "hill",
-          why: {
-            kids: "A hill changes how hard you work. The bell sticker does not push you up.",
-            tweens: "The helper motor does not erase the hill. The question moved attention to the trail.",
-          },
+          why: "A hill changes how hard you work. The bell sticker does not push you up.",
         },
       ],
     },
@@ -827,18 +685,12 @@ export const attentionScenes: Record<ThemeId, AttentionScene[]> = {
         {
           ask: "Which clue matters before another lap with the helper motor?",
           answer: "battery",
-          why: {
-            kids: "The battery stores energy for the motor. Socks do not charge it. You still pedal, steer, and brake.",
-            tweens: "Energy left is the relevant state. The other details are in the scene and not in the decision.",
-          },
+          why: "The battery stores energy for the motor. Socks do not charge it. You still pedal, steer, and brake.",
         },
         {
           ask: "New question: which clue matters for head safety right now?",
           answer: "helmet",
-          why: {
-            kids: "A helmet protects your head if you fall. The song does not.",
-            tweens: "Safety questions attend to protective gear, not to taste in music.",
-          },
+          why: "A helmet protects your head if you fall. The song does not.",
         },
       ],
     },
@@ -998,28 +850,19 @@ export const safetyDecks: Record<
         id: "cheese",
         text: "“The Moon is made of cheese.” Said in a sure voice.",
         answer: "wrong",
-        why: {
-          kids: "That is a joke, not a fact. A sure voice does not make it true. The Moon is not made of cheese.",
-          tweens: "Fluency is not evidence. A smooth wrong sentence is still wrong.",
-        },
+        why: "That is a joke, not a fact. A sure voice does not make it true. The Moon is not made of cheese.",
       },
       {
         id: "wrong-ok",
         text: "“AI can be wrong even when it sounds sure.”",
         answer: "right",
-        why: {
-          kids: "Yes. That is the point of this lesson.",
-          tweens: "Treat confident output as a draft, not as proof.",
-        },
+        why: "Yes. That is the point of this lesson.",
       },
       {
         id: "friend",
         text: "“Type your home address so the AI can be your friend.”",
         answer: "wrong",
-        why: {
-          kids: "No. Your address is private. An AI is not a friend who needs it.",
-          tweens: "Friendship is not a reason to hand over a home address.",
-        },
+        why: "No. Your address is private. An AI is not a friend who needs it.",
       },
     ],
     privacy: [
@@ -1027,37 +870,25 @@ export const safetyDecks: Record<
         id: "planet",
         text: "My favorite planet is Saturn.",
         answer: "share",
-        why: {
-          kids: "A favorite planet is a fun fact, not a private one.",
-          tweens: "Favorites are low risk. Still skip last names and places you go.",
-        },
+        why: "A favorite planet is a fun fact, not a private one.",
       },
       {
         id: "address",
         text: "My address is 12 Rocket Street.",
         answer: "keep",
-        why: {
-          kids: "Keep your address private. Do not type it into a chat.",
-          tweens: "A street address can locate a home. Keep it offline.",
-        },
+        why: "Keep your address private. Do not type it into a chat.",
       },
       {
         id: "school",
         text: "I go to Lincoln Elementary.",
         answer: "keep",
-        why: {
-          kids: "Your school name plus your name can point to you. Keep it off chats.",
-          tweens: "School plus a name is identifying. Don’t offer it to a bot.",
-        },
+        why: "Your school name plus your name can point to you. Keep it off chats.",
       },
       {
         id: "password",
         text: "My password is rocket123.",
         answer: "keep",
-        why: {
-          kids: "Passwords stay secret. Never teach them to a website chat.",
-          tweens: "A password is a key. No assistant needs it.",
-        },
+        why: "Passwords stay secret. Never teach them to a website chat.",
       },
     ],
     grownup: [
@@ -1065,28 +896,19 @@ export const safetyDecks: Record<
         id: "planet-q",
         text: "Which planet is the biggest?",
         answer: "wonder",
-        why: {
-          kids: "That is a wonder question. Check a source, and it is fine to learn it with a grown-up too.",
-          tweens: "Curiosity about science is welcome. The earlier lesson still says: check a source.",
-        },
+        why: "That is a wonder question. Check a source, and it is fine to learn it with a grown-up too.",
       },
       {
         id: "medicine",
         text: "A screen says you should take medicine.",
         answer: "ask",
-        why: {
-          kids: "Medicine is a grown-up decision. Ask a parent, guardian, or doctor. Do not follow a screen.",
-          tweens: "Health instructions from a chat are not medical care. Stop and ask a trusted adult.",
-        },
+        why: "Medicine is a grown-up decision. Ask a parent, guardian, or doctor. Do not follow a screen.",
       },
       {
         id: "meet",
         text: "Someone from a game wants to meet in person, alone.",
         answer: "ask",
-        why: {
-          kids: "Do not go. Tell a grown-up right away.",
-          tweens: "In-person meetups with someone from the internet are a stop-and-tell moment. Not a secret.",
-        },
+        why: "Do not go. Tell a grown-up right away.",
       },
     ],
   },
@@ -1096,28 +918,19 @@ export const safetyDecks: Record<
         id: "rode",
         text: "“People rode dinosaurs to school.” Said like a fact.",
         answer: "wrong",
-        why: {
-          kids: "People and those dinosaurs did not live at the same time. A sure voice can still be silly and wrong.",
-          tweens: "This fails a basic source check. Confidence does not repair it.",
-        },
+        why: "People and those dinosaurs did not live at the same time. A sure voice can still be silly and wrong.",
       },
       {
         id: "wrong-ok",
         text: "“A fossil answer can be wrong if the examples were bad.”",
         answer: "right",
-        why: {
-          kids: "Yes. Bad examples make bad guesses. You saw that when a wrong cheer spread.",
-          tweens: "Training data quality shows up again here. Wrong examples, wrong guesses.",
-        },
+        why: "Yes. Bad examples make bad guesses. You saw that when a wrong cheer spread.",
       },
       {
         id: "phone",
         text: "“Tell the chat your phone number so it can text you dino facts.”",
         answer: "wrong",
-        why: {
-          kids: "No phone numbers. A book or a grown-up can share dino facts without your number.",
-          tweens: "Facts do not require your phone number. That ask is a privacy fail.",
-        },
+        why: "No phone numbers. A book or a grown-up can share dino facts without your number.",
       },
     ],
     privacy: [
@@ -1125,37 +938,25 @@ export const safetyDecks: Record<
         id: "fav",
         text: "My favorite dinosaur is Triceratops.",
         answer: "share",
-        why: {
-          kids: "A favorite dinosaur is okay to say in a game like this.",
-          tweens: "Taste in dinosaurs is not personal data.",
-        },
+        why: "A favorite dinosaur is okay to say in a game like this.",
       },
       {
         id: "photo",
         text: "A photo of my house and the street sign.",
         answer: "keep",
-        why: {
-          kids: "That photo shows where you live. Keep it private.",
-          tweens: "A house plus a street sign is location data. Don’t upload it.",
-        },
+        why: "That photo shows where you live. Keep it private.",
       },
       {
         id: "fullname",
         text: "My full name and my age together.",
         answer: "keep",
-        why: {
-          kids: "Keep your full name off chats. This site does not ask for it.",
-          tweens: "Full name plus age is more than a nickname. Don’t combine them for a bot.",
-        },
+        why: "Keep your full name off chats. This site does not ask for it.",
       },
       {
         id: "color",
         text: "I like the color green.",
         answer: "share",
-        why: {
-          kids: "A favorite color is fine.",
-          tweens: "Low-risk preference. Still no school, address, or password next to it.",
-        },
+        why: "A favorite color is fine.",
       },
     ],
     grownup: [
@@ -1163,28 +964,19 @@ export const safetyDecks: Record<
         id: "birds",
         text: "Are birds related to dinosaurs?",
         answer: "wonder",
-        why: {
-          kids: "Good wonder question. A museum sign or a book can help. You can ask a grown-up too.",
-          tweens: "This is a science question, not a safety emergency. Check a source.",
-        },
+        why: "Good wonder question. A museum sign or a book can help. You can ask a grown-up too.",
       },
       {
         id: "scare",
         text: "A picture online scared you and you don’t want to say it out loud.",
         answer: "ask",
-        why: {
-          kids: "Tell a grown-up you trust. You do not have to handle a scare alone.",
-          tweens: "Scary content is a grown-up conversation, not something to feed back into a chat.",
-        },
+        why: "Tell a grown-up you trust. You do not have to handle a scare alone.",
       },
       {
         id: "meet",
         text: "A player offers a secret fossil meetup after school.",
         answer: "ask",
-        why: {
-          kids: "Secret meetups are a no. Tell a grown-up.",
-          tweens: "“Secret” plus “meet” is the alarm. Show a trusted adult.",
-        },
+        why: "Secret meetups are a no. Tell a grown-up.",
       },
     ],
   },
@@ -1194,28 +986,19 @@ export const safetyDecks: Record<
         id: "eyes",
         text: "“Close your eyes. The e-bike motor will steer.”",
         answer: "wrong",
-        why: {
-          kids: "No. You steer and brake. The motor only helps. And a grown-up’s rules matter.",
-          tweens: "That advice is unsafe. A helper motor does not drive for you.",
-        },
+        why: "No. You steer and brake. The motor only helps. And a grown-up’s rules matter.",
       },
       {
         id: "helmet-true",
         text: "“A helmet can protect your head if you fall.”",
         answer: "right",
-        why: {
-          kids: "Yes. That one is true. It still does not make you invincible.",
-          tweens: "True, and limited. A helmet is protection, not permission to ride unsafely.",
-        },
+        why: "Yes. That one is true. It still does not make you invincible.",
       },
       {
         id: "always",
         text: "“If the answer sounds smart, it is always right.”",
         answer: "wrong",
-        why: {
-          kids: "Nope. Smart-sounding can still be wrong.",
-          tweens: "There is no “always right” mode. Check the claim.",
-        },
+        why: "Nope. Smart-sounding can still be wrong.",
       },
     ],
     privacy: [
@@ -1223,37 +1006,25 @@ export const safetyDecks: Record<
         id: "color",
         text: "My helmet is blue.",
         answer: "share",
-        why: {
-          kids: "A helmet color is a normal detail.",
-          tweens: "Fine by itself. Don’t add your route home.",
-        },
+        why: "A helmet color is a normal detail.",
       },
       {
         id: "route",
         text: "I ride home alone on Maple Street every day at 3.",
         answer: "keep",
-        why: {
-          kids: "That tells people where you will be. Keep it private.",
-          tweens: "A route plus a time is sensitive. Not chat material.",
-        },
+        why: "That tells people where you will be. Keep it private.",
       },
       {
         id: "lock",
         text: "My bike lock code is 4821.",
         answer: "keep",
-        why: {
-          kids: "Lock codes are secrets, like passwords.",
-          tweens: "A code is a credential. Never paste it.",
-        },
+        why: "Lock codes are secrets, like passwords.",
       },
       {
         id: "hill",
         text: "Hills are harder than flat paths.",
         answer: "share",
-        why: {
-          kids: "That is a riding fact, not a private fact.",
-          tweens: "General knowledge. Safe to say.",
-        },
+        why: "That is a riding fact, not a private fact.",
       },
     ],
     grownup: [
@@ -1261,28 +1032,19 @@ export const safetyDecks: Record<
         id: "battery-q",
         text: "What does the battery store?",
         answer: "wonder",
-        why: {
-          kids: "It stores energy for the motor. A fine thing to learn. You can still check a source.",
-          tweens: "A how-it-works question. Not a safety stop.",
-        },
+        why: "It stores energy for the motor. A fine thing to learn. You can still check a source.",
       },
       {
         id: "street",
         text: "A website says kids should ride an e-bike in the street with no helmet and no adult.",
         answer: "ask",
-        why: {
-          kids: "Stop. Ask a grown-up. Do not follow that.",
-          tweens: "Safety advice that drops the helmet and the adult is a reject-and-ask moment.",
-        },
+        why: "Stop. Ask a grown-up. Do not follow that.",
       },
       {
         id: "hurt",
         text: "You fell and your arm hurts a lot.",
         answer: "ask",
-        why: {
-          kids: "Tell a grown-up now. A chat cannot check your arm.",
-          tweens: "Injury needs a person, not a generated tip.",
-        },
+        why: "Tell a grown-up now. A chat cannot check your arm.",
       },
     ],
   },

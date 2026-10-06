@@ -18,15 +18,14 @@ import {
   writePrefs,
   type Prefs,
 } from "@/lib/prefs";
-import type { AgeId, ThemeId } from "@/lib/types";
+import type { ThemeId } from "@/lib/types";
 
 type PrefsContextValue = {
   prefs: Prefs;
   ready: boolean;
   setTheme: (theme: ThemeId) => void;
-  setAge: (age: AgeId) => void;
   markComplete: (slug: string) => void;
-  saveWelcome: (prefs: Pick<Prefs, "theme" | "age">) => void;
+  saveWelcome: (prefs: Pick<Prefs, "theme">) => void;
 };
 
 const PrefsContext = createContext<PrefsContextValue | null>(null);
@@ -66,11 +65,6 @@ export function PreferencesRoot({ children }: { children: React.ReactNode }) {
     [commit, prefs],
   );
 
-  const setAge = useCallback(
-    (age: AgeId) => commit({ ...prefs, age }),
-    [commit, prefs],
-  );
-
   const markComplete = useCallback(
     (slug: string) => {
       if (prefs.completed.includes(slug)) return;
@@ -80,15 +74,15 @@ export function PreferencesRoot({ children }: { children: React.ReactNode }) {
   );
 
   const saveWelcome = useCallback(
-    (picked: Pick<Prefs, "theme" | "age">) => {
+    (picked: Pick<Prefs, "theme">) => {
       commit({ ...prefs, ...picked });
     },
     [commit, prefs],
   );
 
   const value = useMemo(
-    () => ({ prefs, ready, setTheme, setAge, markComplete, saveWelcome }),
-    [prefs, ready, setTheme, setAge, markComplete, saveWelcome],
+    () => ({ prefs, ready, setTheme, markComplete, saveWelcome }),
+    [prefs, ready, setTheme, markComplete, saveWelcome],
   );
 
   return (
