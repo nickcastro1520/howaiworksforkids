@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "lib/engine.test.ts"]
+  "exclude": ["node_modules", "lib/ml.test.ts"]
 }

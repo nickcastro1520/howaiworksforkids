@@ -5,84 +5,144 @@ import { LESSONS } from "@/lib/lessons";
 export const metadata: Metadata = {
   title: "For parents and teachers",
   description:
-    "How to use How AI Works for Kids at home or in class. Lessons stay free: no student accounts, no checkout, and no live chatbot.",
+    "What kids learn in each lesson, how to use How AI Works for Kids at home or in class, conversation starters, and our safety and privacy promises.",
   alternates: { canonical: "/parents" },
-  openGraph: {
-    title: "For parents and teachers",
-    description:
-      "A free lesson path for ages 6–10. No accounts, no ads, and no paywall.",
-    url: "/parents",
-  },
+  openGraph: { title: "For parents and teachers", url: "/parents" },
 };
+
+const FAQ = [
+  {
+    q: "Does my child chat with an AI on this site?",
+    a: "No. There is no live chatbot and nothing is sent to an AI service. Each game is a tiny, simple model written for this site that runs inside the web page, like Pip's nearest-neighbor sorter and word counter.",
+  },
+  {
+    q: "What age is it for?",
+    a: "Ages 6 to 10. Six- and seven-year-olds may want a grown-up nearby to read along, or they can tap \u201cRead it to me\u201d on each story page.",
+  },
+  {
+    q: "Is it free?",
+    a: "Yes. The core lessons are free and will stay free. There are no ads and no in-app purchases.",
+  },
+  {
+    q: "Do kids need an account?",
+    a: "No. Progress (which lessons are done) is saved in this browser only, using localStorage. Clearing site data, or tapping \u201cStart over\u201d on the lesson trail, erases it.",
+  },
+  {
+    q: "Does it work on tablets?",
+    a: "Yes. Everything works with touch, a mouse, or a keyboard, on phones, tablets, Chromebooks, and computers.",
+  },
+];
 
 export default function ParentsPage() {
   return (
-    <div className="parents-shell">
-      <aside className="parents-intro">
-        <p className="kicker">Adults</p>
-        <h1 className="mt-2 font-bold">
-          Sit beside them <em>for one game.</em>
-        </h1>
-        <p className="mt-4 text-lg">
-          About five minutes. Read the question out loud if they want. The games run in the browser.
-          Nothing is sent to an AI model.
-        </p>
-        <p className="mt-4 text-muted">
-          The lessons are for ages 6–10. Short sentences, and almost no jargon.
-        </p>
-      </aside>
-
-      <div>
-        <section aria-labelledby="map">
-          <h2 id="map" className="font-display text-3xl font-bold">
-            What each game teaches
-          </h2>
-          <ol className="syllabus">
-            {LESSONS.map((lesson) => (
-              <li key={lesson.slug}>
-                <Link className="syllabus-row" href={`/lessons/${lesson.slug}`}>
-                  <span className="font-display text-xl font-bold text-accent">
-                    {String(lesson.number).padStart(2, "0")}
-                  </span>
-                  <span>
-                    <strong>{lesson.title}</strong>
-                    <span className="mt-1 block">{lesson.takeaway}</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="mt-10" id="classroom" aria-labelledby="class">
-          <h2 id="class" className="font-display text-3xl font-bold">
-            Classroom pack
-          </h2>
-          <blockquote className="pull">
-            Lessons stay free. A printable pack is planned — cards and a short teacher guide. No
-            checkout, no paywall, and no teacher login.
-          </blockquote>
-          <p className="mt-3 text-muted">You can pass one phone around a table today.</p>
-        </section>
-
-        <section className="mt-10" aria-labelledby="safety">
-          <h2 id="safety" className="font-display text-3xl font-bold">
-            Safety by design
-          </h2>
-          <ul className="safety-grid">
-            <li>No ads and no kid accounts.</li>
-            <li>No open chat with an AI model. Answers are written ahead of time or computed on the device.</li>
-            <li>
-              “Tell a parent” asks for a parent email only, then opens the device email app. The
-              address is not stored.
-            </li>
-            <li>The chosen world stays in this browser. Clearing site data removes it.</li>
-          </ul>
-          <p className="mt-4">
-            <Link className="font-extrabold underline decoration-2 underline-offset-4" href="/privacy">
-              Read the privacy page
-            </Link>
+    <div className="parents">
+      <header className="page-hero parents-hero">
+        <div className="wrap">
+          <p className="small-cap">For parents &amp; teachers</p>
+          <h1 className="page-title">Kids learn AI by teaching one.</h1>
+          <p className="page-lead">
+            Seven 5-minute lessons. Each has a short story, a hands-on game, a two-question check, and a badge. Kids don&rsquo;t just hear
+            that &ldquo;AI learns from data.&rdquo; They give Pip data, watch it guess, and fix it when it&rsquo;s wrong.
           </p>
+        </div>
+      </header>
+
+      <div className="wrap parents-body">
+        <section aria-labelledby="learn">
+          <h2 id="learn" className="section-title">
+            What kids learn
+          </h2>
+          <div className="learn-table" role="table" aria-label="Lessons and what kids learn">
+            <div className="lt-row lt-head" role="row">
+              <span role="columnheader">Lesson</span>
+              <span role="columnheader">Big idea</span>
+              <span role="columnheader">Ask them afterward</span>
+            </div>
+            {LESSONS.map((l) => (
+              <div key={l.slug} className="lt-row" role="row" style={{ "--lc": l.color } as React.CSSProperties}>
+                <span role="cell" className="lt-lesson">
+                  <b>
+                    {l.number}. <Link href={`/lessons/${l.slug}`}>{l.title}</Link>
+                  </b>
+                  <small>Game: {l.game}</small>
+                </span>
+                <span role="cell">{l.bigIdea}</span>
+                <span role="cell" className="lt-talk">
+                  {l.talk}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="use" className="use-grid">
+          <h2 id="use" className="section-title">
+            How to use it
+          </h2>
+          <div className="use-card">
+            <h3>At home</h3>
+            <ul>
+              <li>Do one lesson a day. Each takes about 5 minutes.</li>
+              <li>Sit nearby for the first one. Let your child drive the game.</li>
+              <li>Use the &ldquo;For a grown-up to ask&rdquo; question at the end of each lesson.</li>
+              <li>Finish all 7 and print the certificate.</li>
+            </ul>
+          </div>
+          <div className="use-card">
+            <h3>In a classroom</h3>
+            <ul>
+              <li>Project a lesson. Read the story together, or tap &ldquo;Read it to me.&rdquo;</li>
+              <li>Let the class vote on each move in the game.</li>
+              <li>Sort the Glorbs works great as a whole-class guessing game: the class picks a secret rule, one student sorts.</li>
+              <li>No logins, so it works on shared devices.</li>
+            </ul>
+          </div>
+          <div className="use-card">
+            <h3>Words we use</h3>
+            <p>
+              We keep sentences short and words simple. When there&rsquo;s a grown-up term, we mention it once in <Link href="/glossary">Pip&rsquo;s Word Book</Link>: for example &ldquo;lopsided data&rdquo; (bias) and &ldquo;made-up answer&rdquo; (hallucination).
+            </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="safe" className="safe-box">
+          <h2 id="safe" className="section-title light">
+            Safety and privacy
+          </h2>
+          <ul className="safe-list">
+            <li>
+              <b>No ads, no trackers.</b> We don&rsquo;t run ads or ad trackers. Basic site analytics are off.
+            </li>
+            <li>
+              <b>No kid data.</b> We never ask for a child&rsquo;s name, email, school, photo, or location.
+            </li>
+            <li>
+              <b>No open AI chat.</b> Kids can&rsquo;t type to an AI here. Every answer in the games was written in advance.
+            </li>
+            <li>
+              <b>Local progress only.</b> Lesson progress is stored in this browser and never sent to us.
+            </li>
+            <li>
+              <b>Certificate name stays on screen.</b> The nickname on the certificate is never saved or sent.
+            </li>
+          </ul>
+          <Link href="/privacy" className="btn btn-sun">
+            Read the privacy notice
+          </Link>
+        </section>
+
+        <section aria-labelledby="faq">
+          <h2 id="faq" className="section-title">
+            Questions
+          </h2>
+          <div className="faq">
+            {FAQ.map((f) => (
+              <details key={f.q}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
         </section>
       </div>
     </div>

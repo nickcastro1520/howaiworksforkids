@@ -1,32 +1,24 @@
 import type { Metadata } from "next";
-import { LessonTrail } from "@/components/LessonTrail";
+import { Trail } from "@/components/Trail";
 
 export const metadata: Metadata = {
-  title: "Lessons",
+  title: "The lesson trail",
   description:
-    "Seven free games that show kids how AI works: patterns, practice, context, look-alikes, attention, checking a source, and being safe and honest.",
+    "Seven short, hands-on AI lessons for kids ages 6–10. Teach Pip, test Pip, and fix Pip's mistakes to learn how real AI works.",
   alternates: { canonical: "/lessons" },
-  openGraph: {
-    title: "Lessons",
-    description:
-      "Seven free games that show kids how AI works, with no accounts and no live chatbot.",
-    url: "/lessons",
-  },
+  openGraph: { title: "The lesson trail", url: "/lessons" },
 };
 
 export default function LessonsPage() {
   return (
-    <div className="lessons-index">
-      <div className="lessons-intro">
-        <p className="kicker">The index</p>
-        <h1 className="mt-2 font-bold">
-          Play in order, <em>or hop.</em>
-        </h1>
-        <p className="mt-4 text-lg text-muted">
-          Every lesson is unlocked. The words stay plain for ages 6–10.
-        </p>
+    <div className="trail-page">
+      <header className="page-hero trail-hero">
+        <h1 className="page-title">The lesson trail</h1>
+        <p className="page-lead">7 stops. Each one is a story, a game, and a badge. Light up Pip&rsquo;s whole brain!</p>
+      </header>
+      <div className="wrap narrow">
+        <Trail />
       </div>
-      <LessonTrail />
     </div>
   );
 }

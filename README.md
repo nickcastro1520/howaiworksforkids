@@ -1,73 +1,49 @@
 # How AI Works for Kids
 
-Free, mobile-first games that show kids ages 6–10 how AI works. The live site is [howaiworksforkids.com](https://howaiworksforkids.com).
+**Live:** https://howaiworksforkids.com
 
-Built by [Nick Castro](https://nickcastrobuilds.com) in Chicago as a portfolio piece for AI enablement and training. No ads, no kid accounts, and no open chat with an AI model. The games run in the browser.
+Free, hands-on lessons that show kids ages 6–10 how AI works. Kids teach a tiny AI named **Pip**, test it, and fix its mistakes. Every finished lesson lights up one of the 7 lights in Pip's brain.
 
-## Lessons
+Built by [Nick Castro](https://nickcastrobuilds.com).
 
-The lessons use plain language for ages 6–10.
+## The lessons
 
-1. **AI isn't magic** — it finds patterns
-2. **Learn by trying** — practice and feedback
-3. **Words need context** — the same word can change
-4. **Tricky look-alikes** — false patterns
-5. **What it pays attention to** — the question picks the clue
-6. **Check a source** — look it up before you answer
-7. **Be safe and honest** — AI can be wrong, privacy, ask a grown-up
+Each lesson goes **Read → Play → Check → Badge**: a 5-page picture story (with a "Read it to me" button), a hands-on game, two quick questions, and a badge.
 
-Worlds (Rockets & space, Dinosaurs, E-bikes) change examples and art. The lesson mechanics stay the same. The choice is saved in `localStorage` on the device, along with finished lessons. Nothing there is sent to a server.
+| # | Lesson | Big idea | Game |
+|---|---|---|---|
+| 1 | Meet Pip: What is AI? | AI is a computer program that learns patterns from examples, then guesses. | **AI Detective**: tap things in a room and decide which ones use AI. |
+| 2 | Teach by Showing | AI learns from examples, not a list of rules. | **Sort the Glorbs**: a real nearest-neighbor model learns your secret rule and shows *why* it guessed. |
+| 3 | How Chatbots Talk | Chatbots guess the next word, again and again. | **Next Word!** + **Story Builder**: a tiny word-counting model writes a story with you. |
+| 4 | Good Examples In, Good Guesses Out | Lopsided examples teach the wrong clue. | **Fix Pip's Mix-up**: Pip thinks red = bird until you add better examples. |
+| 5 | Sure Doesn't Mean Right | AI can sound sure and still be wrong. | **Fact or Fib?** with a Sure-o-meter and a Fact Book. |
+| 6 | Real or Made by AI? | AI can make pictures of things that never happened. | **Spot the Glitches**: find 6 goofs in an AI-style picture. |
+| 7 | Be the Boss of AI | Keep private things private; AI isn't a person; ask a grown-up. | **Go, Ask, or Stop** + **Secret Shield**. |
 
-“Tell a parent” asks for a parent email only and opens the device mail app (`mailto:`). The address is not stored. There is no child name or child email field.
+The machine-learning bits in `lib/ml.ts` are real (tiny) models that run in the browser: a weighted nearest-neighbor classifier, a one-clue decision stump, and a word-pair (bigram/trigram) next-word model.
 
-## Scripts
+## Kid safety and privacy
+
+- No ads, no accounts, no sign-up, no names or emails collected.
+- No live chatbot. Every game runs right in the page.
+- Progress is saved only in the browser's `localStorage` (`hawfk.progress.v2`).
+- The certificate's name stays on screen only. The "email a grown-up" option opens the family's own mail app (`mailto:`); nothing is sent to us.
+- Google Analytics loads **only** if `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set (it is not set by default).
+- Respects `prefers-reduced-motion`, works with touch and keyboard.
+
+## Stack
+
+Next.js (App Router) · React · TypeScript · Tailwind CSS v4 · deployed on Vercel from `main`.
 
 ```bash
 npm install
-npm run dev
-npm test
-npm run lint
+npm run dev      # http://localhost:3000
 npm run build
+npm test         # ML model tests (Node 22+)
 ```
 
-## Deploy on Vercel
+## Pages
 
-1. Import the GitHub repo `nickcastro1520/howaiworksforkids`.
-2. Framework preset: **Next.js**. Production branch: **main**.
-3. Deploy. No database and no required environment variables.
-4. In the project, open **Settings → Domains** and add `howaiworksforkids.com` and `www.howaiworksforkids.com`.
-5. Redirect `www` to the apex (or the other way around) using the toggle Vercel shows.
+`/` home · `/lessons` trail · `/lessons/[slug]` lessons · `/finish` certificate · `/glossary` word book · `/parents` parents & teachers · `/tested-by-kids` · `/about` · `/privacy`
 
-Optional environment variables (see `.env.example`):
-
-| Name | Purpose |
-| --- | --- |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 measurement ID (`G-…`). Leave unset to keep analytics off. Do not invent an ID. |
-| `GOOGLE_SITE_VERIFICATION` | Search Console HTML-tag token, if you are not verifying by DNS. |
-| `RESEND_API_KEY` / `PARENT_NOTIFY_WEBHOOK` | **Off.** Not read by the app. Reserved for a future parent-only email sender. Never collect a child’s name or email. |
-
-The analytics tag, when present, turns off Google signals and ad personalization. A kids’ site can stay on with analytics unset.
-
-## Namecheap DNS
-
-In Namecheap, open the domain → **Advanced DNS**. Remove parking records and any URL redirect that fights Vercel.
-
-Use the records Vercel prints on the domain screen. They are usually:
-
-| Type | Host | Value |
-| --- | --- | --- |
-| A | `@` | `76.76.21.21` |
-| CNAME | `www` | `cname.vercel-dns.com` |
-
-Save, then wait for Vercel to mark the domain valid. DNS can take a while to propagate.
-
-## Google Search Console
-
-1. Add a property for `https://howaiworksforkids.com` (domain property or URL-prefix).
-2. Verify with the DNS TXT record Google gives you, or set `GOOGLE_SITE_VERIFICATION` and redeploy if you use the HTML tag.
-3. Submit the sitemap: `https://howaiworksforkids.com/sitemap.xml`.
-4. Also published for crawlers: `robots.txt` and `llms.txt`.
-
-## Privacy
-
-The public notice is `/privacy`. It is written for a child-directed site: no ads, no kid profiles, no sale of personal information, and no live model. On-device preferences can be cleared in the browser.
+SEO: metadata, Open Graph/Twitter images, JSON-LD (`lib/seo.ts`), `sitemap.xml`, `robots.txt`, `llms.txt`.

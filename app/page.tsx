@@ -1,114 +1,172 @@
 import Link from "next/link";
-import { ThemeArt, ThemeArtSwap } from "@/components/Art";
+import { Glorb, Sparkle } from "@/components/art/Bits";
+import { Book } from "@/components/art/Props";
+import { HeroPip } from "@/components/HeroPip";
 import { JsonLd } from "@/components/JsonLd";
-import { LessonTrail } from "@/components/LessonTrail";
+import { LessonTiles } from "@/components/LessonTiles";
+import { Pip } from "@/components/Pip";
 import { siteGraph } from "@/lib/seo";
-import { NICK } from "@/lib/site";
-import { THEMES } from "@/lib/themes";
 
-const swapClass = {
-  space: "swap-space",
-  dinosaurs: "swap-dinos",
-  ebikes: "swap-ebikes",
-} as const;
-
-const PROMISES = [
-  ["01", "No accounts", "Kids don’t make a profile. Nothing to sign up for."],
-  ["02", "No live chat", "The games are scripted on this device. No message goes to an AI."],
-  ["03", "No ads", "The lessons stay free. No checkout and no paywall."],
+const STEPS = [
+  { n: 1, title: "Read", text: "A short picture story with Pip. Tap to hear it read out loud." },
+  { n: 2, title: "Play", text: "A hands-on game where you teach, test, and fix a real tiny AI." },
+  { n: 3, title: "Check", text: "Two quick questions. No grades. Just try again." },
+  { n: 4, title: "Badge", text: "Earn a badge and turn on a light in Pip's brain." },
 ];
 
-export default function HomePage() {
+const PROMISES = [
+  { title: "No ads", text: "Not one. Not ever." },
+  { title: "No accounts", text: "No sign-up, no names, no emails from kids." },
+  { title: "No chatbot", text: "Kids never chat with a live AI here. Every game runs right in the page." },
+  { title: "Stays on your device", text: "Progress is saved in this browser only. We never see it." },
+];
+
+function StepIcon({ n }: { n: number }) {
+  if (n === 1) return <Book size={74} />;
+  if (n === 2) return <Glorb g={{ color: "orange", eyes: 2, top: "antenna", spots: true, shape: "round" }} size={70} />;
+  if (n === 3)
+    return (
+      <svg viewBox="0 0 80 80" width="70" height="70" aria-hidden="true">
+        <circle cx="40" cy="40" r="32" fill="#33c4b0" stroke="#231d4f" strokeWidth="4" />
+        <path d="M24 41 l11 11 l22 -24" stroke="#fff" strokeWidth="8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  return <Sparkle size={70} />;
+}
+
+export default function Home() {
   return (
     <>
       <JsonLd data={siteGraph()} />
-      <div className="shell pb-8">
-        <section className="hero-home rise">
-          <div>
-            <p className="kicker">Ages 6–10 · free · no sign-up</p>
-            <h1 className="hero-title mt-3 font-bold">
-              How AI works, <em>so a kid can teach it back.</em>
-            </h1>
-            <p className="mt-4 max-w-xl text-lg">
-              Seven short games. No ads. No account. No chatting with a live AI.
+
+      <section className="hero">
+        <div className="stars" aria-hidden="true" />
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <p className="hero-kicker">
+              <span>Ages 6&ndash;10</span>
+              <span>Free</span>
+              <span>No sign-up</span>
             </p>
-            {THEMES.map((theme) => (
-              <p key={theme.id} className={`${swapClass[theme.id]} mt-3 max-w-xl text-muted`}>
-                {theme.hero}
-              </p>
-            ))}
-            <div className="mt-6 flex flex-col gap-2 sm:flex-row">
-              <Link className="btn btn-primary" href="/lessons/not-magic">
-                Start with “AI isn’t magic”
+            <h1 className="hero-title">
+              Teach a tiny AI.
+              <span>Find out how real AI works.</span>
+            </h1>
+            <p className="hero-lead">
+              Meet Pip, a baby AI who knows almost nothing. In 7 quick games, you&rsquo;ll teach Pip, test Pip, and catch
+              Pip&rsquo;s mistakes. That&rsquo;s exactly how real AI works!
+            </p>
+            <div className="hero-ctas">
+              <Link href="/lessons/what-is-ai" className="btn btn-huge btn-sun">
+                Start lesson 1 &rarr;
               </Link>
-              <Link className="btn btn-ghost" href="/lessons">
-                See the path
+              <Link href="/lessons" className="btn btn-huge btn-ghost-light">
+                See the trail
               </Link>
             </div>
           </div>
-          <ThemeArtSwap className="hero-art" />
-        </section>
+          <HeroPip />
+        </div>
+        <svg className="hero-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 40 C240 90 480 0 720 30 C960 60 1200 10 1440 40 V90 H0Z" fill="#fff8ec" />
+        </svg>
+      </section>
 
-        <ul className="promise" aria-label="Promises">
-          {PROMISES.map(([num, title, copy]) => (
-            <li key={num}>
-              <span className="num">{num}</span>
-              <strong>{title}</strong>
-              <p className="mt-1 text-sm text-muted">{copy}</p>
-            </li>
-          ))}
-        </ul>
+      <section className="how">
+        <div className="wrap">
+          <h2 className="section-title">
+            Every lesson has <span className="hl">4 steps</span>
+          </h2>
+          <ol className="how-steps">
+            {STEPS.map((s) => (
+              <li key={s.n} className={`how-step how-${s.n}`}>
+                <span className="how-icon">
+                  <StepIcon n={s.n} />
+                </span>
+                <span className="how-n">Step {s.n}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-        <section className="mt-12" aria-labelledby="lesson-path">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <h2 id="lesson-path" className="font-display text-4xl font-bold sm:text-5xl">
-              Seven games. <em className="text-accent">One path.</em>
+      <section className="games">
+        <div className="wrap">
+          <div className="section-head">
+            <h2 className="section-title">
+              7 games. <span className="hl hl-mint">7 big ideas.</span>
             </h2>
-            <Link className="font-extrabold underline decoration-2 underline-offset-4" href="/lessons">
-              Open the full index
+            <p className="section-sub">Each one takes about 5 minutes. Do them in order, or jump around.</p>
+          </div>
+          <LessonTiles />
+        </div>
+      </section>
+
+      <section className="promise">
+        <div className="wrap promise-inner">
+          <div className="promise-copy">
+            <p className="small-cap light">For grown-ups</p>
+            <h2 className="section-title light">Built safe for kids, on purpose.</h2>
+            <p className="promise-lead">
+              Kids learn how AI works by doing it, without talking to an AI. Every game is a tiny model that runs in the page.
+            </p>
+            <Link href="/parents" className="btn btn-sun">
+              Parent &amp; teacher guide
             </Link>
           </div>
-          <LessonTrail variant="stepper" />
-        </section>
+          <ul className="promise-list">
+            {PROMISES.map((p, i) => (
+              <li key={p.title} style={{ "--i": i } as React.CSSProperties}>
+                <b>{p.title}</b>
+                <span>{p.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-        <section className="mt-10" aria-labelledby="worlds">
-          <h2 id="worlds" className="font-display text-4xl font-bold sm:text-5xl">
-            The pictures change. The ideas don’t.
+      <section className="testers">
+        <div className="wrap">
+          <h2 className="section-title">
+            Tested by <span className="hl hl-pink">real kids</span>
           </h2>
-          {THEMES.map((theme, index) => (
-            <article
-              key={theme.id}
-              className={index % 2 === 1 ? "world-band world-band-flip" : "world-band"}
-            >
-              <ThemeArt theme={theme.id} className="world-band-art" />
-              <div className="world-band-copy">
-                <p className="kicker">World 0{index + 1}</p>
-                <h3 className="mt-2 font-bold">{theme.name}</h3>
-                <p className="mt-2 max-w-sm text-lg text-muted">{theme.blurb}</p>
+          <p className="section-sub">Our first test pilots are trying every lesson right now. Their real notes will go here.</p>
+          <div className="tester-row">
+            {[
+              { name: "Nathan", age: 8, color: "#2a7de1" },
+              { name: "Nolan", age: 11, color: "#23914a" },
+            ].map((t) => (
+              <div key={t.name} className="tester" style={{ "--tc": t.color } as React.CSSProperties}>
+                <span className="tester-badge">Test pilot</span>
+                <p className="tester-name">
+                  {t.name}, <span>age {t.age}</span>
+                </p>
+                <p className="tester-note">Notes coming soon. We only post things kids really said.</p>
               </div>
-            </article>
-          ))}
-        </section>
-
-        <section className="family-close">
-          <h2 className="font-bold">Made for families in {NICK.city}.</h2>
-          <div>
-            <p className="text-lg">
-              {NICK.name} built this for kids, including his sons Nathan (8) and Nolan (11), who are
-              the test users. Their notes are not invented. The tested-by page stays a placeholder
-              until real sessions are written down.
-            </p>
-            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-              <Link className="btn btn-sun" href="/parents">
-                For parents and teachers
-              </Link>
-              <Link className="btn btn-ghost" href="/tested-by-kids">
-                Tested by real kids
-              </Link>
-            </div>
+            ))}
           </div>
-        </section>
-      </div>
+          <p className="center">
+            <Link href="/tested-by-kids" className="text-link">
+              How we test
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <section className="final-cta">
+        <div className="wrap final-inner">
+          <Pip mood="wow" size={150} wave />
+          <div>
+            <h2 className="section-title">Pip is ready to learn.</h2>
+            <p className="section-sub">Are you ready to teach?</p>
+            <Link href="/lessons/what-is-ai" className="btn btn-huge btn-go">
+              Let&rsquo;s go! &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
