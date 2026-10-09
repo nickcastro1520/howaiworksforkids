@@ -3,13 +3,19 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Lesson } from "@/lib/lessons";
-import { LESSONS, nextLesson } from "@/lib/lessons";
+import { SECTIONS, SECTION_1, sectionLessons } from "@/lib/lessons";
 import { useProgress } from "@/lib/progress";
 import { StoryArt } from "./art/StoryArt";
 import { Badge } from "./Badge";
 import { Confetti } from "./Confetti";
 import { Pip } from "./Pip";
+import { MissionCard } from "./MissionCard";
 import { AIDetective } from "./games/AIDetective";
+import { AITimeMachine } from "./games/AITimeMachine";
+import { HelperOrDoer } from "./games/HelperOrDoer";
+import { MonsterMaker } from "./games/MonsterMaker";
+import { PipsHomework } from "./games/PipsHomework";
+import { PixelPeek } from "./games/PixelPeek";
 import { FactOrFib } from "./games/FactOrFib";
 import { FixMixup } from "./games/FixMixup";
 import { GoAskStop } from "./games/GoAskStop";
@@ -30,6 +36,11 @@ const GAMES: Record<string, (p: GameProps) => React.ReactNode> = {
   "ai-can-be-wrong": FactOrFib,
   "real-or-made-up": SpotGlitches,
   "smart-and-safe": GoAskStop,
+  "where-did-ai-come-from": AITimeMachine,
+  "how-ai-sees-pictures": PixelPeek,
+  "say-it-clearly": MonsterMaker,
+  "check-it-fix-it": PipsHomework,
+  "ai-learning-helper": HelperOrDoer,
 };
 
 type Step = "read" | "play" | "check" | "badge";
@@ -81,7 +92,7 @@ function Story({ lesson, onFinish }: { lesson: Lesson; onFinish: () => void }) {
         </div>
         <div className="story-bubble" aria-live="polite" key={page}>
           <p>{p.text}</p>
-          <SayButton text={p.text} label="this page" size="md" className="read-aloud" onSpeak={() => setTalkMode(true)}>
+          <SayButton text={p.text} label="this page" name="Read it to me" size="md" className="read-aloud" onSpeak={() => setTalkMode(true)}>
             Read it to me
           </SayButton>
         </div>
@@ -197,9 +208,14 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
 
 function Celebrate({ lesson }: { lesson: Lesson }) {
   const { done } = useProgress();
-  const nxt = nextLesson(lesson.slug);
-  const lights = Math.max(done.length, 1);
-  const allDone = LESSONS.every((l) => done.includes(l.slug));
+  const section = SECTIONS[lesson.section];
+  const inSection = sectionLessons(lesson.section);
+  const doneHere = inSection.filter((l) => done.includes(l.slug)).length;
+  const lights = Math.max(doneHere, 1);
+  const allDone = inSection.every((l) => done.includes(l.slug));
+  const after = inSection.slice(inSection.findIndex((l) => l.slug === lesson.slug) + 1);
+  const nxt = after.find((l) => !done.includes(l.slug)) ?? inSection.find((l) => !done.includes(l.slug));
+  const moreComing = section.planned > inSection.length;
   return (
     <section className="celebrate" aria-label="You earned a badge">
       <Confetti />
@@ -214,13 +230,22 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
         <SayLine text={`You earned the ${lesson.badge} badge! ${lesson.bigIdea}`} label="your badge" size="md" />
       </div>
       <div className="celebrate-pip">
-        <Pip mood="proud" size={110} lights={lights} wave />
+        <Pip mood="proud" size={110} lights={lights} slots={section.planned} wave />
         <p>
-          Pip&rsquo;s brain has <b>{lights} of 7</b> lights on!
+          {lesson.section === 1 ? (
+            <>
+              Pip&rsquo;s brain has <b>{lights} of {inSection.length}</b> lights on!
+            </>
+          ) : (
+            <>
+              {section.kicker}: <b>{lights} of {section.planned}</b> lights on!
+              {moreComing && <> More lessons are coming soon.</>}
+            </>
+          )}
         </p>
       </div>
       <div className="celebrate-actions">
-        {allDone ? (
+        {allDone && lesson.section === 1 ? (
           <Link className="btn btn-big btn-go" href="/finish">
             Get your certificate &rarr;
           </Link>
@@ -229,19 +254,34 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
             Next: {nxt.short} &rarr;
           </Link>
         ) : (
-          <Link className="btn btn-big btn-go" href="/lessons">
-            Finish the other lessons &rarr;
+          <Link className="btn btn-big btn-go" href={section.path}>
+            See what&rsquo;s coming next &rarr;
           </Link>
         )}
-        <Link className="btn btn-plain" href="/lessons">
+        <Link className="btn btn-plain" href={section.path}>
           Back to the trail
         </Link>
       </div>
+      {lesson.mission && <MissionCard mission={lesson.mission} color={lesson.color} />}
       <aside className="talk-card">
         <p className="small-cap">For a grown-up to ask</p>
         <p>{lesson.talk}</p>
       </aside>
     </section>
+  );
+}
+
+/** Section 2 is a soft lock: a friendly suggestion, never a block. */
+function SectionTip({ lesson }: { lesson: Lesson }) {
+  const { done } = useProgress();
+  if (lesson.section !== 2) return null;
+  const s1 = SECTION_1.filter((l) => done.includes(l.slug)).length;
+  if (s1 === SECTION_1.length) return null;
+  return (
+    <p className="section-tip">
+      <span aria-hidden="true">💡</span> Tip: Section 2 builds on Section 1. We suggest{" "}
+      <Link href={SECTIONS[1].path}>doing Section 1 first</Link> ({s1} of {SECTION_1.length} done), but you can start here too!
+    </p>
   );
 }
 
@@ -268,6 +308,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
 
   return (
     <div className="player" ref={top} style={{ "--lc": lesson.color, "--lt": lesson.tint } as React.CSSProperties}>
+      <SectionTip lesson={lesson} />
       <nav className="stepper" aria-label="Lesson steps">
         {STEPS.map((s, i) => (
           <button

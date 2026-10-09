@@ -5,7 +5,7 @@ import { Pip } from "@/components/Pip";
 
 export const metadata: Metadata = {
   title: "Page not found",
-  description: "Pip can't find that page. Try the lesson trail or jump straight to one of the 7 free AI lessons for kids.",
+  description: `Pip can't find that page. Try the lesson trail or jump straight to one of the ${LESSONS.length} free AI lessons for kids.`,
   alternates: { canonical: null },
   robots: { index: false, follow: true },
 };

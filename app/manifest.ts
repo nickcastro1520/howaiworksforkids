@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { LESSONS } from "@/lib/lessons";
 import { SITE_NAME } from "@/lib/site";
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -6,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     id: "/",
     name: SITE_NAME,
     short_name: "How AI Works",
-    description: "Teach a tiny AI named Pip and learn how real AI works. 7 free AI lessons and games for kids ages 6–10.",
+    description: `Teach a tiny AI named Pip and learn how real AI works. ${LESSONS.length} free AI lessons and games for kids ages 6–10.`,
     start_url: "/",
     scope: "/",
     display: "standalone",

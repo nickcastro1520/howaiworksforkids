@@ -22,6 +22,8 @@ type SayProps = {
   getText?: () => string;
   /** Short name for screen readers, e.g. "the question" -> "Hear the question". */
   label: string;
+  /** Accessible name when it should match visible words exactly, e.g. "Read it to me". Defaults to "Hear <label>". */
+  name?: string;
   size?: "sm" | "md" | "lg";
   /** Visible words next to the speaker (md/lg). */
   children?: React.ReactNode;
@@ -30,7 +32,7 @@ type SayProps = {
 };
 
 /** A "Hear it" button. Renders nothing if this device can't speak, so the page still works by reading. */
-export function SayButton({ text, getText, label, size = "sm", children, className = "", onSpeak }: SayProps) {
+export function SayButton({ text, getText, label, name, size = "sm", children, className = "", onSpeak }: SayProps) {
   const id = useId();
   const { supported, speakingId } = useSpeech();
   if (!supported) return null;
@@ -39,7 +41,7 @@ export function SayButton({ text, getText, label, size = "sm", children, classNa
     <button
       type="button"
       className={`say say-${size} ${on ? "is-on" : ""} ${className}`}
-      aria-label={on ? `Stop reading ${label}` : `Hear ${label}`}
+      aria-label={on ? `Stop reading ${label}` : (name ?? `Hear ${label}`)}
       aria-pressed={on}
       title={on ? "Stop" : "Hear it"}
       onClick={(e) => {

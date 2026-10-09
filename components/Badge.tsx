@@ -49,6 +49,50 @@ function Glyph({ slug }: { slug: string }) {
           <circle cx="100" cy="100" r="9" fill="#fff" />
         </g>
       );
+    case "where-did-ai-come-from":
+      return (
+        <g {...s}>
+          <circle cx="100" cy="100" r="26" />
+          <path d="M100 86 V100 L111 108" />
+          <path d="M66 92 l-6 8 l10 4" />
+        </g>
+      );
+    case "how-ai-sees-pictures":
+      return (
+        <g {...s} strokeWidth={5}>
+          <rect x="76" y="76" width="16" height="16" fill="#fff" />
+          <rect x="92" y="76" width="16" height="16" />
+          <rect x="108" y="76" width="16" height="16" fill="#fff" />
+          <rect x="76" y="92" width="16" height="16" />
+          <rect x="92" y="92" width="16" height="16" fill="#fff" />
+          <rect x="108" y="92" width="16" height="16" />
+          <rect x="76" y="108" width="16" height="16" fill="#fff" />
+          <rect x="92" y="108" width="16" height="16" />
+          <rect x="108" y="108" width="16" height="16" fill="#fff" />
+        </g>
+      );
+    case "say-it-clearly":
+      return (
+        <g {...s}>
+          <path d="M74 84 h52 v30 h-30 l-12 12 v-12 h-10 z" />
+          <path d="M84 96 h32 M84 106 h20" />
+        </g>
+      );
+    case "check-it-fix-it":
+      return (
+        <g {...s}>
+          <path d="M80 120 l26 -26" />
+          <path d="M106 94 a14 14 0 1 1 14 -14 l-10 2 l-4 6 z" fill="#fff" />
+          <path d="M76 82 l8 8 l14 -16" />
+        </g>
+      );
+    case "ai-learning-helper":
+      return (
+        <g {...s}>
+          <path d="M100 74 a20 20 0 0 1 12 36 v8 h-24 v-8 a20 20 0 0 1 12 -36z" />
+          <path d="M90 128 h20" />
+        </g>
+      );
     default:
       return (
         <g {...s}>

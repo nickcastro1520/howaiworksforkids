@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { LESSONS } from "@/lib/lessons";
+import { SECTIONS, SECTION_1, numberWord } from "@/lib/lessons";
 import { useProgress } from "@/lib/progress";
 import { SITE_URL } from "@/lib/site";
 import { Badge } from "./Badge";
@@ -13,8 +13,10 @@ export function Certificate() {
   const { isDone } = useProgress();
   const [nick, setNick] = useState("");
   const [email, setEmail] = useState("");
+  const LESSONS = SECTION_1;
+  const total = LESSONS.length;
   const n = LESSONS.filter((l) => isDone(l.slug)).length;
-  const all = n === LESSONS.length;
+  const all = n === total;
   const today = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
   if (!all) {
@@ -24,7 +26,7 @@ export function Certificate() {
         <Pip mood="think" size={150} lights={n} />
         <h1 className="page-title">Almost there!</h1>
         <p className="page-lead">
-          Pip has <b>{n} of 7</b> lights on. Finish all 7 lessons to unlock your certificate.
+          Pip has <b>{n} of {total}</b> lights on. Finish all {total} Section 1 lessons to unlock your certificate.
         </p>
         <div className="finish-badges">
           {LESSONS.map((l) => (
@@ -39,13 +41,13 @@ export function Certificate() {
   }
 
   const subject = "I finished How AI Works for Kids!";
-  const body = `I finished all 7 lessons on How AI Works for Kids and taught Pip how AI works!\n\nAsk me:\n- How does AI learn?\n- How does a chatbot write?\n- What should I do if AI says something weird?\n\n${SITE_URL}`;
+  const body = `I finished all ${numberWord(total)} Section 1 lessons on How AI Works for Kids and taught Pip how AI works!\n\nAsk me:\n- How does AI learn?\n- How does a chatbot write?\n- What should I do if AI says something weird?\n\n${SITE_URL}`;
 
   return (
     <div className="finish">
       <Confetti count={90} />
       <h1 className="page-title center">You did it!</h1>
-      <p className="page-lead center">All 7 lights are on. Pip is all grown up, thanks to you.</p>
+      <p className="page-lead center">All {numberWord(total)} Section 1 lights are on. You taught Pip the basics!</p>
 
       <div className="cert-tools no-print">
         <label className="field">
@@ -63,11 +65,12 @@ export function Certificate() {
       <div className="cert" id="certificate">
         <div className="cert-border">
           <p className="cert-kicker">Certificate of AI Know-How</p>
+          <p className="cert-this">{SECTIONS[1].kicker}: {SECTIONS[1].name}</p>
           <p className="cert-this">This shows that</p>
           <p className="cert-name">{nick.trim() || "A Super Teacher"}</p>
           <p className="cert-text">taught Pip, a tiny AI, and learned how real AI works.</p>
           <div className="cert-row">
-            <Pip mood="proud" size={110} lights={7} bob={false} />
+            <Pip mood="proud" size={110} lights={total} bob={false} />
             <ul className="cert-list">
               {LESSONS.map((l) => (
                 <li key={l.slug}>
@@ -87,6 +90,9 @@ export function Certificate() {
         <button type="button" className="btn btn-big btn-go" onClick={() => window.print()}>
           Print my certificate
         </button>
+        <Link href={SECTIONS[2].path} className="btn btn-big btn-sun">
+          Next: {SECTIONS[2].kicker}, {SECTIONS[2].name} &rarr;
+        </Link>
         <Link href="/glossary" className="btn btn-plain">
           Visit Pip&rsquo;s Word Book
         </Link>

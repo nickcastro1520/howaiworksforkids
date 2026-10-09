@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { LessonPlayer } from "@/components/LessonPlayer";
 import { GLOSSARY, termId } from "@/lib/glossary";
-import { getLesson, LESSONS } from "@/lib/lessons";
+import { getLesson, LESSONS, SECTIONS, sectionLessons } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
 import { lessonJsonLd, lessonSeo, pageMeta } from "@/lib/seo";
 
@@ -38,8 +38,10 @@ export default async function LessonPage({ params }: Props) {
   const lesson = getLesson(slug);
   if (!lesson) notFound();
 
-  const prev = LESSONS.find((l) => l.number === lesson.number - 1);
-  const next = LESSONS.find((l) => l.number === lesson.number + 1);
+  const section = SECTIONS[lesson.section];
+  const inSection = sectionLessons(lesson.section);
+  const prev = inSection.find((l) => l.number === lesson.number - 1);
+  const next = inSection.find((l) => l.number === lesson.number + 1);
   const words = GLOSSARY.filter((g) => g.lesson === lesson.slug);
 
   return (
@@ -50,6 +52,7 @@ export default async function LessonPage({ params }: Props) {
           <Breadcrumbs
             items={[
               { name: "Lessons", path: "/lessons" },
+              ...(lesson.section === 2 ? [{ name: section.kicker, path: section.path }] : []),
               { name: `Lesson ${lesson.number}: ${lesson.short}`, path: `/lessons/${lesson.slug}` },
             ]}
           />
@@ -60,7 +63,16 @@ export default async function LessonPage({ params }: Props) {
             {lesson.title}
           </h1>
           <p className="lesson-meta">
-            Lesson {lesson.number} of {LESSONS.length} &middot; About {lesson.minutes} minutes &middot; Game: <b>{lesson.game}</b>
+            {lesson.section === 1 ? (
+              <>
+                Lesson {lesson.number} of {inSection.length}
+              </>
+            ) : (
+              <>
+                Lesson {lesson.number} &middot; {section.kicker}: {section.name}
+              </>
+            )}{" "}
+            &middot; About {lesson.minutes} minutes &middot; Game: <b>{lesson.game}</b>
           </p>
         </div>
       </header>
@@ -79,9 +91,9 @@ export default async function LessonPage({ params }: Props) {
               <b>{prev.title}</b>
             </Link>
           ) : (
-            <Link href="/lessons" className="pn-card pn-prev">
-              <small>&larr; All lessons</small>
-              <b>The lesson trail</b>
+            <Link href={section.path} className="pn-card pn-prev">
+              <small>&larr; All {section.kicker} lessons</small>
+              <b>{section.name} trail</b>
             </Link>
           )}
           {next ? (
@@ -89,10 +101,15 @@ export default async function LessonPage({ params }: Props) {
               <small>Lesson {next.number} &rarr;</small>
               <b>{next.title}</b>
             </Link>
-          ) : (
+          ) : lesson.section === 1 ? (
             <Link href="/finish" className="pn-card pn-next">
               <small>Finish line &rarr;</small>
               <b>Get your certificate</b>
+            </Link>
+          ) : (
+            <Link href={section.path} className="pn-card pn-next">
+              <small>More coming soon &rarr;</small>
+              <b>See the {section.name} trail</b>
             </Link>
           )}
         </div>
@@ -108,8 +125,8 @@ export default async function LessonPage({ params }: Props) {
             . Grown-ups: see the <Link href="/parents">parent and teacher guide</Link>.
           </p>
         )}
-        <ol className="lesson-all" aria-label="All lessons">
-          {LESSONS.map((l) => (
+        <ol className="lesson-all" aria-label={`All ${section.kicker} lessons`} start={inSection[0].number}>
+          {inSection.map((l) => (
             <li key={l.slug}>
               {l.slug === lesson.slug ? (
                 <span aria-current="page">

@@ -1,10 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { LESSONS } from "@/lib/lessons";
+import { sectionLessons, type SectionId } from "@/lib/lessons";
+import { GRID, PALETTE, PICTURES, pixelAt } from "@/lib/pixels";
 import { useProgress } from "@/lib/progress";
 import { Bird, Fish, Glorb } from "./art/Bits";
 import { Computer, Hand6, Shield } from "./art/Props";
+
+function PixelFish() {
+  return (
+    <svg viewBox={`0 0 ${GRID} ${GRID}`} width="104" height="104" shapeRendering="crispEdges" aria-hidden="true">
+      {PICTURES.fish.flatMap((_, y) =>
+        Array.from({ length: GRID }, (_, x) => <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={PALETTE[pixelAt("fish", y * GRID + x)]} />),
+      )}
+    </svg>
+  );
+}
 
 function Mini({ slug }: { slug: string }) {
   switch (slug) {
@@ -43,6 +54,41 @@ function Mini({ slug }: { slug: string }) {
       );
     case "real-or-made-up":
       return <Hand6 size={110} />;
+    case "where-did-ai-come-from":
+      return (
+        <span className="mini-row mini-emoji">
+          <span>🕰️</span>
+          <span>📚</span>
+          <span>⚡</span>
+          <span>🧠</span>
+        </span>
+      );
+    case "how-ai-sees-pictures":
+      return <PixelFish />;
+    case "say-it-clearly":
+      return (
+        <span className="mini-words">
+          <span>green</span>
+          <span>3 eyes</span>
+          <span className="is-next">small</span>
+        </span>
+      );
+    case "check-it-fix-it":
+      return (
+        <span className="mini-row mini-emoji">
+          <span>🔎</span>
+          <span>📖</span>
+          <span>🛠️</span>
+        </span>
+      );
+    case "ai-learning-helper":
+      return (
+        <span className="mini-row mini-emoji">
+          <span>🤝</span>
+          <span>💡</span>
+          <span>🖍️</span>
+        </span>
+      );
     default:
       return (
         <span className="mini-row">
@@ -53,11 +99,11 @@ function Mini({ slug }: { slug: string }) {
   }
 }
 
-export function LessonTiles() {
+export function LessonTiles({ section = 1 }: { section?: SectionId }) {
   const { isDone } = useProgress();
   return (
-    <div className="bento">
-      {LESSONS.map((l) => (
+    <div className={section === 1 ? "bento" : "bento bento-s2"}>
+      {sectionLessons(section).map((l) => (
         <Link
           key={l.slug}
           href={`/lessons/${l.slug}`}
