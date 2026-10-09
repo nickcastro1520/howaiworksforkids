@@ -4,7 +4,8 @@ import { useState } from "react";
 import { trainStump, type Critter } from "@/lib/ml";
 import { Bird, Fish } from "../art/Bits";
 import { Pip } from "../Pip";
-import { GameHead, PipSays, type GameProps } from "./ui";
+import { SayButton, SayLine } from "../Speak";
+import { Emo, GameHead, PipSays, Sayable, type GameProps } from "./ui";
 
 const START: Critter[] = [
   { shape: "fish", color: "blue" },
@@ -83,9 +84,11 @@ export function FixMixup({ onDone }: GameProps) {
       {step === "intro" && (
         <div className="game-panel">
           <PipSays mood="happy">I studied hard! Show me a new picture and I&rsquo;ll tell you if it&rsquo;s a fish or a bird.</PipSays>
-          <button type="button" className="btn btn-big btn-go" onClick={() => setStep("oops")}>
-            Test Pip with a new picture
-          </button>
+          <Sayable text="Test Pip with a new picture">
+            <button type="button" className="btn btn-big btn-go" onClick={() => setStep("oops")}>
+              <Emo e={"\u{1F50D}"} /> Test Pip with a new picture
+            </button>
+          </Sayable>
         </div>
       )}
 
@@ -100,44 +103,72 @@ export function FixMixup({ onDone }: GameProps) {
               <div className="pip-says-bubble big-bubble wrong-glow">
                 <span className="small-cap">I&rsquo;m sure! It&rsquo;s a&hellip;</span>
                 <span className="guess-team">{firstGuess === "bird" ? "Bird!" : "Fish!"}</span>
+                <SayLine text={`I'm sure! It's a ${firstGuess === "bird" ? "bird" : "fish"}!`} label="Pip's guess" />
               </div>
             </div>
           </div>
           {step === "oops" ? (
             <div className="ask">
-              <p className="ask-q">Is Pip right?</p>
-              <div className="ask-btns">
-                <button type="button" className="btn btn-big btn-no" onClick={() => setStep("why")}>
-                  No! That&rsquo;s a fish!
-                </button>
-                <button type="button" className="btn btn-big btn-plain" onClick={() => setWhyWrong("Look again! It has fins and a tail. It's a fish.")}>
-                  Yes
-                </button>
+              <div className="ask-q-row">
+                <p className="ask-q">Is Pip right?</p>
+                <SayLine text="Is Pip right? No, that's a fish! Or: yes." label="the question" size="md" />
               </div>
-              {whyWrong && <p className="hint">{whyWrong}</p>}
+              <div className="ask-btns">
+                <Sayable text="No! That's a fish!">
+                  <button type="button" className="btn btn-big btn-no" onClick={() => setStep("why")}>
+                    <Emo e={"\u{1F41F}"} /> No! That&rsquo;s a fish!
+                  </button>
+                </Sayable>
+                <Sayable text="Yes">
+                  <button type="button" className="btn btn-big btn-plain" onClick={() => setWhyWrong("Look again! It has fins and a tail. It's a fish.")}>
+                    <Emo e={"\u{1F44D}"} /> Yes
+                  </button>
+                </Sayable>
+              </div>
+              {whyWrong && (
+                <div className="hint-row">
+                  <p className="hint">{whyWrong}</p>
+                  <SayLine text={whyWrong} label="the hint" />
+                </div>
+              )}
             </div>
           ) : (
             <div className="ask">
-              <p className="ask-q">Why did Pip think it was a bird? What clue did Pip use?</p>
+              <div className="ask-q-row">
+                <p className="ask-q">Why did Pip think it was a bird? What clue did Pip use?</p>
+                <SayLine
+                  text="Why did Pip think it was a bird? What clue did Pip use? Its color? Its size? Or, Pip was sleepy?"
+                  label="the question and answers"
+                  size="md"
+                />
+              </div>
               <div className="ask-btns three">
-                {[
-                  ["Its color", true],
-                  ["Its size", false],
-                  ["Pip was sleepy", false],
-                ].map(([t, ok]) => (
-                  <button
-                    key={t as string}
-                    type="button"
-                    className="btn btn-plain"
-                    onClick={() =>
-                      ok ? (setWhyWrong(null), setStep("fix")) : setWhyWrong("Hint: look at Pip's examples. What's the same about every bird?")
-                    }
-                  >
-                    {t as string}
-                  </button>
+                {(
+                  [
+                    ["Its color", true, "\u{1F3A8}"],
+                    ["Its size", false, "\u{1F4CF}"],
+                    ["Pip was sleepy", false, "\u{1F634}"],
+                  ] as const
+                ).map(([t, ok, e]) => (
+                  <Sayable key={t} text={t}>
+                    <button
+                      type="button"
+                      className="btn btn-plain"
+                      onClick={() =>
+                        ok ? (setWhyWrong(null), setStep("fix")) : setWhyWrong("Hint: look at Pip's examples. What's the same about every bird?")
+                      }
+                    >
+                      <Emo e={e} /> {t}
+                    </button>
+                  </Sayable>
                 ))}
               </div>
-              {whyWrong && <p className="hint">{whyWrong}</p>}
+              {whyWrong && (
+                <div className="hint-row">
+                  <p className="hint">{whyWrong}</p>
+                  <SayLine text={whyWrong} label="the hint" />
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -168,11 +199,19 @@ export function FixMixup({ onDone }: GameProps) {
               <b>{shapeScore}%</b>
             </div>
             <p className="muted">Pip uses the clue that fits best. When there&rsquo;s a tie, Pip picks color, because it&rsquo;s easiest to see.</p>
+            <SayButton
+              text={`Color fits ${colorScore} percent of Pip's examples. Shape fits ${shapeScore} percent. Pip uses the clue that fits best. When there's a tie, Pip picks color, because it's easiest to see.`}
+              label="the clue meter"
+              className="say-corner"
+            />
           </div>
 
           {step !== "done" && (
             <>
-              <p className="ask-q">Tap pictures to add them to Pip&rsquo;s examples:</p>
+              <div className="ask-q-row">
+                <p className="ask-q">Tap pictures to add them to Pip&rsquo;s examples:</p>
+                <SayLine text="Tap pictures to add them to Pip's examples. Then tap Test Pip again." label="what to do" size="md" />
+              </div>
               <div className="tray">
                 {TRAY.map((c, i) => (
                   <button key={i} type="button" className={`tray-card ${added.includes(i) ? "is-added" : ""}`} onClick={() => add(i)} disabled={added.includes(i)}>
@@ -184,7 +223,7 @@ export function FixMixup({ onDone }: GameProps) {
                 ))}
               </div>
               <button type="button" className="btn btn-big btn-go" onClick={retest} disabled={added.length === 0}>
-                Test Pip again
+                <Emo e={"\u{1F9EA}"} /> Test Pip again
               </button>
             </>
           )}
@@ -218,7 +257,7 @@ export function FixMixup({ onDone }: GameProps) {
                     onDone();
                   }}
                 >
-                  Yay! Finish the game
+                  <Emo e={"\u{1F389}"} /> Yay! Finish the game
                 </button>
               </>
             ) : (
@@ -227,12 +266,17 @@ export function FixMixup({ onDone }: GameProps) {
                   Still mixed up! Color still works as a shortcut in my examples. Try adding a fish or bird that breaks the color rule.
                 </PipSays>
                 <button type="button" className="btn btn-plain" onClick={() => setStep("fix")}>
-                  Add more examples
+                  <Emo e={"\u2795"} /> Add more examples
                 </button>
               </>
             )
           )}
-          {step === "done" && <p className="win-line">Mix-up fixed! You taught Pip with fair, mixed-up examples.</p>}
+          {step === "done" && (
+            <div className="win-row">
+              <p className="win-line">Mix-up fixed! You taught Pip with fair, mixed-up examples.</p>
+              <SayLine text="Mix-up fixed! You taught Pip with fair, mixed-up examples." label="the result" />
+            </div>
+          )}
         </div>
       )}
     </div>

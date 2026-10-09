@@ -4,7 +4,8 @@ import { useMemo, useRef, useState } from "react";
 import { knnGuess, type Example } from "@/lib/ml";
 import { Glorb, type GlorbData } from "../art/Bits";
 import { Pip } from "../Pip";
-import { Dots, GameHead, PipSays, shuffle, type GameProps } from "./ui";
+import { SayLine } from "../Speak";
+import { Dots, Emo, GameHead, PipSays, Sayable, shuffle, type GameProps } from "./ui";
 
 type F = "color" | "eyes" | "top" | "spots" | "shape";
 const KEYS: F[] = ["color", "eyes", "top", "spots", "shape"];
@@ -142,15 +143,20 @@ export function SortGlorbs({ onDone }: GameProps) {
           </div>
           <div className="sort-btns">
             {(Object.keys(TEAMS) as Team[]).map((t) => (
-              <button key={t} type="button" className={`btn btn-big team-btn team-${t}`} onClick={() => teach(t)}>
-                <TeamIcon team={t} /> {TEAMS[t]}
-              </button>
+              <Sayable key={t} text={TEAMS[t]}>
+                <button type="button" className={`btn btn-big team-btn team-${t}`} onClick={() => teach(t)}>
+                  <TeamIcon team={t} /> {TEAMS[t]}
+                </button>
+              </Sayable>
             ))}
           </div>
           {canTest && (
-            <button type="button" className="link-btn" onClick={startTest}>
-              I&rsquo;m done teaching. Test Pip now!
-            </button>
+            <div className="say-row">
+              <button type="button" className="btn btn-plain" onClick={startTest}>
+                <Emo e={"\u{1F9EA}"} /> I&rsquo;m done teaching. Test Pip now!
+              </button>
+              <SayLine text="I'm done teaching. Test Pip now!" label="the test button" />
+            </div>
           )}
         </div>
       )}
@@ -172,6 +178,11 @@ export function SortGlorbs({ onDone }: GameProps) {
                     <span className={`guess-team team-${guessTeam}`}>
                       <TeamIcon team={guessTeam} /> {TEAMS[guessTeam]}
                     </span>
+                    <SayLine
+                      key={testIndex}
+                      text={`${guess && guess.confidence === 1 ? "I'm pretty sure" : "My guess"}: ${TEAMS[guessTeam]}. Was I right, or wrong?`}
+                      label="Pip's guess"
+                    />
                   </>
                 )}
               </div>
@@ -180,12 +191,16 @@ export function SortGlorbs({ onDone }: GameProps) {
           {!thinking && guess && (
             <>
               <div className="ask-btns">
-                <button type="button" className="btn btn-big btn-yes" onClick={() => judge(true)}>
-                  Right!
-                </button>
-                <button type="button" className="btn btn-big btn-no" onClick={() => judge(false)}>
-                  Wrong
-                </button>
+                <Sayable text="Right!">
+                  <button type="button" className="btn btn-big btn-yes" onClick={() => judge(true)}>
+                    <Emo e={"\u2705"} /> Right!
+                  </button>
+                </Sayable>
+                <Sayable text="Wrong">
+                  <button type="button" className="btn btn-big btn-no" onClick={() => judge(false)}>
+                    <Emo e={"\u274C"} /> Wrong
+                  </button>
+                </Sayable>
               </div>
               <div className="why-box">
                 <p className="why-title">Why did Pip guess that? It looks most like these examples:</p>
@@ -209,7 +224,12 @@ export function SortGlorbs({ onDone }: GameProps) {
               </div>
             </>
           )}
-          {feedback && !thinking && <p className="muted center">{feedback}</p>}
+          {feedback && !thinking && (
+            <div className="say-row">
+              <p className="muted center">{feedback}</p>
+              <SayLine text={feedback} label="Pip's answer" />
+            </div>
+          )}
         </div>
       )}
 

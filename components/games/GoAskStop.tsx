@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Shield } from "../art/Props";
-import { Dots, GameHead, PipSays, type GameProps } from "./ui";
+import { SayLine } from "../Speak";
+import { Dots, Emo, GameHead, PipSays, Sayable, type GameProps } from "./ui";
 
 type Light = "go" | "ask" | "stop";
 
@@ -15,10 +16,10 @@ const CARDS: { text: string; answer: Light; why: string }[] = [
   { text: "AI made a silly picture of your friend, and you want to share it.", answer: "ask", why: "It's your friend's face. Ask your friend and a grown-up first." },
 ];
 
-const LIGHTS: { id: Light; label: string; sub: string }[] = [
-  { id: "go", label: "Go", sub: "That's OK" },
-  { id: "ask", label: "Ask", sub: "Ask a grown-up first" },
-  { id: "stop", label: "Stop", sub: "Don't do it. Tell a grown-up" },
+const LIGHTS: { id: Light; label: string; sub: string; emoji: string }[] = [
+  { id: "go", label: "Go", sub: "That's OK", emoji: "\u{1F44D}" },
+  { id: "ask", label: "Ask", sub: "Ask a grown-up first", emoji: "\u{1F64B}" },
+  { id: "stop", label: "Stop", sub: "Don't do it. Tell a grown-up", emoji: "\u270B" },
 ];
 
 const SECRETS: { text: string; secret: boolean }[] = [
@@ -43,6 +44,16 @@ export function GoAskStop({ onDone }: GameProps) {
 
   const card = CARDS[i];
   const item = SECRETS[s];
+  const verdict =
+    item && sPick !== null
+      ? sPick === item.secret
+        ? item.secret
+          ? "Yes! That's private. Shield up!"
+          : "Yep, that's fine to type."
+        : item.secret
+          ? "Careful! That's private. Keep it secret."
+          : "That one's OK. It doesn't tell anyone who or where you are."
+      : "";
 
   function chooseLight(l: Light) {
     if (pick) return;
@@ -91,22 +102,31 @@ export function GoAskStop({ onDone }: GameProps) {
           <div className="scenario pop" key={i}>
             <span className="scenario-n">{i + 1}</span>
             <p>{card.text}</p>
+            <SayLine
+              key={i}
+              text={`${card.text} Green: go. Yellow: ask a grown-up first. Or red: stop.`}
+              label="what happens"
+              size="md"
+            />
           </div>
           <div className="traffic" role="group" aria-label="Choose a light">
             {LIGHTS.map((l) => (
-              <button
-                key={l.id}
-                type="button"
-                className={`tlight tlight-${l.id} ${pick === l.id ? "is-picked" : ""} ${pick && card.answer === l.id ? "is-answer" : ""}`}
-                onClick={() => chooseLight(l.id)}
-                disabled={Boolean(pick)}
-              >
-                <span className="bulb" aria-hidden="true" />
-                <span className="tlight-text">
-                  <b>{l.label}</b>
-                  <small>{l.sub}</small>
-                </span>
-              </button>
+              <Sayable key={l.id} text={`${l.label}. ${l.sub}.`}>
+                <button
+                  type="button"
+                  className={`tlight tlight-${l.id} ${pick === l.id ? "is-picked" : ""} ${pick && card.answer === l.id ? "is-answer" : ""}`}
+                  onClick={() => chooseLight(l.id)}
+                  disabled={Boolean(pick)}
+                >
+                  <span className="bulb" aria-hidden="true">
+                    <Emo e={l.emoji} />
+                  </span>
+                  <span className="tlight-text">
+                    <b>{l.label}</b>
+                    <small>{l.sub}</small>
+                  </span>
+                </button>
+              </Sayable>
             ))}
           </div>
           {pick && (
@@ -140,27 +160,27 @@ export function GoAskStop({ onDone }: GameProps) {
               <>
                 <div className="secret-card pop" key={s}>
                   {item.text}
+                  <SayLine key={s} text={`${item.text}. Keep it secret? Or OK to type?`} label="the card" />
                 </div>
                 {sPick === null ? (
                   <div className="ask-btns">
-                    <button type="button" className="btn btn-big btn-no" onClick={() => chooseSecret(true)}>
-                      Keep it secret
-                    </button>
-                    <button type="button" className="btn btn-big btn-yes" onClick={() => chooseSecret(false)}>
-                      OK to type
-                    </button>
+                    <Sayable text="Keep it secret">
+                      <button type="button" className="btn btn-big btn-no" onClick={() => chooseSecret(true)}>
+                        <Emo e={"\u{1F6E1}\uFE0F"} /> Keep it secret
+                      </button>
+                    </Sayable>
+                    <Sayable text="OK to type">
+                      <button type="button" className="btn btn-big btn-yes" onClick={() => chooseSecret(false)}>
+                        <Emo e={"\u2328\uFE0F"} /> OK to type
+                      </button>
+                    </Sayable>
                   </div>
                 ) : (
                   <>
                     <p className={`verdict ${sPick === item.secret ? "ok" : "bad"}`}>
-                      {sPick === item.secret
-                        ? item.secret
-                          ? "Yes! That's private. Shield up!"
-                          : "Yep, that's fine to type."
-                        : item.secret
-                          ? "Careful! That's private. Keep it secret."
-                          : "That one's OK. It doesn't tell anyone who or where you are."}
+                      {verdict}
                     </p>
+                    <SayLine text={verdict} label="the answer" />
                     <button type="button" className="btn btn-big btn-go" onClick={nextSecret}>
                       {s + 1 >= SECRETS.length ? "Finish" : "Next"}
                     </button>
