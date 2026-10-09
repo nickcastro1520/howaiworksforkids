@@ -107,9 +107,9 @@ export default async function LessonPage({ params }: Props) {
               <b>Get your certificate</b>
             </Link>
           ) : (
-            <Link href={section.path} className="pn-card pn-next">
-              <small>More coming soon &rarr;</small>
-              <b>See the {section.name} trail</b>
+            <Link href="/quiz" className="pn-card pn-next">
+              <small>Final quiz &rarr;</small>
+              <b>Test what you know</b>
             </Link>
           )}
         </div>

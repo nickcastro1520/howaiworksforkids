@@ -766,6 +766,190 @@ function Lesson12({ page }: { page: number }) {
   }
 }
 
+
+function Lesson13({ page }: { page: number }) {
+  const round1 = G("teal", 2, "horns", false, "round");
+  const round2 = G("orange", 1, "antenna", false, "round");
+  const square = G("teal", 2, "antenna", false, "square");
+  const spiky = G("orange", 3, "horns", false, "spiky");
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="0.6rem" className="align-end">
+          <span className="pop"><Pip size={100} mood="happy" bob={false} /></span>
+          <BigEmoji e="🏐" size={56} className="pop" />
+          <Glorb g={round1} size={84} />
+          <Glorb g={round2} size={84} />
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <div className="art-col">
+            <Row gap="0.2rem">
+              <Glorb g={round1} size={64} />
+              <Glorb g={round2} size={64} />
+            </Row>
+            <Chip color="#208644">picked</Chip>
+          </div>
+          <div className="art-col">
+            <Row gap="0.2rem">
+              <Glorb g={square} size={64} />
+              <Glorb g={spiky} size={64} />
+            </Row>
+            <Chip color="#cb4834">left out</Chip>
+          </div>
+        </Row>
+      );
+    case 2:
+      return (
+        <Row gap="0.6rem" className="align-end">
+          <Glorb g={square} size={96} className="pop" />
+          <Glorb g={spiky} size={96} className="pop" />
+          <Pip size={96} mood="think" bob={false} />
+        </Row>
+      );
+    case 3:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <div className="art-col">
+            <BigEmoji e="📦" size={64} />
+            <Row gap="0.1rem">
+              <Glorb g={round1} size={44} />
+              <Glorb g={square} size={44} />
+              <Glorb g={spiky} size={44} />
+            </Row>
+          </div>
+          <BigEmoji e="⚖️" size={74} className="pop" />
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="0.3rem" className="align-end">
+          <Glorb g={round1} size={72} className="pop" />
+          <Glorb g={square} size={72} className="pop" />
+          <span className="pop"><Pip size={96} mood="proud" bob={false} /></span>
+          <Glorb g={spiky} size={72} className="pop" />
+        </Row>
+      );
+  }
+}
+
+function Lesson14({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="0.6rem" className="align-end">
+          <Person size={110} shirt="#a3343c" />
+          <BigEmoji e="💬" size={52} className="fly-in" />
+          <span className="art-neq" aria-hidden="true">&rarr;</span>
+          <BigEmoji e="🏢" size={84} />
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <BigEmoji e="🏢" size={84} />
+          <div className="art-col">
+            <BigEmoji e="🗂️" size={60} className="pop" />
+            <Chip color="#231d4f">chat history</Chip>
+          </div>
+        </Row>
+      );
+    case 2:
+      return (
+        <Row gap="0.8rem">
+          <Shield size={110} className="pop" />
+          <div className="art-col">
+            <Chip color="#a3343c">full name</Chip>
+            <Chip color="#a3343c">school</Chip>
+            <Chip color="#a3343c">address</Chip>
+            <Chip color="#a3343c">password</Chip>
+          </div>
+        </Row>
+      );
+    case 3:
+      return (
+        <Row gap="0.6rem">
+          <div className="art-col">
+            <Chip color="#cb4834" className="art-strike">Maya Lopez</Chip>
+            <span className="art-neq" aria-hidden="true">&darr;</span>
+            <Chip color="#208644">my friend</Chip>
+          </div>
+          <Pip size={100} mood="happy" bob={false} />
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <BigEmoji e="🧽" size={70} className="pop" />
+          <span className="pop"><Pip size={110} mood="proud" bob={false} /></span>
+          <Shield size={84} className="pop" />
+        </Row>
+      );
+  }
+}
+
+function Lesson15({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <Person size={120} shirt="#4a4a9e" />
+          <BigEmoji e="🛠️" size={60} className="pop" />
+          <Pip size={100} mood="wow" bob={false} />
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="1rem">
+          <BigEmoji e="🐾" size={64} className="pop" />
+          <BigEmoji e="🍎" size={64} className="pop" />
+          <BigEmoji e="😀" size={64} className="pop" />
+        </Row>
+      );
+    case 2:
+      return (
+        <Row gap="0.8rem">
+          <Basket label="Land" color="#208644">
+            <BigEmoji e="🐕" size={40} />
+            <BigEmoji e="🐔" size={40} />
+          </Basket>
+          <Basket label="Water" color="#2774d1">
+            <BigEmoji e="🐟" size={40} />
+            <BigEmoji e="🐙" size={40} />
+          </Basket>
+        </Row>
+      );
+    case 3:
+      return (
+        <Row gap="0.6rem">
+          <div className="art-col">
+            <BigEmoji e="🐍" size={64} />
+            <Chip color="#cb4834">oops: water?</Chip>
+          </div>
+          <span className="art-neq" aria-hidden="true">+</span>
+          <div className="art-col">
+            <BigEmoji e="➕" size={48} className="pop" />
+            <Chip color="#208644">add an example</Chip>
+          </div>
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <span className="pop"><Pip size={110} mood="proud" bob={false} /></span>
+          <div className="art-card-mini pop">
+            <b>My AI Card</b>
+            <span>🧪 tested</span>
+            <span>⚖️ every kind</span>
+            <span>🛡️ safety rule</span>
+          </div>
+        </Row>
+      );
+  }
+}
+
 const MAP: Record<string, (p: { page: number }) => React.ReactNode> = {
   "what-is-ai": Lesson1,
   "learning-from-examples": Lesson2,
@@ -779,6 +963,9 @@ const MAP: Record<string, (p: { page: number }) => React.ReactNode> = {
   "say-it-clearly": Lesson10,
   "check-it-fix-it": Lesson11,
   "ai-learning-helper": Lesson12,
+  "fair-for-everyone": Lesson13,
+  "secrets-stay-safe": Lesson14,
+  "build-your-own-ai": Lesson15,
 };
 
 export function StoryArt({ slug, page }: { slug: string; page: number }) {

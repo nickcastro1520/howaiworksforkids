@@ -39,7 +39,7 @@ export default function LessonsPage() {
           <p className="small-cap">{s2.kicker}</p>
           <h2 id="s2-teaser">{s2.name}</h2>
           <p>
-            {s2.blurb} {SECTION_2.length} lessons are ready now, and more are coming soon.
+            {s2.blurb} {SECTION_2.length} lessons, a final quiz, and a second certificate.
           </p>
           <Link href={s2.path} className="btn btn-big btn-sun">
             See the {s2.name} trail &rarr;

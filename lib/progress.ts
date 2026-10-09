@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { PROGRESS_KEY } from "@/lib/site";
+import { PROGRESS_KEY, QUIZ_KEY } from "@/lib/site";
 
 /**
  * Progress lives ONLY in this browser's localStorage.
@@ -70,33 +70,47 @@ export function useProgress() {
   };
 }
 
-/* ---------------- Final quiz (used in release 2) ----------------
- * Saved ONLY in this browser, as { score, missed: conceptId[] }. No answers are
- * sent anywhere and nothing about the quiz goes to analytics.
+/* ---------------- Final quiz ----------------
+ * Saved ONLY in this browser, as { score, missed: conceptId[] }. No answers, no name.
+ * Nothing about the quiz is sent anywhere, and nothing about it goes to analytics.
  */
-export const QUIZ_KEY = "hawfk-quiz";
+const QUIZ_EVENT = "hawfk-quiz";
 
-export type QuizResult = { score: number; total: number; missed: string[] };
+export type QuizResult = { score: number; missed: string[] };
+
+let quizRaw: string | null = null;
+let quizCached: QuizResult | null = null;
 
 export function readQuiz(): QuizResult | null {
   if (typeof window === "undefined") return null;
+  let raw: string | null = null;
   try {
-    const raw = window.localStorage.getItem(QUIZ_KEY);
-    if (!raw) return null;
-    const p = JSON.parse(raw) as Partial<QuizResult>;
-    if (typeof p.score !== "number" || typeof p.total !== "number" || !Array.isArray(p.missed)) return null;
-    return { score: p.score, total: p.total, missed: p.missed.filter((m): m is string => typeof m === "string") };
+    raw = window.localStorage.getItem(QUIZ_KEY);
   } catch {
     return null;
   }
+  if (raw === quizRaw) return quizCached;
+  quizRaw = raw;
+  quizCached = null;
+  try {
+    const p = raw ? (JSON.parse(raw) as Partial<QuizResult>) : null;
+    if (p && typeof p.score === "number" && Array.isArray(p.missed)) {
+      quizCached = { score: p.score, missed: p.missed.filter((m): m is string => typeof m === "string") };
+    }
+  } catch {
+    quizCached = null;
+  }
+  return quizCached;
 }
 
 export function saveQuiz(result: QuizResult) {
   try {
-    window.localStorage.setItem(QUIZ_KEY, JSON.stringify(result));
+    // Only these two fields, on purpose.
+    window.localStorage.setItem(QUIZ_KEY, JSON.stringify({ score: result.score, missed: result.missed }));
   } catch {
     /* storage blocked: the result just won't be remembered */
   }
+  window.dispatchEvent(new Event(QUIZ_EVENT));
 }
 
 export function clearQuiz() {
@@ -105,4 +119,19 @@ export function clearQuiz() {
   } catch {
     /* ignore */
   }
+  window.dispatchEvent(new Event(QUIZ_EVENT));
+}
+
+function subscribeQuiz(cb: () => void) {
+  window.addEventListener("storage", cb);
+  window.addEventListener(QUIZ_EVENT, cb);
+  return () => {
+    window.removeEventListener("storage", cb);
+    window.removeEventListener(QUIZ_EVENT, cb);
+  };
+}
+
+/** The saved quiz result on this device, or null if the quiz hasn't been taken here. */
+export function useQuizResult(): QuizResult | null {
+  return useSyncExternalStore(subscribeQuiz, readQuiz, () => null);
 }

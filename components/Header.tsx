@@ -15,9 +15,10 @@ const NAV = [
 export function Header() {
   const path = usePathname();
   const { done } = useProgress();
-  // The pill follows the section you're in (Section 1 everywhere else).
+  // The pill follows the section you're in (the final quiz and its certificate count as Section 2; Section 1 everywhere else).
   const slug = path?.startsWith("/lessons/") ? path.slice("/lessons/".length) : "";
-  const section: SectionId = slug === "section-2" || getLesson(slug)?.section === 2 ? 2 : 1;
+  const s2Page = path === "/quiz" || path === "/finish/section-2";
+  const section: SectionId = s2Page || slug === "section-2" || getLesson(slug)?.section === 2 ? 2 : 1;
   const info = SECTIONS[section];
   const slots = info.planned;
   const n = sectionLessons(section).filter((l) => done.includes(l.slug)).length;

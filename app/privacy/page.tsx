@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GA_ENABLED } from "@/lib/analytics";
-import { NICK, PROGRESS_KEY, SITE_NAME, SITE_URL } from "@/lib/site";
+import { NICK, PROGRESS_KEY, QUIZ_KEY, SITE_NAME, SITE_URL } from "@/lib/site";
 import { ogAlt } from "@/lib/og";
 import { pageMeta } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -44,6 +44,12 @@ export default function PrivacyPage() {
         Tap &ldquo;Start over&rdquo; on the lesson trail, or clear this site&rsquo;s data, to delete it.
       </p>
       <p>
+        The final quiz result is saved the same way, under the key <code>{QUIZ_KEY}</code>: the score and the IDs of any topics that were
+        missed (for example &ldquo;fairness&rdquo;), so the certificate can unlock and the next visit can say &ldquo;last time.&rdquo; No
+        answers, no name, nothing else. It never leaves your device, and the quiz is not tracked in analytics. &ldquo;Start over&rdquo; deletes
+        it too.
+      </p>
+      <p>
         The nickname typed on the certificate is only shown on the screen. It is not saved or sent anywhere.
       </p>
 
@@ -56,7 +62,8 @@ export default function PrivacyPage() {
       <h2>Drawings</h2>
       <p>
         Some games let kids draw (for example Pixel Peek and Pip&rsquo;s Idea Machine). Drawings stay on the screen and disappear when you
-        leave the page. They are not saved or sent anywhere.
+        leave the page. They are not saved or sent anywhere. The same goes for the sorting machine kids build in Lesson 15 and its
+        &ldquo;My AI Card&rdquo;: it has no name field, and printing it uses your own printer.
       </p>
 
       <h2>Grown-up missions</h2>
@@ -75,8 +82,11 @@ export default function PrivacyPage() {
 
       <h2>Tell a grown-up email</h2>
       <p>
-        On the finish page, a grown-up can choose to open their own email app with a short note about what their child learned. This uses a{" "}
-        <code>mailto:</code> link. The address is not sent to us or saved, and the field is cleared right away.
+        On the certificate pages and the quiz results, a grown-up can choose to open their own email app with a short note about what their
+        child learned. If the quiz was taken, the note includes the score and a talk question for each missed topic. It never includes a name.
+        This uses a <code>mailto:</code> link. The address is not sent to us or saved, and the field is cleared right away. The same note is
+        shown on screen with &ldquo;Copy note&rdquo; and &ldquo;Print note&rdquo; buttons, which only use your device&rsquo;s clipboard and
+        printer.
       </p>
 
       <h2 id="analytics">Analytics</h2>
@@ -93,7 +103,7 @@ export default function PrivacyPage() {
             <li>
               There are two custom events. &ldquo;Lesson finished&rdquo; records the lesson number and name and whether it was the first time
               on this device. &ldquo;Teacher kit download&rdquo; records which kit was downloaded and which button was used. Nothing about who
-              did it. Game answers, drawings, and grown-up missions are not tracked.
+              did it. Game answers, quiz answers and scores, drawings, and grown-up missions are not tracked.
             </li>
             <li>Google Analytics sets first-party cookies to count visits. You can block them with your browser&rsquo;s settings or a
               content blocker, and the lessons will still work the same.</li>
