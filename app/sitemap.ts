@@ -9,6 +9,7 @@ const PAGES: Entry[] = [
   { path: "/lessons", og: "lessons", priority: 0.9, freq: "weekly" },
   ...LESSONS.map((l): Entry => ({ path: `/lessons/${l.slug}`, og: l.slug, priority: 0.8, freq: "monthly" })),
   { path: "/parents", og: "parents", priority: 0.7, freq: "monthly" },
+  { path: "/teachers", og: "teachers", priority: 0.7, freq: "monthly" },
   { path: "/glossary", og: "glossary", priority: 0.6, freq: "monthly" },
   { path: "/tested-by-kids", og: "tested-by-kids", priority: 0.4, freq: "monthly" },
   { path: "/about", og: "about", priority: 0.4, freq: "yearly" },

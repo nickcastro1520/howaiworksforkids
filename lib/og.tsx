@@ -43,6 +43,14 @@ const PAGES: Record<string, OgCard> = {
     alt: "A guide for parents and teachers: how to use 7 free AI lessons for kids at home or in class.",
     accent: "#ffd34d",
   },
+  teachers: {
+    kicker: "For teachers & homeschool",
+    title: "Free AI lesson kit",
+    sub: "Guide · Card sort · Worksheets · Parent letter",
+    alt: "A free print-and-go teacher kit for Lesson 1, Meet Pip: What is AI? For teachers, homeschool parents, and club leaders.",
+    accent: "#79f2da",
+    light: 1,
+  },
   about: {
     kicker: "About",
     title: "Made by Nick Castro",

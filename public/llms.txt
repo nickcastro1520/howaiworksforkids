@@ -20,6 +20,8 @@ The games run real, very small models inside the web page: a weighted nearest-ne
 
 - [Home](https://howaiworksforkids.com/): What the site is and the 7 games
 - [Lesson trail](https://howaiworksforkids.com/lessons): All lessons with progress
+- [For teachers](https://howaiworksforkids.com/teachers): For teachers, homeschool parents, and club leaders. Free print-and-go Lesson 1 teacher kit (PDF, 8 pages: 35-minute teacher guide, "AI or Not?" card sort, K-2 and 3-5 worksheets, answer key, parent letter), how to use the site in class, concept-level alignment to the AI4K12 Five Big Ideas and CSTA Impacts of Computing. Full Teacher Pack for all 7 lessons coming soon
+- [Lesson 1 teacher kit (PDF)](https://howaiworksforkids.com/teachers/lesson-1-teacher-kit.pdf)
 - [For parents and teachers](https://howaiworksforkids.com/parents): What kids learn in each lesson, discussion questions, how to use it at home or in class, safety, FAQ
 - [Pip's Word Book](https://howaiworksforkids.com/glossary): 12 AI words in kid language (AI, example, pattern, data, training, guess, model, chatbot, lopsided data/bias, made-up answer/hallucination, AI-made picture/deepfake, private info)
 - [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Tested with Nathan (8) and Nolan (11, the older tester who checks if things are too easy or confusing). Audience is ages 6-10. Real quotes only, shared by their dad
