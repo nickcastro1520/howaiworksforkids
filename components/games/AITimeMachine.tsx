@@ -25,12 +25,16 @@ const INGREDIENTS = [
   { id: "loud", emoji: "🔊", text: "Louder speakers", good: false, why: "Nope! Being loud doesn't make me smart." },
 ];
 
-/** Listed A to Z on purpose: no ranking, no "best", no links. */
+/**
+ * Listed A to Z on purpose: no ranking, no "best", no links. Every card gets the same neutral,
+ * general line so none is favored.
+ */
+const WHAT_IT_DOES = "A chat helper that answers questions and helps with writing.";
 const HELPERS = [
-  { name: "ChatGPT", maker: "OpenAI", known: "Known for making AI chat helpers famous when lots of people started using it a few years ago.", mark: "C", color: "#1f7a5c" },
-  { name: "Claude", maker: "Anthropic", known: "Known for helping with writing and reading. Its makers focus a lot on AI safety.", mark: "C", color: "#a4532a" },
-  { name: "Gemini", maker: "Google", known: "Known for working with words, pictures, and sounds, and for working with other Google apps.", mark: "G", color: "#2f5fd0" },
-  { name: "Grok", maker: "xAI", known: "Known for answering with a sense of humor and keeping up with things happening right now.", mark: "G", color: "#231d4f" },
+  { name: "ChatGPT", maker: "OpenAI", known: WHAT_IT_DOES, mark: "C", color: "#1f7a5c" },
+  { name: "Claude", maker: "Anthropic", known: WHAT_IT_DOES, mark: "C", color: "#a4532a" },
+  { name: "Gemini", maker: "Google", known: WHAT_IT_DOES, mark: "G", color: "#2f5fd0" },
+  { name: "Grok", maker: "xAI", known: WHAT_IT_DOES, mark: "G", color: "#231d4f" },
 ];
 
 export function AITimeMachine({ onDone }: GameProps) {

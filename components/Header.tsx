@@ -41,7 +41,7 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Link href={info.path} className="brain-pill" aria-label={`${section === 2 ? "S2 " : ""}${n}/${slots}: Pip's brain lights on in ${info.kicker}`}>
+        <Link href={info.path} className="brain-pill">
           <span className="brain-dots" aria-hidden="true">
             {Array.from({ length: slots }).map((_, i) => (
               <i key={i} className={i < n ? "on" : ""} />
@@ -51,6 +51,7 @@ export function Header() {
             {section === 2 && <span className="brain-sec">S2 </span>}
             {n}/{slots}
           </span>
+          <span className="sr-only">: Pip&rsquo;s brain lights on in {info.kicker}</span>
         </Link>
       </div>
     </header>

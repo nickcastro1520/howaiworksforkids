@@ -137,23 +137,24 @@ export function peekScores(target: PicId, shown: number[]): Record<PicId, number
   return out;
 }
 
-/* ---------- Part 2: 8x8 drawings Pip learned from (nearest neighbor, lib/ml.ts) ---------- */
+/* ---------- Part 2: 6x6 drawings Pip learned from (nearest neighbor, lib/ml.ts) ---------- */
+/* 6x6 so every square is a big, easy tap target (about 55px on a 375px phone). */
 
 export type DrawId = "cat" | "fish" | "house";
 export const DRAW_IDS: DrawId[] = ["cat", "fish", "house"];
-export const DRAW = 8;
+export const DRAW = 6;
 
 // prettier-ignore
 const DRAWINGS: { label: DrawId; rows: string[] }[] = [
-  { label: "cat", rows: ["#......#", "##....##", "########", "#.#..#.#", "########", "#..##..#", ".######.", "..#..#.."] },
-  { label: "cat", rows: [".#....#.", ".##..##.", ".######.", ".#.##.#.", ".######.", ".##..##.", "..####..", "........"] },
-  { label: "cat", rows: ["#......#", "##....##", "#.####.#", "#.#..#.#", "#......#", "#..##..#", ".#....#.", "..####.."] },
-  { label: "fish", rows: ["........", "...###..", "#.#####.", "########", "###.####", "#.#####.", "...###..", "........"] },
-  { label: "fish", rows: ["........", "........", "#..####.", "##.#####", ".#######", "##.#####", "#..####.", "........"] },
-  { label: "fish", rows: ["....#...", "...###..", "#.#####.", "###..##.", "#.#####.", "...###..", "....#...", "........"] },
-  { label: "house", rows: ["...##...", "..####..", ".######.", "########", ".#....#.", ".#.##.#.", ".#.##.#.", ".######."] },
-  { label: "house", rows: ["...#....", "..###...", ".#####..", "#######.", ".#...#..", ".#.#.#..", ".#.#.#..", ".#####.."] },
-  { label: "house", rows: ["....##..", "...####.", "..######", ".#######", "..#...#.", "..#.#.#.", "..#.#.#.", "..#####."] },
+  { label: "cat", rows: ["#....#", "##..##", "######", "#.##.#", "######", ".####."] },
+  { label: "cat", rows: [".#..#.", ".####.", ".#..#.", ".####.", "..##..", "......"] },
+  { label: "cat", rows: ["#...#.", "##.##.", "#####.", "#.#.#.", "#####.", ".###.."] },
+  { label: "fish", rows: ["......", "..###.", "#.####", "######", "#.####", "..###."] },
+  { label: "fish", rows: ["......", "#.###.", "######", "#.###.", "......", "......"] },
+  { label: "fish", rows: ["..##..", "#.###.", "######", "#.###.", "..##..", "......"] },
+  { label: "house", rows: ["..##..", ".####.", "######", ".#..#.", ".#..#.", ".####."] },
+  { label: "house", rows: ["..#...", ".###..", "#####.", ".#.#..", ".#.#..", ".###.."] },
+  { label: "house", rows: ["...##.", "..####", ".#####", "..#..#", "..#..#", "..####"] },
 ];
 
 export type Drawing = boolean[];
@@ -162,15 +163,16 @@ export function rowsToDrawing(rows: string[]): Drawing {
   return rows.join("").split("").map((c) => c === "#");
 }
 
-/**
- * Turn a drawing into clues Pip can compare, no matter where on the grid it was drawn:
- * crop to the drawing, squash it onto a 4x4 grid (which parts have ink?), plus its shape
- * (wide, tall, or square) and whether the top has a gap (like two cat ears).
- */
 /** Every example keeps its original pixels so Pip can show "the drawing it looked at". */
 const PIXELS = new WeakMap<Example<string>, Drawing>();
 
-export const FEATURE_KEYS = [...Array.from({ length: 16 }, (_, i) => `c${i}`), "shape", "topGap", "leftGap"];
+/**
+ * Turn a drawing into clues Pip can compare, no matter where on the grid it was drawn.
+ * Pip crops to the drawing, then checks simple shape clues a kid would notice:
+ * is it wide or tall, is there a gap on top or ink in both top corners (two cat ears), a gap down the left side (a fish tail),
+ * is the top thin (a roof), is the bottom thin or full, and is there a hole in the middle (eyes, a door)?
+ */
+export const FEATURE_KEYS = ["shape", "topGap", "topCorners", "leftGap", "topThin", "bottomThin", "middleHole", "rightGap"];
 
 function toFeatures(d: Drawing): Record<string, string> {
   const on: [number, number][] = [];
@@ -184,20 +186,22 @@ function toFeatures(d: Drawing): Record<string, string> {
   const ys = on.map((p) => p[1]);
   const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
   const w = maxX - minX + 1, h = maxY - minY + 1;
-  const cells = Array(16).fill(0);
-  for (const [x, y] of on) {
-    const cx = Math.min(3, Math.floor(((x - minX) / w) * 4));
-    const cy = Math.min(3, Math.floor(((y - minY) / h) * 4));
-    cells[cy * 4 + cx] += 1;
-  }
-  cells.forEach((c, i) => (f[`c${i}`] = c > 0 ? "1" : "0"));
-  f.shape = w >= h + 2 ? "wide" : h >= w + 2 ? "tall" : "square";
+  const at = (x: number, y: number) => d[(minY + y) * DRAW + minX + x];
+  const row = (y: number) => Array.from({ length: w }, (_, x) => at(x, y));
+  const col = (x: number) => Array.from({ length: h }, (_, y) => at(x, y));
+  const count = (line: boolean[]) => line.filter(Boolean).length;
   const gapIn = (line: boolean[]) => {
     const idx = line.map((v, i) => (v ? i : -1)).filter((i) => i >= 0);
     return idx.length >= 2 && idx[idx.length - 1] - idx[0] + 1 > idx.length ? "yes" : "no";
   };
-  f.topGap = gapIn(Array.from({ length: w }, (_, i) => d[minY * DRAW + minX + i]));
-  f.leftGap = gapIn(Array.from({ length: h }, (_, i) => d[(minY + i) * DRAW + minX]));
+  f.shape = w > h ? "wide" : h > w ? "tall" : "square";
+  f.topGap = gapIn(row(0));
+  f.topCorners = at(0, 0) && at(w - 1, 0) ? "yes" : "no";
+  f.leftGap = gapIn(col(0));
+  f.rightGap = gapIn(col(w - 1));
+  f.topThin = count(row(0)) * 2 <= w ? "yes" : "no";
+  f.bottomThin = count(row(h - 1)) * 2 <= w ? "yes" : "no";
+  f.middleHole = Array.from({ length: Math.max(0, h - 2) }, (_, y) => gapIn(row(y + 1))).includes("yes") ? "yes" : "no";
   return f;
 }
 
@@ -213,9 +217,13 @@ export function exampleToDrawing(e: Example<string>): Drawing {
   return PIXELS.get(e) ?? Array(DRAW * DRAW).fill(false);
 }
 
-/** Pip's guess for a kid's drawing: the closest example drawings vote. */
+/**
+ * Pip's guess for a kid's drawing: the single closest example drawing (k = 1), which is exactly what
+ * Pip tells the kid ("your drawing looked most like my fish drawings"). On a tie the newest example
+ * wins, so an example the kid just taught is used right away.
+ */
 export function guessDrawing(d: Drawing, examples: Example<string>[] = STARTER_EXAMPLES) {
-  const g = knnGuess(examples, FEATURE_KEYS, toFeatures(d), 3);
+  const g = knnGuess(examples, FEATURE_KEYS, toFeatures(d), 1);
   if (!g) return null;
-  return { label: g.label as DrawId, confidence: g.confidence, closest: exampleToDrawing(g.neighbors[0]), closestLabel: g.neighbors[0].label as DrawId };
+  return { label: g.label as DrawId, closest: exampleToDrawing(g.neighbors[0]), closestLabel: g.neighbors[0].label as DrawId };
 }

@@ -92,7 +92,7 @@ function Story({ lesson, onFinish }: { lesson: Lesson; onFinish: () => void }) {
         </div>
         <div className="story-bubble" aria-live="polite" key={page}>
           <p>{p.text}</p>
-          <SayButton text={p.text} label="this page" size="md" className="read-aloud" onSpeak={() => setTalkMode(true)}>
+          <SayButton text={p.text} label="this page" name="Read it to me" size="md" className="read-aloud" onSpeak={() => setTalkMode(true)}>
             Read it to me
           </SayButton>
         </div>

@@ -223,7 +223,7 @@ function Paint({ color }: { color: string }) {
         onPointerLeave={() => (paint.current.active = false)}
         onPointerCancel={() => (paint.current.active = false)}
         role="group"
-        aria-label={`Drawing grid, 8 by 8. ${filled} squares filled.`}
+        aria-label={`Drawing grid, ${DRAW} by ${DRAW}. ${filled} squares filled.`}
       >
         {cells.map((on, i) => (
           <button
