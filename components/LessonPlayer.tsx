@@ -9,6 +9,7 @@ import { StoryArt } from "./art/StoryArt";
 import { Badge } from "./Badge";
 import { Confetti } from "./Confetti";
 import { Pip } from "./Pip";
+import { LessonVideo } from "./LessonVideo";
 import { MissionCard } from "./MissionCard";
 import { AIDetective } from "./games/AIDetective";
 import { AITimeMachine } from "./games/AITimeMachine";
@@ -86,6 +87,7 @@ function Story({ lesson, onFinish }: { lesson: Lesson; onFinish: () => void }) {
 
   return (
     <section className="story" aria-label="Story">
+      <LessonVideo slug={lesson.slug} />
       <div className="stage" style={{ background: lesson.tint }}>
         <span className="stage-page" aria-hidden="true">
           {page + 1}/{lesson.story.length}

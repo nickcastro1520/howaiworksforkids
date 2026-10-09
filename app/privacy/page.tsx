@@ -73,6 +73,13 @@ export default function PrivacyPage() {
         text on your device&rsquo;s clipboard. We don&rsquo;t track whether a mission is opened, copied, or done.
       </p>
 
+      <h2>Lesson video</h2>
+      <p>
+        Lesson 8 has an optional 13-second cartoon. The video file is served from this site, not from another company&rsquo;s player, and
+        nothing downloads until someone taps play. We don&rsquo;t track whether it is watched. It was made with AI (Google Veo) and has
+        captions and music.
+      </p>
+
       <h2>Read aloud</h2>
       <p>
         &ldquo;Read it to me&rdquo; and the &ldquo;Hear it&rdquo; speaker buttons use your device&rsquo;s built-in speech feature. They read
