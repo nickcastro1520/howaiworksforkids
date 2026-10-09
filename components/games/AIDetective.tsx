@@ -2,7 +2,19 @@
 
 import { useState } from "react";
 import { OUT } from "../art/Bits";
-import { GameHead, PipSays, type GameProps } from "./ui";
+import { SayLine } from "../Speak";
+import { Emo, GameHead, PipSays, Sayable, type GameProps } from "./ui";
+
+const EMOJI: Record<string, string> = {
+  speaker: "\u{1F5E3}\uFE0F",
+  tablet: "\u{1F4FA}",
+  phone: "\u{1F4F1}",
+  vacuum: "\u{1F916}",
+  lamp: "\u{1F4A1}",
+  teddy: "\u{1F9F8}",
+  books: "\u{1F4DA}",
+  clock: "\u23F0",
+};
 
 type Item = {
   id: string;
@@ -225,7 +237,7 @@ export function AIDetective({ onDone }: GameProps) {
               setLast(null);
             }}
           >
-            {it.name}
+            <Emo e={EMOJI[it.id]} /> {it.name}
           </button>
         ))}
       </div>
@@ -233,16 +245,28 @@ export function AIDetective({ onDone }: GameProps) {
       <div className="game-panel" aria-live="polite">
         {item ? (
           <div className="ask">
-            <p className="ask-q">
-              Does the <b>{item.name.toLowerCase()}</b> use AI?
-            </p>
+            <div className="ask-q-row">
+              <p className="ask-q">
+                <Emo e={EMOJI[item.id]} big /> Does the <b>{item.name.toLowerCase()}</b> use AI?
+              </p>
+              <SayLine
+                key={item.id}
+                text={`Does the ${item.name.toLowerCase()} use AI? Tap: yes, it learns. Or: no AI.`}
+                label="the question"
+                size="md"
+              />
+            </div>
             <div className="ask-btns">
-              <button type="button" className="btn btn-big btn-ai" onClick={() => answer(true)}>
-                Yes, it learns!
-              </button>
-              <button type="button" className="btn btn-big btn-plain" onClick={() => answer(false)}>
-                No AI
-              </button>
+              <Sayable text="Yes, it learns!">
+                <button type="button" className="btn btn-big btn-ai" onClick={() => answer(true)}>
+                  <Emo e={"\u{1F9E0}"} /> Yes, it learns!
+                </button>
+              </Sayable>
+              <Sayable text="No AI">
+                <button type="button" className="btn btn-big btn-plain" onClick={() => answer(false)}>
+                  <Emo e={"\u{1F6AB}"} /> No AI
+                </button>
+              </Sayable>
             </div>
           </div>
         ) : lastItem && last ? (
@@ -256,9 +280,12 @@ export function AIDetective({ onDone }: GameProps) {
           </PipSays>
         )}
         {finished && (
-          <p className="win-line">
-            Case closed! You found all {foundAI} AI things. AI is the stuff that learns and guesses.
-          </p>
+          <div className="win-row">
+            <p className="win-line">
+              Case closed! You found all {foundAI} AI things. AI is the stuff that learns and guesses.
+            </p>
+            <SayLine text={`Case closed! You found all ${foundAI} AI things. AI is the stuff that learns and guesses.`} label="the result" />
+          </div>
         )}
       </div>
     </div>

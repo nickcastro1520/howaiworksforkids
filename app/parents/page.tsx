@@ -24,7 +24,7 @@ const FAQ = [
   },
   {
     q: "What age is it for?",
-    a: "Ages 6 to 10. Six- and seven-year-olds may want a grown-up nearby to read along, or they can tap \u201cRead it to me\u201d on each story page.",
+    a: "Ages 6 to 10. Kids who can\u2019t read yet can still play everything: tap \u201cHear how to play\u201d at the start of any game, or any speaker button, and the instructions, questions, and answer choices are read aloud. Answers also have pictures. A grown-up nearby still helps the youngest players.",
   },
   {
     q: "Is it free?",

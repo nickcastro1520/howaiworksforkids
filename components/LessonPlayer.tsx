@@ -18,6 +18,9 @@ import { SortGlorbs } from "./games/SortGlorbs";
 import { SpotGlitches } from "./games/SpotGlitches";
 import type { GameProps } from "./games/ui";
 import { trackEvent } from "@/lib/analytics";
+import { setTalkMode, stopSpeaking } from "@/lib/speech";
+import { SayButton, SayLine, useAutoSay } from "./Speak";
+import { Emo, Sayable } from "./games/ui";
 
 const GAMES: Record<string, (p: GameProps) => React.ReactNode> = {
   "what-is-ai": AIDetective,
@@ -37,39 +40,13 @@ const STEPS: { id: Step; label: string }[] = [
   { id: "badge", label: "Badge" },
 ];
 
-function useSpeech() {
-  const [speaking, setSpeaking] = useState(false);
-  const [supported, setSupported] = useState(false);
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
-    return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
-    };
-  }, []);
-  const speak = useCallback((text: string) => {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text.replace(/[\u201c\u201d]/g, ""));
-    u.rate = 0.92;
-    u.pitch = 1.1;
-    u.onend = () => setSpeaking(false);
-    u.onerror = () => setSpeaking(false);
-    setSpeaking(true);
-    window.speechSynthesis.speak(u);
-  }, []);
-  const stop = useCallback(() => {
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-    setSpeaking(false);
-  }, []);
-  return { speaking, supported, speak, stop };
-}
-
 function Story({ lesson, onFinish }: { lesson: Lesson; onFinish: () => void }) {
   const [page, setPage] = useState(0);
-  const { speaking, supported, speak, stop } = useSpeech();
   const p = lesson.story[page];
   const last = page === lesson.story.length - 1;
+  const stop = stopSpeaking;
+  // In talk mode ("Read it to me" was tapped), each new page reads itself.
+  useAutoSay(p.text);
 
   const go = useCallback(
     (d: number) => {
@@ -104,19 +81,9 @@ function Story({ lesson, onFinish }: { lesson: Lesson; onFinish: () => void }) {
         </div>
         <div className="story-bubble" aria-live="polite" key={page}>
           <p>{p.text}</p>
-          {supported && (
-            <button type="button" className="read-aloud" onClick={() => (speaking ? stop() : speak(p.text))} aria-pressed={speaking}>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
-                {speaking ? (
-                  <path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                ) : (
-                  <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-                )}
-              </svg>
-              {speaking ? "Stop" : "Read it to me"}
-            </button>
-          )}
+          <SayButton text={p.text} label="this page" size="md" className="read-aloud" onSpeak={() => setTalkMode(true)}>
+            Read it to me
+          </SayButton>
         </div>
       </div>
       <div className="story-nav">
@@ -167,23 +134,32 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
       <p className="small-cap">
         Quick check &middot; {q + 1} of {lesson.quiz.length}
       </p>
-      <h2 className="check-q" key={q}>
-        {item.q}
-      </h2>
+      <div className="check-q-row">
+        <h2 className="check-q" key={q}>
+          {item.q}
+        </h2>
+        <SayLine
+          text={`${item.q} ${item.options.map((o, i) => `${"ABC"[i]}: ${o}.`).join(" ")}`}
+          label="the question and answers"
+          size="md"
+        />
+      </div>
       <div className="check-opts">
         {item.options.map((o, i) => (
-          <button
-            key={o}
-            type="button"
-            className={`check-opt ${picked === i && right ? "is-right" : ""} ${wrong.includes(i) ? "is-wrong" : ""}`}
-            onClick={() => choose(i)}
-            aria-pressed={picked === i}
-          >
-            <span className="opt-letter" aria-hidden="true">
-              {"ABC"[i]}
-            </span>
-            {o}
-          </button>
+          <Sayable key={o} text={o}>
+            <button
+              type="button"
+              className={`check-opt ${picked === i && right ? "is-right" : ""} ${wrong.includes(i) ? "is-wrong" : ""}`}
+              onClick={() => choose(i)}
+              aria-pressed={picked === i}
+            >
+              <span className="opt-letter" aria-hidden="true">
+                {"ABC"[i]}
+              </span>
+              <Emo e={item.icons[i]} big />
+              <span>{o}</span>
+            </button>
+          </Sayable>
         ))}
       </div>
       <div aria-live="polite" className="check-feedback">
@@ -192,6 +168,7 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
             <div className="check-yes pop">
               <Pip mood="proud" size={70} bob={false} />
               <p>{item.yes}</p>
+              <SayLine text={item.yes} label="Pip's answer" />
               <button
                 type="button"
                 className="btn btn-big btn-go"
@@ -208,7 +185,10 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
               </button>
             </div>
           ) : (
-            <p className="hint">Try again! Hint: {item.hint}</p>
+            <div className="hint-row">
+              <p className="hint">Try again! Hint: {item.hint}</p>
+              <SayLine text={`Try again! Hint: ${item.hint}`} label="the hint" />
+            </div>
           ))}
       </div>
     </section>
@@ -229,7 +209,10 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
       <h2 className="celebrate-title">
         You earned the <span style={{ color: lesson.color }}>{lesson.badge}</span> badge!
       </h2>
-      <p className="celebrate-idea">{lesson.bigIdea}</p>
+      <div className="celebrate-idea-row">
+        <p className="celebrate-idea">{lesson.bigIdea}</p>
+        <SayLine text={`You earned the ${lesson.badge} badge! ${lesson.bigIdea}`} label="your badge" size="md" />
+      </div>
       <div className="celebrate-pip">
         <Pip mood="proud" size={110} lights={lights} wave />
         <p>
@@ -271,6 +254,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const Game = GAMES[lesson.slug];
 
   const moveTo = (s: Step) => {
+    stopSpeaking();
     setStep(s);
     requestAnimationFrame(() => top.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };

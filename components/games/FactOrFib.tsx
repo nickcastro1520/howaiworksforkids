@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Book } from "../art/Props";
 import { Pip } from "../Pip";
-import { Dots, GameHead, PipSays, type GameProps } from "./ui";
+import { SayLine } from "../Speak";
+import { Dots, Emo, GameHead, PipSays, Sayable, type GameProps } from "./ui";
 
 const CLAIMS = [
   { say: "Spiders have 6 legs.", fact: false, truth: "Spiders have 8 legs. Insects, like ants, have 6." },
@@ -52,17 +53,22 @@ export function FactOrFib({ onDone }: GameProps) {
             <div className="fof-bubble pop">
               <span className="sure-badge">Sure-o-meter: 100%</span>
               <p>&ldquo;{c.say}&rdquo;</p>
+              <SayLine key={i} text={`${c.say} Is that a fact, or a fib?`} label="what Pip says" size="md" />
             </div>
           </div>
 
           {pick === null ? (
             <div className="ask-btns">
-              <button type="button" className="btn btn-big btn-yes" onClick={() => choose(true)}>
-                Fact
-              </button>
-              <button type="button" className="btn btn-big btn-no" onClick={() => choose(false)}>
-                Fib
-              </button>
+              <Sayable text="Fact. It's true.">
+                <button type="button" className="btn btn-big btn-yes" onClick={() => choose(true)}>
+                  <Emo e={"\u2705"} /> Fact
+                </button>
+              </Sayable>
+              <Sayable text="Fib. It's not true.">
+                <button type="button" className="btn btn-big btn-no" onClick={() => choose(false)}>
+                  <Emo e={"\u274C"} /> Fib
+                </button>
+              </Sayable>
             </div>
           ) : (
             <div className="factbook pop">
@@ -73,6 +79,11 @@ export function FactOrFib({ onDone }: GameProps) {
               <p className={`factbook-verdict ${c.fact ? "is-fact" : "is-fib"}`}>{c.fact ? "FACT" : "FIB"}</p>
               <p className="factbook-truth">{c.truth}</p>
               <p className="factbook-you">{pick === c.fact ? "You got it!" : "Tricky one! Pip fooled you."}</p>
+              <SayLine
+                text={`The Fact Book says: ${c.fact ? "fact" : "fib"}! ${c.truth} ${pick === c.fact ? "You got it!" : "Tricky one! Pip fooled you."}`}
+                label="the Fact Book"
+                size="md"
+              />
               <button type="button" className="btn btn-big btn-go" onClick={next}>
                 {i + 1 >= CLAIMS.length ? "See my score" : "Next one"}
               </button>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { OUT } from "../art/Bits";
 import { Hand6, MeltyClock, Person } from "../art/Props";
-import { GameHead, PipSays, type GameProps } from "./ui";
+import { Emo, GameHead, PipSays, type GameProps } from "./ui";
 
 type Glitch = { id: string; name: string; tip: string; box: [number, number, number, number] };
 
@@ -206,13 +206,13 @@ export function SpotGlitches({ onDone }: GameProps) {
         {!done && (
           <button
             type="button"
-            className="link-btn"
+            className="btn btn-plain"
             onClick={() => {
               const left = GLITCHES.filter((g) => !found.includes(g.id));
               setHint(left[Math.floor(Math.random() * left.length)].id);
             }}
           >
-            I need a hint
+            <Emo e={"\u{1F4A1}"} /> I need a hint
           </button>
         )}
       </div>

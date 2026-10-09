@@ -22,7 +22,7 @@ The games run real, very small models inside the web page: a weighted nearest-ne
 - [Lesson trail](https://howaiworksforkids.com/lessons): All lessons with progress
 - [For parents and teachers](https://howaiworksforkids.com/parents): What kids learn in each lesson, discussion questions, how to use it at home or in class, safety, FAQ
 - [Pip's Word Book](https://howaiworksforkids.com/glossary): 12 AI words in kid language (AI, example, pattern, data, training, guess, model, chatbot, lopsided data/bias, made-up answer/hallucination, AI-made picture/deepfake, private info)
-- [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Test pilots Nathan (8) and Nolan (11). No invented quotes
+- [Tested by real kids](https://howaiworksforkids.com/tested-by-kids): Tested with Nathan (8) and Nolan (11, the older tester who checks if things are too easy or confusing). Audience is ages 6-10. Real quotes only, shared by their dad
 - [About Nick Castro](https://howaiworksforkids.com/about): Who built it
 - [Privacy](https://howaiworksforkids.com/privacy): Kid-friendly privacy notice
 

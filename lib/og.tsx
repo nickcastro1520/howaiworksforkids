@@ -53,8 +53,8 @@ const PAGES: Record<string, OgCard> = {
   "tested-by-kids": {
     kicker: "Tested by real kids",
     title: "Kid-tested lessons",
-    sub: "Real notes only. Never made up.",
-    alt: "Tested by real kids: how the lessons are tested with young learners.",
+    sub: "Tested with Nathan and Nolan. Real words only.",
+    alt: "Tested by real kids: Pip's lessons for ages 6 to 10 are tested with Nathan and Nolan.",
     accent: "#ffd34d",
   },
   privacy: {

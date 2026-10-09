@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TesterCards } from "@/components/TesterCards";
 import { Glorb, Sparkle } from "@/components/art/Bits";
 import { Book } from "@/components/art/Props";
 import { HeroPip } from "@/components/HeroPip";
@@ -132,24 +133,14 @@ export default function Home() {
           <h2 className="section-title">
             Tested by <span className="hl hl-pink">real kids</span>
           </h2>
-          <p className="section-sub">Our first test pilots are trying every lesson right now. Their real notes will go here.</p>
-          <div className="tester-row">
-            {[
-              { name: "Nathan", age: 8, color: "#2774d1" },
-              { name: "Nolan", age: 11, color: "#208644" },
-            ].map((t) => (
-              <div key={t.name} className="tester" style={{ "--tc": t.color } as React.CSSProperties}>
-                <span className="tester-badge">Test pilot</span>
-                <p className="tester-name">
-                  {t.name}, <span>age {t.age}</span>
-                </p>
-                <p className="tester-note">Notes coming soon. We only post things kids really said.</p>
-              </div>
-            ))}
-          </div>
+          <p className="section-sub">
+            Tested with Nathan and Nolan. Pip is made for ages 6&ndash;10. Nathan, 8, plays every lesson. Nolan, 11, is our older tester. He
+            checks whether things are too easy or confusing.
+          </p>
+          <TesterCards />
           <p className="center">
             <Link href="/tested-by-kids" className="text-link">
-              How we test
+              How we test with kids
             </Link>
           </p>
         </div>

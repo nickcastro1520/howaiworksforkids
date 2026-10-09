@@ -26,7 +26,7 @@ export default function AboutPage() {
             there is: kids.
           </p>
           <p>
-            I live in {NICK.city}. My sons, Nathan (8) and Nolan (11), are the test pilots for every lesson. I also co-wrote <i>The Smart
+            I live in {NICK.city}. Every lesson is tested with my sons: Nathan, 8, and Nolan, 11, our older tester, who checks whether things are too easy or confusing. I also co-wrote <i>The Smart
             Soccer Ball Mystery</i> with Nancy Castro, a picture book about what happens when a model learns from bad examples.
           </p>
           <p>
