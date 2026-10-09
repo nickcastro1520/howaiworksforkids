@@ -212,6 +212,40 @@ function lessonResource(lesson: Lesson, full = false) {
 }
 
 
+/** The free Lesson 1 teacher kit (PDF) on /teachers. */
+export function teacherKitJsonLd() {
+  const l1 = LESSONS[0];
+  const pageUrl = absoluteUrl("/teachers");
+  return {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "@id": `${pageUrl}#lesson-1-kit`,
+    name: `Lesson 1 Teacher Kit: ${l1.title}`,
+    description:
+      "A free, print-and-go teacher kit: a 35-minute teacher guide, the AI or Not? unplugged card sort, K–2 and 3–5 worksheets, an answer key, and a parent letter.",
+    url: pageUrl,
+    image: absoluteUrl("/teachers/kit-cover-640.webp"),
+    associatedMedia: {
+      "@type": "MediaObject",
+      name: "Lesson 1 Teacher Kit (PDF, 8 pages)",
+      contentUrl: absoluteUrl("/teachers/lesson-1-teacher-kit.pdf"),
+      encodingFormat: "application/pdf",
+    },
+    learningResourceType: ["Lesson plan", "Worksheet", "Unplugged activity", "Answer key"],
+    educationalLevel: LEVEL,
+    typicalAgeRange: AGE_RANGE,
+    timeRequired: "PT35M",
+    isAccessibleForFree: true,
+    inLanguage: "en-US",
+    audience: { "@type": "EducationalAudience", educationalRole: "teacher", audienceType: "Teachers, homeschool parents, and club leaders" },
+    about: { "@id": `${absoluteUrl(`/lessons/${l1.slug}`)}#lesson` },
+    isPartOf: { "@type": "Course", "@id": IDS.course, name: COURSE_NAME, url: absoluteUrl("/lessons") },
+    author: { "@id": IDS.person },
+    publisher: { "@id": IDS.org },
+    dateModified: "2026-10-08",
+  };
+}
+
 /** The full course with every lesson as a LearningResource. */
 export function courseJsonLd() {
   return {

@@ -40,7 +40,7 @@ const FAQ = [
   },
   {
     q: "Can I use it in my classroom?",
-    a: "Yes, and it's free for classrooms. Project a lesson for the whole class, or let students work on their own devices. There are no logins, so it works on shared tablets and Chromebooks. The “What kids learn” table above lists the big idea and a discussion question for each lesson.",
+    a: "Yes, and it's free for classrooms. Project a lesson for the whole class, or let students work on their own devices. There are no logins, so it works on shared tablets and Chromebooks. The “What kids learn” table above lists the big idea and a discussion question for each lesson. Teachers can also download a free, print-and-go Lesson 1 teacher kit on the Teachers page.",
   },
   {
     q: "Is it really how AI works, or just a cartoon?",
@@ -64,6 +64,12 @@ export default function ParentsPage() {
           <p className="page-lead">
             Seven 5-minute lessons. Each has a short story, a hands-on game, a two-question check, and a badge. Kids don&rsquo;t just hear
             that &ldquo;AI learns from data.&rdquo; They give Pip data, watch it guess, and fix it when it&rsquo;s wrong.
+          </p>
+          <p className="parents-teacher-link">
+            Teaching a class or a homeschool group?{" "}
+            <Link href="/teachers" className="text-link">
+              Get the free Lesson 1 teacher kit
+            </Link>
           </p>
         </div>
       </header>
@@ -117,6 +123,11 @@ export default function ParentsPage() {
               <li>Sort the Glorbs works great as a whole-class guessing game: the class picks a secret rule, one student sorts.</li>
               <li>No logins, so it works on shared devices.</li>
             </ul>
+            <p className="use-more">
+              <Link href="/teachers" className="text-link">
+                Free Lesson 1 teacher kit and classroom guide &rarr;
+              </Link>
+            </p>
           </div>
           <div className="use-card">
             <h3>Words we use</h3>

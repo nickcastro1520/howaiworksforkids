@@ -18,6 +18,7 @@ export function Footer() {
           <Link href="/glossary">Word Book</Link>
           <Link href="/finish">Certificate</Link>
           <Link href="/parents">Parents &amp; Teachers</Link>
+          <Link href="/teachers">Teacher kit</Link>
           <Link href="/tested-by-kids">Tested by kids</Link>
           <Link href="/about">About</Link>
           <Link href="/privacy">Privacy</Link>
