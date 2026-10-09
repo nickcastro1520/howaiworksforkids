@@ -93,6 +93,35 @@ function Glyph({ slug }: { slug: string }) {
           <path d="M90 128 h20" />
         </g>
       );
+    case "fair-for-everyone":
+      return (
+        <g {...s}>
+          <path d="M100 72 V128" />
+          <path d="M78 128 H122" />
+          <path d="M72 84 H128" />
+          <path d="M72 84 L62 106 H82 Z" />
+          <path d="M128 84 L118 106 H138 Z" />
+        </g>
+      );
+    case "secrets-stay-safe":
+      return (
+        <g {...s}>
+          <rect x="78" y="96" width="44" height="34" rx="6" />
+          <path d="M86 96 V86 a14 14 0 0 1 28 0 V96" />
+          <path d="M100 108 v10" />
+        </g>
+      );
+    case "build-your-own-ai":
+      return (
+        <g {...s}>
+          <rect x="76" y="80" width="48" height="44" rx="10" />
+          <path d="M100 80 V68" />
+          <circle cx="100" cy="64" r="4" fill="#fff" />
+          <circle cx="90" cy="100" r="3" fill="#fff" />
+          <circle cx="110" cy="100" r="3" fill="#fff" />
+          <path d="M90 112 H110" />
+        </g>
+      );
     default:
       return (
         <g {...s}>

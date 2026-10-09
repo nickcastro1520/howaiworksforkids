@@ -15,7 +15,7 @@ export function SectionTabs({ current }: { current: SectionId }) {
             <b>{s.name}</b>
             <span>
               Lessons {live[0].number}&ndash;{live[0].number + s.planned - 1}
-              {s.planned > live.length && <> &middot; {live.length} ready now</>}
+              {id === 2 && <> &middot; + final quiz</>}
             </span>
           </Link>
         );

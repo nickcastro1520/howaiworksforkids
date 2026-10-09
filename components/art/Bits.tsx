@@ -6,8 +6,21 @@ export type GlorbData = {
   eyes: 1 | 2 | 3;
   top: "horns" | "antenna";
   spots: boolean;
-  shape: "round" | "tall";
+  shape: "round" | "tall" | "square" | "spiky";
 };
+
+/** A star-ish outline for spiky Glorbs: points alternate between an outer and inner ellipse. */
+function spikyPath(cx: number, cy: number, rx: number, ry: number, points = 12) {
+  const pts: string[] = [];
+  for (let i = 0; i < points * 2; i++) {
+    const a = (Math.PI * i) / points - Math.PI / 2;
+    const out = i % 2 === 0;
+    const x = cx + Math.cos(a) * (out ? rx + 9 : rx - 3);
+    const y = cy + Math.sin(a) * (out ? ry + 9 : ry - 3);
+    pts.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  return `M${pts.join(" L")} Z`;
+}
 
 const GLORB_FILL = { teal: "#33c4b0", orange: "#ff9a3c" };
 const GLORB_DARK = { teal: "#1f9a89", orange: "#e0731a" };
@@ -40,6 +53,10 @@ export function Glorb({ g, size = 96, className = "" }: { g: GlorbData; size?: n
       <ellipse cx="76" cy="112" rx="11" ry="6" fill={dark} stroke={OUT} strokeWidth="3.5" />
       {tall ? (
         <rect x="24" y={topY} width="72" height={108 - topY} rx="36" fill={fill} stroke={OUT} strokeWidth="4" />
+      ) : g.shape === "square" ? (
+        <rect x="16" y="36" width="88" height="74" rx="12" fill={fill} stroke={OUT} strokeWidth="4" strokeLinejoin="round" />
+      ) : g.shape === "spiky" ? (
+        <path d={spikyPath(60, 74, 40, 34)} fill={fill} stroke={OUT} strokeWidth="4" strokeLinejoin="round" />
       ) : (
         <ellipse cx="60" cy="74" rx="44" ry="38" fill={fill} stroke={OUT} strokeWidth="4" />
       )}

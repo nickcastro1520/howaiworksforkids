@@ -89,6 +89,30 @@ function Mini({ slug }: { slug: string }) {
           <span>🖍️</span>
         </span>
       );
+    case "fair-for-everyone":
+      return (
+        <span className="mini-row">
+          <Glorb g={{ color: "teal", eyes: 2, top: "horns", spots: false, shape: "round" }} size={64} />
+          <Glorb g={{ color: "orange", eyes: 1, top: "antenna", spots: false, shape: "square" }} size={64} />
+          <Glorb g={{ color: "teal", eyes: 3, top: "horns", spots: false, shape: "spiky" }} size={64} />
+        </span>
+      );
+    case "secrets-stay-safe":
+      return (
+        <span className="mini-row mini-emoji">
+          <span>🧽</span>
+          <span>🛡️</span>
+          <span>💬</span>
+        </span>
+      );
+    case "build-your-own-ai":
+      return (
+        <span className="mini-row mini-emoji">
+          <span>🐾</span>
+          <span>🧪</span>
+          <span>🪪</span>
+        </span>
+      );
     default:
       return (
         <span className="mini-row">

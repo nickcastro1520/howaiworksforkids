@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { COMING_SOON, SECTIONS, SECTION_1, sectionLessons, type SectionId } from "@/lib/lessons";
-import { useProgress } from "@/lib/progress";
+import { SECTIONS, SECTION_1, sectionLessons, type SectionId } from "@/lib/lessons";
+import { useProgress, useQuizResult } from "@/lib/progress";
 import { Badge } from "./Badge";
 import { Pip } from "./Pip";
 
@@ -20,11 +20,11 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
   const { done, isDone, reset } = useProgress();
   const info = SECTIONS[section];
   const lessons = sectionLessons(section);
-  const soon = COMING_SOON.filter((c) => c.section === section);
+  const quiz = useQuizResult();
   const total = info.planned;
   const n = lessons.filter((l) => isDone(l.slug)).length;
   const nextUp = lessons.find((l) => !isDone(l.slug));
-  const stops = lessons.length + soon.length;
+  const stops = lessons.length;
   const height = 120 + stops * 100;
   const s1Done = SECTION_1.every((l) => isDone(l.slug));
   const released = lessons.length;
@@ -63,8 +63,14 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
             <Link href="/finish" className="btn btn-sun">
               Get your certificate &rarr;
             </Link>
+          ) : quiz ? (
+            <Link href="/finish/section-2" className="btn btn-sun">
+              Get your Section 2 certificate &rarr;
+            </Link>
           ) : (
-            <p className="hud-soon">You finished every lesson so far! More are coming soon.</p>
+            <Link href="/quiz" className="btn btn-sun">
+              Take the final quiz &rarr;
+            </Link>
           )}
         </div>
       </div>
@@ -105,24 +111,6 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
             </li>
           );
         })}
-        {soon.map((c, k) => (
-          <li key={c.number} className={`stop ${(lessons.length + k) % 2 ? "stop-right" : "stop-left"} is-soon`}>
-            <div className="stop-card stop-soon">
-              <span className="stop-badge soon-badge" aria-hidden="true">
-                🔒
-              </span>
-              <span className="stop-body">
-                <span className="stop-meta">
-                  Lesson {c.number} &middot; <b className="stop-soon-tag">Coming soon</b>
-                </span>
-                <span className="stop-title">{c.title}</span>
-                <span className="stop-game">
-                  Game: <b>{c.game}</b>
-                </span>
-              </span>
-            </div>
-          </li>
-        ))}
         {section === 1 ? (
           <li className="stop stop-finish">
             <Link href="/finish" className="finish-flag">
@@ -137,17 +125,26 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
             </Link>
           </li>
         ) : (
-          <li className="stop stop-finish">
-            <div className="finish-flag is-soon">
+          <li className="stop stop-finish stop-finish-2">
+            <Link href="/quiz" className="finish-flag">
+              <span className="finish-emoji" aria-hidden="true">
+                🧠
+              </span>
+              <span>
+                <b>Final quiz</b>
+                <small>{quiz ? `Done: ${quiz.score} of 10` : "10 questions, both sections"}</small>
+              </span>
+            </Link>
+            <Link href="/finish/section-2" className="finish-flag">
               <svg viewBox="0 0 60 70" width="56" height="64" aria-hidden="true">
-                <path d="M10 66 V6" stroke="#8a84a8" strokeWidth="5" strokeLinecap="round" />
-                <path d="M12 8 H52 L44 22 L52 36 H12 Z" fill="#e6e1f3" stroke="#8a84a8" strokeWidth="4" strokeLinejoin="round" />
+                <path d="M10 66 V6" stroke="#231d4f" strokeWidth="5" strokeLinecap="round" />
+                <path d="M12 8 H52 L44 22 L52 36 H12 Z" fill="#ffd34d" stroke="#231d4f" strokeWidth="4" strokeLinejoin="round" />
               </svg>
               <span>
-                <b>Final quiz + certificate</b>
-                <small>Coming soon</small>
+                <b>Finish line</b>
+                <small>Your Section 2 certificate</small>
               </span>
-            </div>
+            </Link>
           </li>
         )}
       </ol>

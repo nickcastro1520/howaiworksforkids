@@ -17,6 +17,9 @@ import { MonsterMaker } from "./games/MonsterMaker";
 import { PipsHomework } from "./games/PipsHomework";
 import { PixelPeek } from "./games/PixelPeek";
 import { FactOrFib } from "./games/FactOrFib";
+import { FairTeam } from "./games/FairTeam";
+import { PromptScrubber } from "./games/PromptScrubber";
+import { SortingMachine } from "./games/SortingMachine";
 import { FixMixup } from "./games/FixMixup";
 import { GoAskStop } from "./games/GoAskStop";
 import { NextWord } from "./games/NextWord";
@@ -41,6 +44,9 @@ const GAMES: Record<string, (p: GameProps) => React.ReactNode> = {
   "say-it-clearly": MonsterMaker,
   "check-it-fix-it": PipsHomework,
   "ai-learning-helper": HelperOrDoer,
+  "fair-for-everyone": FairTeam,
+  "secrets-stay-safe": PromptScrubber,
+  "build-your-own-ai": SortingMachine,
 };
 
 type Step = "read" | "play" | "check" | "badge";
@@ -215,7 +221,6 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
   const allDone = inSection.every((l) => done.includes(l.slug));
   const after = inSection.slice(inSection.findIndex((l) => l.slug === lesson.slug) + 1);
   const nxt = after.find((l) => !done.includes(l.slug)) ?? inSection.find((l) => !done.includes(l.slug));
-  const moreComing = section.planned > inSection.length;
   return (
     <section className="celebrate" aria-label="You earned a badge">
       <Confetti />
@@ -239,7 +244,7 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
           ) : (
             <>
               {section.kicker}: <b>{lights} of {section.planned}</b> lights on!
-              {moreComing && <> More lessons are coming soon.</>}
+              {allDone && <> Ready for the final quiz!</>}
             </>
           )}
         </p>
@@ -249,15 +254,15 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
           <Link className="btn btn-big btn-go" href="/finish">
             Get your certificate &rarr;
           </Link>
+        ) : allDone ? (
+          <Link className="btn btn-big btn-go" href="/quiz">
+            Take the final quiz &rarr;
+          </Link>
         ) : nxt ? (
           <Link className="btn btn-big btn-go" href={`/lessons/${nxt.slug}`}>
             Next: {nxt.short} &rarr;
           </Link>
-        ) : (
-          <Link className="btn btn-big btn-go" href={section.path}>
-            See what&rsquo;s coming next &rarr;
-          </Link>
-        )}
+        ) : null}
         <Link className="btn btn-plain" href={section.path}>
           Back to the trail
         </Link>

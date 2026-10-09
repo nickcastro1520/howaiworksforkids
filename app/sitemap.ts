@@ -8,8 +8,8 @@ const PAGES: Entry[] = [
   { path: "/", og: "home", priority: 1, freq: "weekly" },
   { path: "/lessons", og: "lessons", priority: 0.9, freq: "weekly" },
   { path: SECTIONS[2].path, og: "section-2", priority: 0.85, freq: "weekly" },
-  // Only released lessons. Coming-soon lessons have no page yet, so they stay out.
   ...LESSONS.map((l): Entry => ({ path: `/lessons/${l.slug}`, og: l.slug, priority: 0.8, freq: "monthly" })),
+  { path: "/quiz", og: "quiz", priority: 0.6, freq: "monthly" },
   { path: "/parents", og: "parents", priority: 0.7, freq: "monthly" },
   { path: "/teachers", og: "teachers", priority: 0.7, freq: "monthly" },
   { path: "/glossary", og: "glossary", priority: 0.6, freq: "monthly" },
@@ -18,7 +18,7 @@ const PAGES: Entry[] = [
   { path: "/privacy", og: "privacy", priority: 0.3, freq: "yearly" },
 ];
 
-/** /finish is intentionally left out: it's a personal certificate screen and is marked noindex. */
+/** /finish and /finish/section-2 are intentionally left out: they are personal certificate screens and are marked noindex. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date(`${CONTENT_UPDATED}T00:00:00Z`);
   return PAGES.map((p) => ({

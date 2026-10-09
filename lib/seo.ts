@@ -63,7 +63,7 @@ export const LESSON_SEO: Record<string, LessonSeo> = {
   "where-did-ai-come-from": {
     title: "History of AI for Kids: Where Did AI Come From?",
     description:
-      "A short, kid-friendly history of AI. Kids play AI Time Machine, learn why AI needed lots of data, fast computers, and better ways to learn, then meet the AI helpers. Ages 6–10.",
+      "A short, kid-friendly history of AI. Kids play AI Time Machine, learn why AI needed lots of data, fast computers, and better ways to learn. Ages 6–10.",
     keywords: ["history of AI for kids", "where did AI come from", "AI timeline for kids", "AI for elementary students"],
     teaches: [
       "People dreamed about thinking machines long before computers",
@@ -98,6 +98,39 @@ export const LESSON_SEO: Record<string, LessonSeo> = {
       "Is AI helping you learn or doing the work for you? Kids sort Helper vs Doer cards, then use Pip's Idea Machine and draw their own idea. Ages 6–10.",
     keywords: ["using AI for learning kids", "AI homework help for kids", "AI and creativity for kids", "responsible AI use for kids"],
     teaches: ["Use AI as a helper, not a doer", "Your own thinking and making matter", "AI can give ideas you build on"],
+  },
+  "fair-for-everyone": {
+    title: "AI Fairness for Kids: Pick the Team Game",
+    description:
+      "Why can AI leave some people out? Kids see Pip pick only round Glorbs, then add examples of every kind until the Fair Meter balances. Free for ages 6–10.",
+    keywords: ["AI fairness for kids", "AI bias for kids", "fair AI lesson", "AI ethics for kids"],
+    teaches: [
+      "An AI that learns from only some kinds of examples can leave others out",
+      "Examples of every kind help make AI fair",
+      "Test an AI to see who it works for",
+    ],
+  },
+  "secrets-stay-safe": {
+    title: "AI Privacy for Kids: What Not to Tell a Chatbot",
+    description:
+      "What you type to an AI travels to a company's computers and can be saved. Kids scrub names, schools, and addresses from prompts in Prompt Scrubber. Ages 6–10.",
+    keywords: ["AI privacy for kids", "chatbot safety for kids", "what not to tell AI", "online privacy for kids"],
+    teaches: [
+      "What you type to an AI goes to a company's computers and can be saved",
+      "Leave out full names, schools, addresses, birthdays, and passwords",
+      "Safe stand-ins like \u201cmy friend\u201d still get good help",
+    ],
+  },
+  "build-your-own-ai": {
+    title: "Build Your Own AI: A Machine Learning Project for Kids",
+    description:
+      "Kids build a real sorting AI in the browser: pick a job, teach it with examples, test it, fix it, check it works for every kind, and print a My AI Card. Ages 6–10.",
+    keywords: ["build an AI for kids", "machine learning project for kids", "AI project for kids", "teach kids to build AI"],
+    teaches: [
+      "Building an AI: teach, test, and fix with examples",
+      "Check an AI works for every kind of input",
+      "Every AI needs a safety rule",
+    ],
   },
 };
 
@@ -292,7 +325,7 @@ export function courseJsonLd() {
     "@type": "Course",
     "@id": IDS.course,
     name: COURSE_NAME,
-    description: `A free, ${LESSONS.length}-lesson AI course for kids ages 6–10. In Section 1 (${SECTIONS[1].name}, ${SECTION_1.length} lessons) kids teach a tiny AI named Pip and learn what AI is, how it learns from examples, how chatbots guess the next word, why lopsided data causes mistakes, why AI can be wrong, how to spot AI-made pictures, and how to stay safe. In Section 2 (${SECTIONS[2].name}, ${SECTION_2.length} lessons so far) they learn where AI came from, how AI sees pictures, how to ask clearly, how to check and fix answers, and how to use AI as a helper for learning.`,
+    description: `A free, ${LESSONS.length}-lesson AI course for kids ages 6–10, with a final quiz and two printable certificates. In Section 1 (${SECTIONS[1].name}, ${SECTION_1.length} lessons) kids teach a tiny AI named Pip and learn what AI is, how it learns from examples, how chatbots guess the next word, why lopsided data causes mistakes, why AI can be wrong, how to spot AI-made pictures, and how to stay safe. In Section 2 (${SECTIONS[2].name}, ${SECTION_2.length} lessons) they learn where AI came from, how AI sees pictures, how to ask clearly, how to check and fix answers, how to use AI as a helper, why AI needs examples of every kind to be fair, how to keep private things out of prompts, and how to build their own AI.`,
     url: absoluteUrl("/lessons"),
     image: absoluteUrl("/og/lessons"),
     provider: { "@type": "Organization", "@id": IDS.org, name: SITE_NAME, sameAs: SITE_URL },
@@ -304,7 +337,7 @@ export function courseJsonLd() {
     isAccessibleForFree: true,
     timeRequired: `PT${TOTAL_MINUTES}M`,
     teaches: LESSONS.map((l) => l.bigIdea),
-    about: ["Artificial intelligence", "Machine learning", "AI literacy", "AI safety", "History of AI", "Computer vision", "Prompting"],
+    about: ["Artificial intelligence", "Machine learning", "AI literacy", "AI safety", "History of AI", "Computer vision", "Prompting", "AI fairness", "Privacy"],
     dateModified: CONTENT_UPDATED,
     offers: { "@type": "Offer", price: 0, priceCurrency: "USD", category: "Free", availability: "https://schema.org/InStock" },
     hasCourseInstance: {
@@ -317,7 +350,33 @@ export function courseJsonLd() {
   };
 }
 
-/** A section trail page: an ItemList of its released lessons (coming-soon lessons are left out). */
+/** The final quiz page. Questions are not listed in the schema (it's an interactive quiz, not a Q&A page). */
+export function quizJsonLd(description: string) {
+  const url = absoluteUrl("/quiz");
+  return {
+    "@context": "https://schema.org",
+    "@type": "Quiz",
+    "@id": `${url}#quiz`,
+    name: "How AI Works for Kids: Final Quiz",
+    description,
+    url,
+    image: absoluteUrl("/og/quiz"),
+    educationalLevel: LEVEL,
+    typicalAgeRange: AGE_RANGE,
+    audience,
+    isAccessibleForFree: true,
+    inLanguage: "en-US",
+    learningResourceType: "Quiz",
+    interactivityType: "active",
+    about: ["Artificial intelligence", "AI literacy", "AI safety"],
+    author: { "@id": IDS.person },
+    publisher: { "@id": IDS.org },
+    dateModified: CONTENT_UPDATED,
+    isPartOf: { "@type": "Course", "@id": IDS.course, name: COURSE_NAME, url: absoluteUrl("/lessons") },
+  };
+}
+
+/** A section trail page: an ItemList of its lessons. */
 export function sectionJsonLd(section: SectionId) {
   const info = SECTIONS[section];
   const url = absoluteUrl(info.path);

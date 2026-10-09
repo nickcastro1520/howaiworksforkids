@@ -37,11 +37,15 @@ const FAQ = [
   },
   {
     q: "Do kids need an account?",
-    a: "No. Progress (which lessons are done) is saved in this browser only, using localStorage. Clearing site data, or tapping \u201cStart over\u201d on the lesson trail, erases it.",
+    a: "No. Progress (which lessons are done) and the final quiz result (the score and which topics were missed) are saved in this browser only, using localStorage. Clearing site data, or tapping \u201cStart over\u201d on the lesson trail, erases them.",
+  },
+  {
+    q: "What is the final quiz?",
+    a: "After Section 2, kids can take a 10-question quiz covering both sections, with picture answers and read-aloud. There's no timer and no fail screen: the right answer is shown after every question, and kids can retake it any time. The score and missed topics stay on the device. A \u201cTell a grown-up\u201d note can include the score and a talk question for each missed topic, without your child's name.",
   },
   {
     q: "How long does it take?",
-    a: `Each lesson takes about 5 to 7 minutes, and all ${LESSONS.length} take about ${Math.round(TOTAL_MINUTES / 5) * 5} minutes. Kids can do one a day or several in a row. Section 1 comes first, but nothing is locked: lessons can be done in any order.`,
+    a: `Each lesson takes about 5 to 9 minutes, and all ${LESSONS.length} take about ${Math.round(TOTAL_MINUTES / 5) * 5} minutes. Kids can do one a day or several in a row. Section 1 comes first, but nothing is locked: lessons can be done in any order.`,
   },
   {
     q: "Can I use it in my classroom?",
@@ -120,6 +124,10 @@ export default function ParentsPage() {
               <li>Sit nearby for the first one. Let your child drive the game.</li>
               <li>Use the &ldquo;For a grown-up to ask&rdquo; question at the end of each lesson.</li>
               <li>Finish all {SECTION_1.length} in Section 1 and print the certificate. Then try {SECTIONS[2].kicker}.</li>
+              <li>
+                After {SECTIONS[2].kicker}, take the <Link href="/quiz">final quiz</Link> together. Use the talk questions in the &ldquo;Tell a
+                grown-up&rdquo; note for any topics your child missed.
+              </li>
             </ul>
           </div>
           <div className="use-card">
@@ -174,10 +182,12 @@ export default function ParentsPage() {
               grown-up missions happen on a grown-up&rsquo;s own account, not on this site.
             </li>
             <li>
-              <b>Local progress only.</b> Lesson progress is stored in this browser and never sent to us.
+              <b>Local progress only.</b> Lesson progress and the final quiz result are stored in this browser and never sent to us. The
+              quiz isn&rsquo;t tracked in analytics.
             </li>
             <li>
-              <b>Certificate name stays on screen.</b> The nickname on the certificate is never saved or sent.
+              <b>Certificate name stays on screen.</b> The nickname on the certificate is never saved or sent, and it&rsquo;s never put in the
+              &ldquo;Tell a grown-up&rdquo; email note.
             </li>
           </ul>
           <Link href="/privacy" className="btn btn-sun">

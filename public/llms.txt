@@ -1,10 +1,10 @@
 # How AI Works for Kids
 
-> Free, hands-on AI lessons for kids ages 6–10 (roughly grades 1–5). Kids teach a tiny AI named Pip, then test it and fix its mistakes, and learn how real AI learns, guesses, and goes wrong. 12 lessons so far in two sections, about 70 minutes total. No ads, no accounts, no live chatbot. Made by Nick Castro in Chicago.
+> Free, hands-on AI lessons for kids ages 6–10 (roughly grades 1–5). Kids teach a tiny AI named Pip, then test it and fix its mistakes, and learn how real AI learns, guesses, and goes wrong. 15 lessons in two sections, about 95 minutes total, plus a 10-question final quiz. No ads, no accounts, no live chatbot. Made by Nick Castro in Chicago.
 
-Each lesson has four steps: Read (a 5-page picture story with a "Read it to me" button), Play (a hands-on game), Check (two quick questions), and Badge (a light in Pip's brain turns on). Section 1, "Teach Pip" (lessons 1–7), ends with a printable certificate. Section 2, "Pip Grows Up" (lessons 8–15), has lessons 8–12 available now; lessons 13–15 and a final quiz are coming soon. Section 2 lessons also end with an optional "Try it with a grown-up" mission: a sample prompt a grown-up can type into their own AI account. The site never connects to an AI, and the missions don't recommend any product. Section 1 is suggested first, but nothing is locked.
+Each lesson has four steps: Read (a 5-page picture story with a "Read it to me" button), Play (a hands-on game), Check (two quick questions), and Badge (a light in Pip's brain turns on). Section 1, "Teach Pip" (lessons 1–7), ends with a printable certificate. Section 2, "Pip Grows Up" (lessons 8–15), ends with a 10-question final quiz and a second printable certificate (it unlocks after all Section 2 lessons and the quiz). Section 2 lessons also end with an optional "Try it with a grown-up" mission: a sample prompt a grown-up can type into their own AI account. The site never connects to an AI, and the missions don't recommend any product. Section 1 is suggested first, but nothing is locked.
 
-The games run real, very small models inside the web page: a weighted nearest-neighbor classifier (Sort the Glorbs), a one-clue decision stump trained on the child's examples (Fix Pip's Mix-up), a word-pair counting next-word model (Story Builder), a pixel-matching picture guesser (Pixel Peek), and a nearest-neighbor drawing guesser that kids can teach (Pixel Peek, part 2). Drawings are never saved or sent. Nothing a child does is sent to an AI service. Progress is stored only in the browser (localStorage). Optional, anonymous Google Analytics may be enabled with ad features off; no personal data is collected from children.
+The games run real, very small models inside the web page: a weighted nearest-neighbor classifier (Sort the Glorbs), a one-clue decision stump trained on the child's examples (Fix Pip's Mix-up), a word-pair counting next-word model (Story Builder), a pixel-matching picture guesser (Pixel Peek), and a nearest-neighbor drawing guesser that kids can teach (Pixel Peek, part 2), a look-alike team picker that leaves out shapes it never saw until kids add examples of every kind (Pick the Team), and a nearest-neighbor sorting machine that kids build, test, fix, and check for every kind (My Sorting Machine). Drawings and kid-built models are never saved or sent. Nothing a child does is sent to an AI service. Progress and the final quiz result (score and missed topic IDs only) are stored only in the browser (localStorage); the quiz is not tracked in analytics. Optional, anonymous Google Analytics may be enabled with ad features off; no personal data is collected from children.
 
 ## Lessons
 
@@ -26,13 +26,19 @@ The games run real, very small models inside the web page: a weighted nearest-ne
 11. [Check It, Fix It](https://howaiworksforkids.com/lessons/check-it-fix-it): Find the mistake, check it in a trusted source, then tell the AI exactly what to fix. Game: Pip's Homework. ~6 min.
 12. [AI Can Help You Learn and Make Things](https://howaiworksforkids.com/lessons/ai-learning-helper): Use AI as a helper (quizzes, explanations, ideas), not a doer; your own thinking and making matter. Games: Helper or Doer? and Pip's Idea Machine. ~7 min.
 
-Coming soon in Section 2: 13. Fair for Everyone, 14. Secrets Stay Safe, 15. Build Your Own AI, and a Section 2 final quiz.
+13. [Fair for Everyone](https://howaiworksforkids.com/lessons/fair-for-everyone): If an AI only learns from some kinds of examples, it can leave others out; examples of every kind help make it fair. Uses made-up creatures (Glorbs), not real groups of people. Game: Pick the Team (Pip picks only round Glorbs; kids add square and spiky examples until the Fair Meter balances). ~7 min.
+14. [Secrets Stay Safe](https://howaiworksforkids.com/lessons/secrets-stay-safe): What you type to an AI travels to a company's computers and can be saved, so leave out full names, schools, addresses, birthdays, and passwords; safe stand-ins like "my friend" still get good help. Game: Prompt Scrubber. ~7 min.
+15. [Build Your Own AI](https://howaiworksforkids.com/lessons/build-your-own-ai): Kids build a tiny sorting AI (animals, snacks, or faces): teach it with examples, test it on new cards, fix mistakes by adding examples, check it works for every kind, pick a safety rule, and print a "My AI Card" (no name field). Game: My Sorting Machine. ~9 min.
+
+### Final quiz
+
+[Final quiz](https://howaiworksforkids.com/quiz): 10 picture questions across both sections (examples, next-word guessing, lopsided data, checking answers, AI-made pictures, pixels, clear prompts, AI as a helper, fairness, privacy). Read-aloud, no timer, no fail screen; the right answer is shown after each question and retakes are allowed. Only the score and missed topic IDs are saved, on the device. An optional "Tell a grown-up" email note (mailto, or copy/print) lists the score and a talk question per missed topic, never a name.
 
 ## Pages
 
 - [Home](https://howaiworksforkids.com/): What the site is and the games in both sections
 - [Lesson trail, Section 1](https://howaiworksforkids.com/lessons): Section 1 lessons with progress
-- [Lesson trail, Section 2](https://howaiworksforkids.com/lessons/section-2): Section 2, Pip Grows Up, with progress and coming-soon lessons
+- [Lesson trail, Section 2](https://howaiworksforkids.com/lessons/section-2): Section 2, Pip Grows Up, with progress, the final quiz, and the certificate
 - [For teachers](https://howaiworksforkids.com/teachers): For teachers, homeschool parents, and club leaders. Free print-and-go Lesson 1 teacher kit (PDF, 8 pages: 35-minute teacher guide, "AI or Not?" card sort, K-2 and 3-5 worksheets, answer key, parent letter), how to use the site in class, concept-level alignment to the AI4K12 Five Big Ideas and CSTA Impacts of Computing. Full Teacher Pack for all 7 Section 1 lessons coming soon
 - [Lesson 1 teacher kit (PDF)](https://howaiworksforkids.com/teachers/lesson-1-teacher-kit.pdf)
 - [For parents and teachers](https://howaiworksforkids.com/parents): What kids learn in each lesson, discussion questions, how to use it at home or in class, safety, FAQ

@@ -113,8 +113,8 @@ export default function Home() {
               {SECTIONS[2].name}: <span className="hl hl-pink">{SECTION_2.length} more games</span>
             </h2>
             <p className="section-sub">
-              Where AI came from, how AI sees pictures, asking clearly, checking answers, and using AI as a helper. Each ends with an optional
-              mission to try with a grown-up. More lessons coming soon.
+              Where AI came from, how AI sees pictures, asking clearly, checking answers, AI as a helper, fairness, keeping secrets safe, and
+              building your own AI. Each ends with an optional mission to try with a grown-up. Then take the final quiz!
             </p>
           </div>
           <LessonTiles section={2} />
@@ -123,7 +123,9 @@ export default function Home() {
               See the {SECTIONS[2].name} trail &rarr;
             </Link>
           </p>
-          <p className="muted center">{LESSONS.length} free lessons so far, in two sections.</p>
+          <p className="muted center">
+            {LESSONS.length} free lessons in two sections, plus a <Link href="/quiz">final quiz</Link>.
+          </p>
         </div>
       </section>
 

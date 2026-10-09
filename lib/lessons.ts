@@ -593,6 +593,161 @@ export const LESSONS: Lesson[] = [
       check: ["Did it wait for your answer each time?", "Pick one answer and check it in a book together.", "Who did the thinking? (You did!)"],
     },
   },
+  {
+    slug: "fair-for-everyone",
+    number: 13,
+    section: 2,
+    title: "Fair for Everyone",
+    short: "Fair for everyone",
+    bigIdea: "If an AI only learns from some kinds of examples, it can leave others out. Examples of every kind help make it fair for everyone.",
+    game: "Pick the Team",
+    gameBlurb: "Pip is picking a Glorb Ball team, but only round Glorbs get picked. Fix Pip's examples until the Fair Meter balances.",
+    badge: "Fairness Friend",
+    minutes: 7,
+    color: "#3f6b12",
+    tint: "#eef6e2",
+    summary:
+      "Kids see how an AI that learned from only one kind of example can leave others out, using made-up Glorbs, not real people. They open Pip's example box, add the missing kinds, and retest until every great player makes the team.",
+    story: [
+      { text: "Pip is picking players for Glorb Ball! Pip learned what a player looks like from examples.", mood: "happy" },
+      { text: "But all of Pip's examples were round Glorbs. So Pip only picks round ones!", mood: "oops" },
+      { text: "Square and spiky Glorbs are great players too. Pip isn't being mean. Pip just never saw them.", mood: "think" },
+      { text: "When an AI learns from every kind of example, it works better for everyone. That's fair!", mood: "wow" },
+      { text: "Let's open Pip's example box and make the team fair for every Glorb!", mood: "proud" },
+    ],
+    quiz: [
+      {
+        q: "Pip only learned from round Glorbs. What happens?",
+        options: ["Pip leaves out the other shapes", "Pip picks everyone", "Pip falls asleep"],
+        icons: ["⚪", "🎉", "😴"],
+        answer: 0,
+        yes: "Right! Pip only picks Glorbs that look like its examples.",
+        hint: "Who did Pip pick at the start of the game?",
+      },
+      {
+        q: "How can you make Pip fair for everyone?",
+        options: ["Add examples of every kind", "Show only round Glorbs", "Hide the square Glorbs"],
+        icons: ["🧩", "⚪", "🙈"],
+        answer: 0,
+        yes: "Yes! Examples of every kind help an AI work for everyone.",
+        hint: "What did you add to Pip's example box?",
+      },
+    ],
+    talk: "Have you ever seen a game or a rule that left someone out? How could we make it fair for everyone?",
+    mission: {
+      intro: "Let's see what a real AI imagines! A grown-up types the request. You look closely and talk about what you notice.",
+      prompts: [
+        { label: "If your AI can make pictures, the grown-up types this 3 times", text: "Make a picture of a scientist in a lab." },
+        { label: "Then the grown-up types", text: "Show scientists of many different kinds." },
+        { label: "No pictures? Type this instead", text: "Tell me a short story about a firefighter." },
+      ],
+      check: [
+        "Did the first pictures look alike? What was the same?",
+        "What changed when you asked for many different kinds?",
+        "In the story, who did the AI imagine? Could a firefighter be anyone?",
+      ],
+    },
+  },
+  {
+    slug: "secrets-stay-safe",
+    number: 14,
+    section: 2,
+    title: "Secrets Stay Safe",
+    short: "Secrets stay safe",
+    bigIdea: "The words you type to an AI travel to a company's computers and can be saved. Leave out private things. The AI can still help!",
+    game: "Prompt Scrubber",
+    gameBlurb: "Find the private details hiding in prompts, swap them for safe words, and see that Pip's answer is just as good.",
+    badge: "Secret Keeper",
+    minutes: 7,
+    color: "#a3343c",
+    tint: "#fbe8e9",
+    summary:
+      "Kids learn that what they type to an AI goes to a company's computers and can be saved, so private details stay out. They find full names, schools, streets, birthdays, and phone numbers in prompts, swap them for safe stand-ins, and see the AI can still help.",
+    story: [
+      { text: "When you type to an AI, your words don't stay on your screen. They travel far away to a company's computers.", mood: "wow" },
+      { text: "Those computers can save what you type. Grown-ups call that chat history.", mood: "think" },
+      { text: "So some things stay secret: your full name, your school, where you live, your birthday, and passwords.", mood: "think" },
+      { text: "Good news! AI can still help without them. Say \u201cmy friend\u201d or \u201cmy town\u201d instead.", mood: "happy" },
+      { text: "Let's scrub some prompts and keep the secrets safe!", mood: "proud" },
+    ],
+    quiz: [
+      {
+        q: "Where do the words you type to an AI go?",
+        options: ["To a company's computers far away", "Nowhere, they vanish", "Only into my tablet"],
+        icons: ["🏢", "💨", "📱"],
+        answer: 0,
+        yes: "Right! Your words travel far away, and they can be saved.",
+        hint: "Remember where the words flew in the game?",
+      },
+      {
+        q: "Which prompt keeps secrets safe?",
+        options: ["Write a poem for my friend who loves cats", "Write a poem for Maya Lopez at Lincoln School", "My password is tiger7, remember it"],
+        icons: ["🛡️", "🏫", "🔑"],
+        answer: 0,
+        yes: "Yes! \u201cMy friend\u201d works great, and no secrets leave home.",
+        hint: "Which one has no names, schools, or passwords?",
+      },
+    ],
+    talk: "What are some things that are private in our family? Who can you ask before you share something online?",
+    mission: {
+      intro: "Let's ask a real AI about staying safe, then compare its answer with Pip's Secret Shield from Lesson 7: full name, school, home address, and passwords.",
+      prompts: [{ label: "The grown-up types", text: "What should a kid never share with a chatbot?" }],
+      check: [
+        "Compare its list with Pip's Secret Shield. Did it miss anything? Did it add anything?",
+        "The grown-up shows you where this app keeps chat history in its settings.",
+        "Who should you ask before you share something online?",
+      ],
+    },
+  },
+  {
+    slug: "build-your-own-ai",
+    number: 15,
+    section: 2,
+    title: "Build Your Own AI",
+    short: "Build your own AI",
+    bigIdea: "You can build an AI! Teach it with examples, test it, fix its mistakes, make sure it works for every kind, and give it a safety rule.",
+    game: "My Sorting Machine",
+    gameBlurb: "Pick a job, teach your machine with examples, test it, fix it, and print your own AI Card.",
+    badge: "AI Builder",
+    minutes: 9,
+    color: "#4a4a9e",
+    tint: "#ebebfa",
+    summary:
+      "Kids put it all together and build a real (tiny) sorting AI in the browser. They pick a job, teach it with examples, test it on new cards, fix mistakes by adding examples, check it works for every kind, pick a safety rule, and print a My AI Card.",
+    story: [
+      { text: "You've learned so much! Now it's your turn to build an AI.", mood: "wow" },
+      { text: "First, pick a job. Your AI could sort animals, snacks, or faces.", mood: "happy" },
+      { text: "Then teach it with examples, and test it on cards it has never seen.", mood: "think" },
+      { text: "If it makes a mistake, add an example. Check it works for every kind, and give it a safety rule.", mood: "think" },
+      { text: "That's what real AI builders do. Let's build yours!", mood: "proud" },
+    ],
+    quiz: [
+      {
+        q: "Your sorting machine gets a card wrong. What do you do?",
+        options: ["Add an example to teach it", "Give up", "Unplug it"],
+        icons: ["➕", "🏳️", "🔌"],
+        answer: 0,
+        yes: "Right! Adding examples is how you fix an AI.",
+        hint: "How did you fix your machine in the game?",
+      },
+      {
+        q: "What does a good AI builder do before sharing their AI?",
+        options: ["Test it on new cards, for every kind", "Just hope it works", "Make it go faster"],
+        icons: ["🧪", "🤞", "🏎️"],
+        answer: 0,
+        yes: "Yes! Test it, and make sure it works for every kind.",
+        hint: "What did you check after the test?",
+      },
+    ],
+    talk: "If you could build an AI to help our family, what job would it do? What safety rule would it need?",
+    mission: {
+      intro: "Let's use a real AI as a helper for family fun! A grown-up types the request, and you answer its questions together.",
+      prompts: [
+        { label: "The grown-up types", text: "Help us plan a 20-minute game night with 3 games that need no screens. Ask us 2 questions first." },
+      ],
+      check: ["Did it ask you 2 questions first?", "Do the games really need no screens?", "Pick your favorite game and play it!"],
+    },
+  },
 ];
 
 /* ---------------- Sections ---------------- */
@@ -603,7 +758,7 @@ export type SectionInfo = {
   kicker: string;
   path: string;
   blurb: string;
-  /** Lessons planned for this section, including ones not released yet. */
+  /** Lessons in this section (all released). */
   planned: number;
 };
 
@@ -621,17 +776,10 @@ export const SECTIONS: Record<SectionId, SectionInfo> = {
     name: "Pip Grows Up",
     kicker: "Section 2",
     path: "/lessons/section-2",
-    blurb: "Pip grows up and so do you: where AI came from, how AI sees, clear prompts, checking answers, and using AI as a helper.",
+    blurb: "Pip grows up and so do you: where AI came from, how AI sees, clear prompts, checking answers, AI as a helper, fairness, privacy, and building your own AI.",
     planned: 8,
   },
 };
-
-/** Lessons that are planned but not released yet. Shown as "coming soon" on the trail only (never in the sitemap or schema). */
-export const COMING_SOON: { number: number; section: SectionId; title: string; game: string; badge: string }[] = [
-  { number: 13, section: 2, title: "Fair for Everyone", game: "Pick the Team", badge: "Fairness Friend" },
-  { number: 14, section: 2, title: "Secrets Stay Safe", game: "Prompt Scrubber", badge: "Secret Keeper" },
-  { number: 15, section: 2, title: "Build Your Own AI", game: "My Sorting Machine", badge: "AI Builder" },
-];
 
 export function sectionLessons(section: SectionId): Lesson[] {
   return LESSONS.filter((l) => l.section === section);

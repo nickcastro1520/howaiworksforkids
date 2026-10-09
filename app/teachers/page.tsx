@@ -11,7 +11,7 @@ import { KIT, KIT_CONTENTS, KIT_PREVIEWS } from "@/lib/teacherKit";
 export const metadata: Metadata = pageMeta({
   title: "Free AI Lesson Plan for Elementary Teachers (Ages 6–10)",
   description:
-    "A free, print-and-go teacher kit for Lesson 1, Meet Pip: What is AI? A 35-minute guide, unplugged card sort, K–2 and 3–5 worksheets, answer key, and parent letter. No sign-up.",
+    "A free, print-and-go Lesson 1 teacher kit: a 35-minute guide, unplugged card sort, K–2 and 3–5 worksheets, answer key, and parent letter. No sign-up.",
   path: "/teachers",
   ogKey: "teachers",
   ogAlt: ogAlt("teachers"),
@@ -64,12 +64,12 @@ const BIG_IDEAS = [
     text: "Computers sense the world with sensors, like a phone that sees a face or a speaker that hears words. Pictures reach an AI as pixels.",
     lessons: [1, 9],
   },
-  { n: 2, name: "Representation & Reasoning", text: "AI keeps track of features (color, shape, pixel patterns) and uses them to decide.", lessons: [2, 4, 9] },
+  { n: 2, name: "Representation & Reasoning", text: "AI keeps track of features (color, shape, pixel patterns) and uses them to decide.", lessons: [2, 4, 9, 15] },
   {
     n: 3,
     name: "Learning",
-    text: "Computers can learn from data. Students give Pip examples, watch it guess, and fix it. AI took off with more data, faster computers, and better learning methods.",
-    lessons: [1, 2, 3, 4, 8, 9],
+    text: "Computers can learn from data. Students give Pip examples, watch it guess, and fix it, then build and test their own sorting AI. AI took off with more data, faster computers, and better learning methods.",
+    lessons: [1, 2, 3, 4, 8, 9, 15],
   },
   {
     n: 4,
@@ -80,8 +80,8 @@ const BIG_IDEAS = [
   {
     n: 5,
     name: "Societal Impact",
-    text: "Lopsided data, made-up answers, AI-made pictures, staying safe and private, and using AI as a helper for learning.",
-    lessons: [4, 5, 6, 7, 8, 12],
+    text: "Lopsided data, fairness for everyone, made-up answers, AI-made pictures, keeping private details out of prompts, and using AI as a helper for learning.",
+    lessons: [4, 5, 6, 7, 8, 12, 13, 14],
   },
 ];
 
@@ -244,8 +244,8 @@ export default function TeachersPage() {
             <div className="std-card std-csta">
               <p className="std-kicker">CSTA K&ndash;12 CS Standards</p>
               <h3>Impacts of Computing</h3>
-              <p>Computing in everyday life, and using it safely and responsibly: spotting AI at home, checking answers, AI-made pictures, and privacy.</p>
-              <LessonChips nums={[1, 5, 6, 7, 11, 12]} />
+              <p>Computing in everyday life, and using it safely and responsibly: spotting AI at home, checking answers, AI-made pictures, fairness, and privacy.</p>
+              <LessonChips nums={[1, 5, 6, 7, 11, 12, 13, 14]} />
             </div>
           </div>
         </section>
