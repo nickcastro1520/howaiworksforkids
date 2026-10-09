@@ -7,7 +7,7 @@ import { LessonPlayer } from "@/components/LessonPlayer";
 import { GLOSSARY, termId } from "@/lib/glossary";
 import { getLesson, LESSONS, SECTIONS, sectionLessons } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
-import { lessonJsonLd, lessonSeo, pageMeta } from "@/lib/seo";
+import { lessonJsonLd, lessonSeo, pageMeta, videoJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -47,6 +47,7 @@ export default async function LessonPage({ params }: Props) {
   return (
     <div className="lesson" style={{ "--lc": lesson.color, "--lt": lesson.tint } as React.CSSProperties}>
       <JsonLd data={lessonJsonLd(lesson)} />
+      {videoJsonLd(lesson) && <JsonLd data={videoJsonLd(lesson)} />}
       <header className="lesson-hero">
         <div className="wrap lesson-hero-inner">
           <Breadcrumbs

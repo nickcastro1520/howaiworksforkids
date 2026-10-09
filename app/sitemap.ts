@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { LESSONS, SECTIONS } from "@/lib/lessons";
 import { absoluteUrl, CONTENT_UPDATED } from "@/lib/site";
+import { videoFor } from "@/lib/video";
 
 type Entry = { path: string; og: string; priority: number; freq: "weekly" | "monthly" | "yearly" };
 
@@ -27,5 +28,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: p.freq,
     priority: p.priority,
     images: [absoluteUrl(`/og/${p.og}`)],
+    ...(videoFor(p.og)
+      ? {
+          videos: [
+            {
+              title: "Watch Pip's time ride: where did AI come from?",
+              thumbnail_loc: absoluteUrl(videoFor(p.og)!.poster),
+              description: videoFor(p.og)!.description,
+              content_loc: absoluteUrl(videoFor(p.og)!.src),
+              duration: videoFor(p.og)!.seconds,
+              publication_date: videoFor(p.og)!.uploadDate,
+              family_friendly: "yes" as const,
+            },
+          ],
+        }
+      : {}),
   }));
 }

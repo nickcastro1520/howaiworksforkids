@@ -1162,3 +1162,20 @@ button.mm-chip:hover { background: #fde4df; }
   .fq .check-opts .sayable > .check-opt { padding-right: 2.9rem; }
   .fq .check-opt .emo-big { font-size: 1.8rem; }
 }
+
+/* Optional lesson video (Lesson 8) */
+.lesson-video { max-width: 920px; margin: 0 auto 1.4rem; background: #fff; border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.lesson-video-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1rem; }
+.lesson-video-head h2 { margin: 0; font-size: clamp(1.4rem, 4vw, 1.9rem); }
+.lesson-video-opt { font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+.lesson-video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; border: 3px solid var(--ink); border-radius: 18px; overflow: hidden; background: var(--lt, #eee); }
+.lesson-video-frame video { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--lt, #eee); }
+.lesson-video-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -62%); width: 76px; height: 76px; min-width: 48px; min-height: 48px; border-radius: 50%; border: 3px solid var(--ink); background: var(--sun); color: var(--ink); display: grid; place-items: center; box-shadow: 0 5px 0 var(--ink); cursor: pointer; padding: 0 0 0 4px; transition: transform 0.1s; }
+.lesson-video-play:hover { transform: translate(-50%, -64%); }
+.lesson-video-play:active { transform: translate(-50%, -56%); box-shadow: 0 1px 0 var(--ink); }
+.lesson-video-play:focus-visible { outline: 4px solid var(--grape); outline-offset: 3px; }
+.lesson-video-text { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0.6rem 1rem; }
+.lesson-video-text p { margin: 0; flex: 1 1 320px; font-size: 1.05rem; font-weight: 600; }
+.lesson-video-credit { margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--ink-2); }
+@media (max-width: 480px) { .lesson-video { padding: 0.8rem; } .lesson-video-play { width: 68px; height: 68px; } }
+@media print { .lesson-video-frame video, .lesson-video-play { display: none; } }

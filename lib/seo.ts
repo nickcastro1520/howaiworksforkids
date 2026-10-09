@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GLOSSARY } from "@/lib/glossary";
 import type { Lesson } from "@/lib/lessons";
 import { LESSONS, SECTION_1, SECTION_2, SECTIONS, sectionLessons, type SectionId } from "@/lib/lessons";
+import { videoFor } from "@/lib/video";
 import { absoluteUrl, CONTENT_UPDATED, LOGO_URL, NICK, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
@@ -397,7 +398,40 @@ export function sectionJsonLd(section: SectionId) {
 }
 
 export function lessonJsonLd(lesson: Lesson) {
-  return { "@context": "https://schema.org", ...lessonResource(lesson, true) };
+  const v = videoFor(lesson.slug);
+  return {
+    "@context": "https://schema.org",
+    ...lessonResource(lesson, true),
+    ...(v ? { video: { "@id": `${absoluteUrl(`/lessons/${lesson.slug}`)}#video` } } : {}),
+  };
+}
+
+/** The optional lesson video (self-hosted file; no third-party embed). Null when the lesson has none. */
+export function videoJsonLd(lesson: Lesson) {
+  const v = videoFor(lesson.slug);
+  if (!v) return null;
+  const page = absoluteUrl(`/lessons/${lesson.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "@id": `${page}#video`,
+    name: `Pip\u2019s time ride: where did AI come from?`,
+    description: `${v.description} ${v.credit}`,
+    thumbnailUrl: absoluteUrl(v.poster),
+    uploadDate: v.uploadDate,
+    contentUrl: absoluteUrl(v.src),
+    duration: `PT${v.seconds}S`,
+    encodingFormat: "video/mp4",
+    inLanguage: "en-US",
+    isFamilyFriendly: true,
+    isAccessibleForFree: true,
+    requiresSubscription: false,
+    audience,
+    creator: { "@id": IDS.org },
+    publisher: { "@id": IDS.org },
+    isPartOf: { "@id": `${page}#lesson` },
+    caption: { "@type": "MediaObject", contentUrl: absoluteUrl(v.captions), encodingFormat: "text/vtt", inLanguage: "en" },
+  };
 }
 
 export type Crumb = { name: string; path: string };
