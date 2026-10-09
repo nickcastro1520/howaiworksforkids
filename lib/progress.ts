@@ -63,6 +63,46 @@ export function useProgress() {
       if (current.done.includes(slug)) return;
       write({ done: [...current.done, slug] });
     },
-    reset: () => write(EMPTY),
+    reset: () => {
+      clearQuiz();
+      write(EMPTY);
+    },
   };
+}
+
+/* ---------------- Final quiz (used in release 2) ----------------
+ * Saved ONLY in this browser, as { score, missed: conceptId[] }. No answers are
+ * sent anywhere and nothing about the quiz goes to analytics.
+ */
+export const QUIZ_KEY = "hawfk-quiz";
+
+export type QuizResult = { score: number; total: number; missed: string[] };
+
+export function readQuiz(): QuizResult | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(QUIZ_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw) as Partial<QuizResult>;
+    if (typeof p.score !== "number" || typeof p.total !== "number" || !Array.isArray(p.missed)) return null;
+    return { score: p.score, total: p.total, missed: p.missed.filter((m): m is string => typeof m === "string") };
+  } catch {
+    return null;
+  }
+}
+
+export function saveQuiz(result: QuizResult) {
+  try {
+    window.localStorage.setItem(QUIZ_KEY, JSON.stringify(result));
+  } catch {
+    /* storage blocked: the result just won't be remembered */
+  }
+}
+
+export function clearQuiz() {
+  try {
+    window.localStorage.removeItem(QUIZ_KEY);
+  } catch {
+    /* ignore */
+  }
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { KitDownload } from "@/components/KitDownload";
-import { LESSONS } from "@/lib/lessons";
+import { LESSONS, SECTIONS, SECTION_1, numberWord } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
 import { pageMeta, teacherKitJsonLd } from "@/lib/seo";
 import { KIT, KIT_CONTENTS, KIT_PREVIEWS } from "@/lib/teacherKit";
@@ -38,7 +38,7 @@ const CLASS_TIPS = [
   {
     emoji: "⏱️",
     title: "About 30–40 minutes",
-    text: "Each lesson on the site takes 5–6 minutes. Add a warm-up, discussion, and the unplugged activity and you have a 30–40 minute class.",
+    text: "Each lesson on the site takes 5–7 minutes. Add a warm-up, discussion, and the unplugged activity and you have a 30–40 minute class.",
   },
   {
     emoji: "🔊",
@@ -58,11 +58,31 @@ const CLASS_TIPS = [
 ];
 
 const BIG_IDEAS = [
-  { n: 1, name: "Perception", text: "Computers sense the world with sensors, like a phone that sees a face or a speaker that hears words.", lessons: [1] },
-  { n: 2, name: "Representation & Reasoning", text: "AI keeps track of features (color, shape) and uses them to decide.", lessons: [2, 4] },
-  { n: 3, name: "Learning", text: "Computers can learn from data. Students give Pip examples, watch it guess, and fix it.", lessons: [1, 2, 3, 4] },
-  { n: 4, name: "Natural Interaction", text: "Chatbots guess the next word. They can sound sure and still be wrong.", lessons: [3, 5] },
-  { n: 5, name: "Societal Impact", text: "Lopsided data, made-up answers, AI-made pictures, and staying safe and private.", lessons: [4, 5, 6, 7] },
+  {
+    n: 1,
+    name: "Perception",
+    text: "Computers sense the world with sensors, like a phone that sees a face or a speaker that hears words. Pictures reach an AI as pixels.",
+    lessons: [1, 9],
+  },
+  { n: 2, name: "Representation & Reasoning", text: "AI keeps track of features (color, shape, pixel patterns) and uses them to decide.", lessons: [2, 4, 9] },
+  {
+    n: 3,
+    name: "Learning",
+    text: "Computers can learn from data. Students give Pip examples, watch it guess, and fix it. AI took off with more data, faster computers, and better learning methods.",
+    lessons: [1, 2, 3, 4, 8, 9],
+  },
+  {
+    n: 4,
+    name: "Natural Interaction",
+    text: "Chatbots guess the next word. Clear prompts get better results, and answers can sound sure and still be wrong.",
+    lessons: [3, 5, 10, 11],
+  },
+  {
+    n: 5,
+    name: "Societal Impact",
+    text: "Lopsided data, made-up answers, AI-made pictures, staying safe and private, and using AI as a helper for learning.",
+    lessons: [4, 5, 6, 7, 8, 12],
+  },
 ];
 
 function LessonChips({ nums }: { nums: number[] }) {
@@ -89,7 +109,7 @@ export default function TeachersPage() {
           <p className="small-cap">For teachers, homeschool parents &amp; club leaders</p>
           <h1 className="page-title">Teach how AI works, with nothing to set up.</h1>
           <p className="page-lead">
-            Seven free, hands-on lessons for ages 6&ndash;10. Kids teach a tiny AI named Pip, watch it guess, and fix it when it&rsquo;s wrong.
+            {numberWord(LESSONS.length, true)} free, hands-on lessons for ages 6&ndash;10. Kids teach a tiny AI named Pip, watch it guess, and fix it when it&rsquo;s wrong.
             Start with the free print-and-go kit for Lesson 1.
           </p>
           <p className="grownup-note">This page is for grown-ups. Kids can head to the <Link href="/lessons">lesson trail</Link>.</p>
@@ -174,12 +194,12 @@ export default function TeachersPage() {
               The Full Teacher Pack
             </h2>
             <p className="section-sub">
-              The same print-and-go format for all 7 lessons: a teacher guide, an unplugged activity, K&ndash;2 and 3&ndash;5 worksheets, an
+              The same print-and-go format for all {numberWord(SECTION_1.length)} {SECTIONS[1].kicker} lessons: a teacher guide, an unplugged activity, K&ndash;2 and 3&ndash;5 worksheets, an
               answer key, and a parent letter for each one. Nothing to sign up for. Check back here.
             </p>
           </div>
           <ol className="pack-list">
-            {LESSONS.map((l) => (
+            {SECTION_1.map((l) => (
               <li key={l.slug} className="pack-card" style={{ "--lc": l.color } as React.CSSProperties}>
                 <span className="pack-num" aria-hidden="true">
                   {l.number}
@@ -225,7 +245,7 @@ export default function TeachersPage() {
               <p className="std-kicker">CSTA K&ndash;12 CS Standards</p>
               <h3>Impacts of Computing</h3>
               <p>Computing in everyday life, and using it safely and responsibly: spotting AI at home, checking answers, AI-made pictures, and privacy.</p>
-              <LessonChips nums={[1, 5, 6, 7]} />
+              <LessonChips nums={[1, 5, 6, 7, 11, 12]} />
             </div>
           </div>
         </section>

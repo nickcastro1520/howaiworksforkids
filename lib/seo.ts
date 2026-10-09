@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { GLOSSARY } from "@/lib/glossary";
 import type { Lesson } from "@/lib/lessons";
-import { LESSONS } from "@/lib/lessons";
+import { LESSONS, SECTION_1, SECTION_2, SECTIONS, sectionLessons, type SectionId } from "@/lib/lessons";
 import { absoluteUrl, CONTENT_UPDATED, LOGO_URL, NICK, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
@@ -59,6 +59,45 @@ export const LESSON_SEO: Record<string, LessonSeo> = {
       "Kids learn to keep private things private, that AI isn't a person, and to ask a grown-up, with the Go, Ask, or Stop game. Free AI safety lesson, ages 6–10.",
     keywords: ["AI safety for kids", "online safety for kids", "teach kids about AI", "AI privacy for kids"],
     teaches: ["Keep private information private", "AI is a computer program, not a person or friend", "Ask a grown-up when unsure"],
+  },
+  "where-did-ai-come-from": {
+    title: "History of AI for Kids: Where Did AI Come From?",
+    description:
+      "A short, kid-friendly history of AI. Kids play AI Time Machine, learn why AI needed lots of data, fast computers, and better ways to learn, then meet the AI helpers. Ages 6–10.",
+    keywords: ["history of AI for kids", "where did AI come from", "AI timeline for kids", "AI for elementary students"],
+    teaches: [
+      "People dreamed about thinking machines long before computers",
+      "AI got much better with more data, faster computers, and better ways to learn from examples",
+      "AI helpers are made by companies, and every AI helper can be wrong",
+    ],
+  },
+  "how-ai-sees-pictures": {
+    title: "How Does AI See Pictures? Pixel Game for Kids",
+    description:
+      "Computers see pictures as tiny colored squares called pixels. Kids watch Pip guess as more pixels appear, then draw their own pixel art for Pip to guess. Ages 6–10.",
+    keywords: ["how does AI see pictures for kids", "computer vision for kids", "pixels for kids", "image recognition for kids"],
+    teaches: ["Pictures are made of pixels: tiny squares of color", "AI looks for patterns in pixels", "AI guesses can be wrong when the clues are few"],
+  },
+  "say-it-clearly": {
+    title: "Prompts for Kids: How to Ask AI Clearly",
+    description:
+      "AI does what you say, not what you mean. Kids build clear prompts with picture tiles in Monster Maker and see how details change the result. Free for ages 6–10.",
+    keywords: ["prompting for kids", "how to talk to AI for kids", "prompt writing for kids", "AI literacy for kids"],
+    teaches: ["A prompt is what you ask an AI", "Clear, detailed prompts get better results", "AI fills in missing details with guesses"],
+  },
+  "check-it-fix-it": {
+    title: "Check AI Answers: A Fact-Checking Game for Kids",
+    description:
+      "Pip's homework has mistakes! Kids find the wrong line, check it in a Fact Book, and learn the best way to ask an AI to fix an answer. Free for ages 6–10.",
+    keywords: ["fact checking AI for kids", "check AI answers", "AI mistakes for kids", "AI literacy for kids"],
+    teaches: ["Find it, check it, fix it", "Check facts in a trusted source", "Tell an AI exactly what is wrong and what is right"],
+  },
+  "ai-learning-helper": {
+    title: "Using AI to Learn: Helper or Doer? (Kids Lesson)",
+    description:
+      "Is AI helping you learn or doing the work for you? Kids sort Helper vs Doer cards, then use Pip's Idea Machine and draw their own idea. Ages 6–10.",
+    keywords: ["using AI for learning kids", "AI homework help for kids", "AI and creativity for kids", "responsible AI use for kids"],
+    teaches: ["Use AI as a helper, not a doer", "Your own thinking and making matter", "AI can give ideas you build on"],
   },
 };
 
@@ -134,7 +173,7 @@ const audience = {
   audienceType: "Children ages 6–10",
 };
 
-const COURSE_NAME = "How AI Works for Kids: 7 Hands-On AI Lessons";
+const COURSE_NAME = `How AI Works for Kids: ${LESSONS.length} Hands-On AI Lessons`;
 
 export const TOTAL_MINUTES = LESSONS.reduce((s, l) => s + l.minutes, 0);
 
@@ -253,7 +292,7 @@ export function courseJsonLd() {
     "@type": "Course",
     "@id": IDS.course,
     name: COURSE_NAME,
-    description: `A free, ${LESSONS.length}-lesson AI course for kids ages 6–10. Kids teach a tiny AI named Pip and learn what AI is, how it learns from examples, how chatbots guess the next word, why lopsided data causes mistakes, why AI can be wrong, how to spot AI-made pictures, and how to stay safe.`,
+    description: `A free, ${LESSONS.length}-lesson AI course for kids ages 6–10. In Section 1 (${SECTIONS[1].name}, ${SECTION_1.length} lessons) kids teach a tiny AI named Pip and learn what AI is, how it learns from examples, how chatbots guess the next word, why lopsided data causes mistakes, why AI can be wrong, how to spot AI-made pictures, and how to stay safe. In Section 2 (${SECTIONS[2].name}, ${SECTION_2.length} lessons so far) they learn where AI came from, how AI sees pictures, how to ask clearly, how to check and fix answers, and how to use AI as a helper for learning.`,
     url: absoluteUrl("/lessons"),
     image: absoluteUrl("/og/lessons"),
     provider: { "@type": "Organization", "@id": IDS.org, name: SITE_NAME, sameAs: SITE_URL },
@@ -265,7 +304,7 @@ export function courseJsonLd() {
     isAccessibleForFree: true,
     timeRequired: `PT${TOTAL_MINUTES}M`,
     teaches: LESSONS.map((l) => l.bigIdea),
-    about: ["Artificial intelligence", "Machine learning", "AI literacy", "AI safety"],
+    about: ["Artificial intelligence", "Machine learning", "AI literacy", "AI safety", "History of AI", "Computer vision", "Prompting"],
     dateModified: CONTENT_UPDATED,
     offers: { "@type": "Offer", price: 0, priceCurrency: "USD", category: "Free", availability: "https://schema.org/InStock" },
     hasCourseInstance: {
@@ -275,6 +314,26 @@ export function courseJsonLd() {
       inLanguage: "en-US",
     },
     hasPart: LESSONS.map((l) => lessonResource(l)),
+  };
+}
+
+/** A section trail page: an ItemList of its released lessons (coming-soon lessons are left out). */
+export function sectionJsonLd(section: SectionId) {
+  const info = SECTIONS[section];
+  const url = absoluteUrl(info.path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${url}#lessons`,
+    name: `${info.kicker}: ${info.name}`,
+    description: info.blurb,
+    url,
+    numberOfItems: sectionLessons(section).length,
+    itemListElement: sectionLessons(section).map((l, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: { "@id": `${absoluteUrl(`/lessons/${l.slug}`)}#lesson`, name: `Lesson ${l.number}: ${l.title}`, url: absoluteUrl(`/lessons/${l.slug}`) },
+    })),
   };
 }
 

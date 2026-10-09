@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SECTIONS, getLesson, sectionLessons, type SectionId } from "@/lib/lessons";
 import { useProgress } from "@/lib/progress";
 import { LogoMark } from "./Logo";
 
@@ -14,7 +15,12 @@ const NAV = [
 export function Header() {
   const path = usePathname();
   const { done } = useProgress();
-  const n = Math.min(done.length, 7);
+  // The pill follows the section you're in (Section 1 everywhere else).
+  const slug = path?.startsWith("/lessons/") ? path.slice("/lessons/".length) : "";
+  const section: SectionId = slug === "section-2" || getLesson(slug)?.section === 2 ? 2 : 1;
+  const info = SECTIONS[section];
+  const slots = info.planned;
+  const n = sectionLessons(section).filter((l) => done.includes(l.slug)).length;
   return (
     <header className="site-header">
       <a href="#main" className="skip">
@@ -35,13 +41,16 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Link href="/lessons" className="brain-pill" aria-label={`Pip's brain: ${n} of 7 lights on`}>
+        <Link href={info.path} className="brain-pill" aria-label={`${section === 2 ? "S2 " : ""}${n}/${slots}: Pip's brain lights on in ${info.kicker}`}>
           <span className="brain-dots" aria-hidden="true">
-            {Array.from({ length: 7 }).map((_, i) => (
+            {Array.from({ length: slots }).map((_, i) => (
               <i key={i} className={i < n ? "on" : ""} />
             ))}
           </span>
-          <span className="brain-n">{n}/7</span>
+          <span className="brain-n">
+            {section === 2 && <span className="brain-sec">S2 </span>}
+            {n}/{slots}
+          </span>
         </Link>
       </div>
     </header>

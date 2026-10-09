@@ -1,7 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { LESSONS } from "@/lib/lessons";
+import { GLOSSARY } from "@/lib/glossary";
+import { LESSONS, SECTIONS, SECTION_1, SECTION_2, numberWord, positionInSection } from "@/lib/lessons";
 import { OgPip } from "@/lib/ogPip";
 
 export type OgCard = {
@@ -10,8 +11,10 @@ export type OgCard = {
   sub: string;
   alt: string;
   accent: string;
-  /** Lesson number to highlight in the 7-light strip. */
+  /** Lights to fill in the strip (lesson cards fill up to their place in their section). */
   light?: number;
+  /** How many lights the strip has (defaults to the Section 1 count). */
+  strip?: number;
 };
 
 const PAGES: Record<string, OgCard> = {
@@ -19,28 +22,36 @@ const PAGES: Record<string, OgCard> = {
     kicker: "Ages 6–10 · Free · No sign-up",
     title: "Teach a tiny AI.",
     sub: "Find out how real AI works.",
-    alt: "How AI Works for Kids: teach a tiny AI named Pip. 7 free AI games for ages 6–10. No ads, no accounts.",
+    alt: `How AI Works for Kids: teach a tiny AI named Pip. ${LESSONS.length} free AI games for ages 6–10. No ads, no accounts.`,
     accent: "#79f2da",
   },
   lessons: {
     kicker: "Free AI course for kids 6–10",
-    title: "7 hands-on AI lessons",
+    title: `${LESSONS.length} hands-on AI lessons`,
     sub: "Story · Game · Quick check · Badge",
-    alt: "The lesson trail: 7 free, hands-on AI lessons for kids, each with a story, a game, a quick check, and a badge.",
+    alt: `The lesson trail: ${LESSONS.length} free, hands-on AI lessons for kids, each with a story, a game, a quick check, and a badge.`,
     accent: "#ffd34d",
+  },
+  "section-2": {
+    kicker: `${SECTIONS[2].kicker} · Ages 6–10 · Free`,
+    title: SECTIONS[2].name,
+    sub: "AI history · Pictures · Prompts · Checking",
+    alt: `${SECTIONS[2].kicker}, ${SECTIONS[2].name}: ${SECTION_2.length} more free AI lessons for kids ages 6–10, with more coming soon.`,
+    accent: "#79f2da",
+    strip: SECTIONS[2].planned,
   },
   glossary: {
     kicker: "Pip's Word Book",
     title: "AI words for kids",
     sub: "Big AI words, in small kid words.",
-    alt: "Pip's Word Book: twelve AI words explained in kid-friendly language.",
+    alt: `Pip's Word Book: ${numberWord(GLOSSARY.length)} AI words explained in kid-friendly language.`,
     accent: "#79f2da",
   },
   parents: {
     kicker: "For parents & teachers",
     title: "Teach kids about AI",
-    sub: "7 free lessons · No ads · No accounts",
-    alt: "A guide for parents and teachers: how to use 7 free AI lessons for kids at home or in class.",
+    sub: `${LESSONS.length} free lessons · No ads · No accounts`,
+    alt: `A guide for parents and teachers: how to use ${LESSONS.length} free AI lessons for kids at home or in class.`,
     accent: "#ffd34d",
   },
   teachers: {
@@ -75,20 +86,21 @@ const PAGES: Record<string, OgCard> = {
   finish: {
     kicker: "Finish line",
     title: "Light up Pip's brain!",
-    sub: "Finish 7 lessons. Print your certificate.",
-    alt: "Finish all 7 lessons to light up Pip's brain and print a certificate.",
+    sub: `Finish ${SECTION_1.length} lessons. Print your certificate.`,
+    alt: `Finish all ${SECTION_1.length} Section 1 lessons to light up Pip's brain and print a certificate.`,
     accent: "#ffd34d",
   },
 };
 
 for (const l of LESSONS) {
   PAGES[l.slug] = {
-    kicker: `Lesson ${l.number} of ${LESSONS.length} · about ${l.minutes} min`,
+    kicker: `${l.section === 1 ? `Lesson ${l.number} of ${SECTION_1.length}` : `${SECTIONS[2].kicker} · Lesson ${l.number}`} · about ${l.minutes} min`,
     title: l.title,
     sub: `Game: ${l.game}`,
     alt: `Lesson ${l.number}, ${l.title}: a free AI lesson for kids ages 6–10 with the game ${l.game}.`,
     accent: l.color,
-    light: l.number,
+    light: positionInSection(l),
+    strip: SECTIONS[l.section].planned,
   };
 }
 
@@ -135,15 +147,15 @@ export async function renderOg(card: OgCard) {
             <div style={{ fontSize: 38, marginTop: 18, color: "#fff8ec", display: "flex" }}>{card.sub}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {LESSONS.map((l) => (
+            {Array.from({ length: card.strip ?? SECTION_1.length }, (_, k) => k + 1).map((n) => (
               <div
-                key={l.slug}
+                key={n}
                 style={{
                   width: 34,
                   height: 34,
                   borderRadius: 999,
                   border: "4px solid #fff8ec",
-                  background: !isLesson || l.number <= (card.light ?? 0) ? "#ffd34d" : "transparent",
+                  background: !isLesson || n <= (card.light ?? 0) ? "#ffd34d" : "transparent",
                   display: "flex",
                 }}
               />

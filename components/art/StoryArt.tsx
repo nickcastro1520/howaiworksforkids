@@ -15,6 +15,8 @@ import {
   StopSign,
 } from "./Props";
 import { Pip } from "../Pip";
+import { GRID, PALETTE, pixelAt, revealOrder } from "@/lib/pixels";
+import { MonsterArt } from "../games/MonsterMaker";
 
 const G = (color: GlorbData["color"], eyes: GlorbData["eyes"], top: GlorbData["top"], spots: boolean, shape: GlorbData["shape"]): GlorbData => ({
   color,
@@ -479,6 +481,291 @@ function Lesson7({ page }: { page: number }) {
   }
 }
 
+
+/* ---------------- Section 2 ---------------- */
+
+function BigEmoji({ e, size = 84, className = "" }: { e: string; size?: number; className?: string }) {
+  return (
+    <span className={`art-emoji ${className}`} style={{ fontSize: size }} aria-hidden="true">
+      {e}
+    </span>
+  );
+}
+
+/** A big old room-sized computer with blinking lights and tape reels. */
+function RoomComputer({ size = 220 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 220 150" width={size} height={(size * 150) / 220} aria-hidden="true">
+      {[0, 1, 2].map((k) => (
+        <g key={k} transform={`translate(${8 + k * 70} 10)`}>
+          <rect width="62" height="130" rx="6" fill="#c9c4dc" stroke="#231d4f" strokeWidth="4" />
+          <circle cx="18" cy="30" r="12" fill="#fff" stroke="#231d4f" strokeWidth="3" />
+          <circle cx="44" cy="30" r="12" fill="#fff" stroke="#231d4f" strokeWidth="3" />
+          {[0, 1, 2, 3].map((j) => (
+            <circle key={j} cx={12 + j * 13} cy="70" r="4" fill={["#ff6b5b", "#ffd34d", "#33c4b0", "#4b9dff"][(j + k) % 4]} className="twinkle" />
+          ))}
+          <rect x="10" y="88" width="42" height="30" rx="3" fill="#8a84a8" />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function PixelGrid({ size = 150, shown = 144 }: { size?: number; shown?: number }) {
+  const order = revealOrder(4);
+  const on = new Set(order.slice(0, shown));
+  return (
+    <svg viewBox={`0 0 ${GRID} ${GRID}`} width={size} height={size} shapeRendering="crispEdges" aria-hidden="true" className="art-pixels">
+      {Array.from({ length: GRID * GRID }, (_, i) => (
+        <rect
+          key={i}
+          x={i % GRID}
+          y={Math.floor(i / GRID)}
+          width="1"
+          height="1"
+          fill={on.has(i) ? PALETTE[pixelAt("apple", i)] : "#e6e1f3"}
+          stroke="#fff"
+          strokeWidth="0.04"
+        />
+      ))}
+    </svg>
+  );
+}
+
+function Lesson8({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="1rem" className="align-end">
+          <span className="pop"><Pip size={110} mood="wow" bob={false} /></span>
+          <BigEmoji e="🕰️" size={96} className="pop wobble" />
+          <BigEmoji e="📜" size={70} className="pop" />
+        </Row>
+      );
+    case 1:
+      return (
+        <div className="art-col">
+          <RoomComputer size={230} />
+          <Chip color="#b0306a">artificial intelligence</Chip>
+        </div>
+      );
+    case 2:
+      return (
+        <Row gap="1rem" className="align-end">
+          <BigEmoji e="🐢" size={86} className="pop" />
+          <BigEmoji e="📄" size={56} className="pop" />
+          <Pip size={92} mood="think" bob={false} />
+        </Row>
+      );
+    case 3:
+      return (
+        <Row gap="0.7rem">
+          <div className="art-col pop"><BigEmoji e="📚" size={70} /><Chip color="#b0306a">more data</Chip></div>
+          <div className="art-col pop"><BigEmoji e="⚡" size={70} /><Chip color="#b0306a">faster computers</Chip></div>
+          <div className="art-col pop"><BigEmoji e="🧠" size={70} /><Chip color="#b0306a">better learning</Chip></div>
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <Phone size={100}>
+            <Sparkle size={30} />
+          </Phone>
+          <span className="pop"><Pip size={110} mood="happy" bob={false} /></span>
+          <Magnifier size={90} className="pop" />
+        </Row>
+      );
+  }
+}
+
+function Lesson9({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="1rem" className="align-end">
+          <span className="pop"><Pip size={110} mood="happy" bob={false} /></span>
+          <PhotoCard tilt={-4}>
+            <Cat size={110} />
+          </PhotoCard>
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="1rem">
+          <PixelGrid size={160} />
+          <Pip size={96} mood="think" bob={false} />
+        </Row>
+      );
+    case 2:
+      return (
+        <div className="art-col">
+          <svg viewBox="0 0 3 3" width="130" height="130" shapeRendering="crispEdges" aria-hidden="true" className="pop">
+            {["#e2483d", "#e2483d", "#ffd34d", "#e2483d", "#3faa4f", "#e2483d", "#4b9dff", "#e2483d", "#e2483d"].map((c, i) => (
+              <rect key={i} x={i % 3} y={Math.floor(i / 3)} width="1" height="1" fill={c} stroke="#231d4f" strokeWidth="0.06" />
+            ))}
+          </svg>
+          <Chip color="#0b7591">1 square = 1 pixel</Chip>
+        </div>
+      );
+    case 3:
+      return (
+        <Row gap="1rem">
+          <PixelGrid size={150} />
+          <span className="art-neq" aria-hidden="true">&rarr;</span>
+          <BigEmoji e="🍎" size={86} className="pop" />
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="1rem">
+          <PixelGrid size={110} shown={18} />
+          <span className="art-neq" aria-hidden="true">&rarr;</span>
+          <PixelGrid size={110} shown={110} />
+        </Row>
+      );
+  }
+}
+
+function Lesson10({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="1rem" className="align-end">
+          <Computer size={190} />
+          <Chip color="#8a45d0">prompt</Chip>
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="0.6rem">
+          <Pip size={100} mood="think" bob={false} />
+          <BigEmoji e="❓" size={60} className="pop wobble" />
+          <BigEmoji e="👾" size={80} className="pop" />
+          <BigEmoji e="❓" size={60} className="pop wobble" />
+        </Row>
+      );
+    case 2:
+      return (
+        <div className="art-col">
+          <Row gap="0.4rem">
+            <Chip color="#8a45d0">small</Chip>
+            <Chip color="#208644">green</Chip>
+            <Chip color="#8a45d0">3 eyes</Chip>
+          </Row>
+          <span className="pop"><MonsterArt m={{ color: "green", eyes: 3, size: "small", place: "hill" }} label="A small green monster with 3 eyes on a hill" size={150} /></span>
+        </div>
+      );
+    case 3:
+      return (
+        <Row gap="1.2rem">
+          <div className="art-col"><BigEmoji e="🌫️" size={70} /><Chip color="#8a84a8">fuzzy</Chip></div>
+          <div className="art-col"><BigEmoji e="🔍" size={70} /><Chip color="#8a45d0">clear</Chip></div>
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <Person size={120} shirt="#8a45d0" />
+          <span className="hop"><MonsterArt m={{ color: "purple", eyes: 1, size: "big", place: "water" }} label="A big purple monster with 1 eye in the water" size={130} /></span>
+          <Sparkle size={34} className="twinkle" />
+        </Row>
+      );
+  }
+}
+
+function Lesson11({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="1rem" className="align-end">
+          <span className="pop"><Pip size={110} mood="oops" bob={false} /></span>
+          <BigEmoji e="🌀" size={70} className="pop wobble" />
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="1rem">
+          <Magnifier size={120} className="pop" />
+          <BigEmoji e="📝" size={80} />
+        </Row>
+      );
+    case 2:
+      return (
+        <Row gap="0.6rem" className="align-end">
+          <Person grown size={120} shirt="#ff8fc7" hair="#2b1d14" skin="#c98b62" />
+          <Book size={90} color="#b14c16" />
+          <Person size={110} shirt="#b14c16" />
+        </Row>
+      );
+    case 3:
+      return (
+        <div className="art-col">
+          <BigEmoji e="🕷️" size={80} className="pop" />
+          <Row gap="0.4rem">
+            <Chip color="#b14c16">8 legs</Chip>
+            <Chip color="#b14c16">please fix it</Chip>
+          </Row>
+        </div>
+      );
+    default:
+      return (
+        <Row gap="0.7rem">
+          <div className="art-col pop"><BigEmoji e="🔎" size={66} /><Chip color="#b14c16">find it</Chip></div>
+          <div className="art-col pop"><BigEmoji e="📖" size={66} /><Chip color="#b14c16">check it</Chip></div>
+          <div className="art-col pop"><BigEmoji e="🛠️" size={66} /><Chip color="#b14c16">fix it</Chip></div>
+        </Row>
+      );
+  }
+}
+
+function Lesson12({ page }: { page: number }) {
+  switch (page) {
+    case 0:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <span className="pop"><Pip size={110} mood="happy" bob={false} /></span>
+          <BigEmoji e="❓" size={56} className="pop" />
+          <BigEmoji e="💡" size={70} className="pop" />
+          <BookStack size={110} />
+        </Row>
+      );
+    case 1:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <Person size={120} shirt="#2f5fd0" />
+          <BigEmoji e="😴" size={60} className="pop" />
+          <Pip size={96} mood="think" bob={false} />
+        </Row>
+      );
+    case 2:
+      return (
+        <Row gap="1.2rem">
+          <div className="art-col"><BigEmoji e="🤝" size={74} /><Chip color="#208644">helper</Chip></div>
+          <div className="art-col"><BigEmoji e="🛋️" size={74} /><Chip color="#cb4834">doer</Chip></div>
+        </Row>
+      );
+    case 3:
+      return (
+        <Row gap="0.6rem" className="align-end">
+          <Pip size={96} mood="happy" bob={false} />
+          <BigEmoji e="💡" size={56} className="pop" />
+          <span className="art-neq" aria-hidden="true">&rarr;</span>
+          <Person size={120} shirt="#2f5fd0" />
+          <Pencil size={110} />
+        </Row>
+      );
+    default:
+      return (
+        <Row gap="0.8rem" className="align-end">
+          <BigEmoji e="🐉" size={70} className="pop" />
+          <span className="art-neq" aria-hidden="true">+</span>
+          <BigEmoji e="🍕" size={70} className="pop" />
+          <Sparkle size={34} className="twinkle" />
+        </Row>
+      );
+  }
+}
+
 const MAP: Record<string, (p: { page: number }) => React.ReactNode> = {
   "what-is-ai": Lesson1,
   "learning-from-examples": Lesson2,
@@ -487,6 +774,11 @@ const MAP: Record<string, (p: { page: number }) => React.ReactNode> = {
   "ai-can-be-wrong": Lesson5,
   "real-or-made-up": Lesson6,
   "smart-and-safe": Lesson7,
+  "where-did-ai-come-from": Lesson8,
+  "how-ai-sees-pictures": Lesson9,
+  "say-it-clearly": Lesson10,
+  "check-it-fix-it": Lesson11,
+  "ai-learning-helper": Lesson12,
 };
 
 export function StoryArt({ slug, page }: { slug: string; page: number }) {

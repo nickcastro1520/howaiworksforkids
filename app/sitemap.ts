@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { LESSONS } from "@/lib/lessons";
+import { LESSONS, SECTIONS } from "@/lib/lessons";
 import { absoluteUrl, CONTENT_UPDATED } from "@/lib/site";
 
 type Entry = { path: string; og: string; priority: number; freq: "weekly" | "monthly" | "yearly" };
@@ -7,6 +7,8 @@ type Entry = { path: string; og: string; priority: number; freq: "weekly" | "mon
 const PAGES: Entry[] = [
   { path: "/", og: "home", priority: 1, freq: "weekly" },
   { path: "/lessons", og: "lessons", priority: 0.9, freq: "weekly" },
+  { path: SECTIONS[2].path, og: "section-2", priority: 0.85, freq: "weekly" },
+  // Only released lessons. Coming-soon lessons have no page yet, so they stay out.
   ...LESSONS.map((l): Entry => ({ path: `/lessons/${l.slug}`, og: l.slug, priority: 0.8, freq: "monthly" })),
   { path: "/parents", og: "parents", priority: 0.7, freq: "monthly" },
   { path: "/teachers", og: "teachers", priority: 0.7, freq: "monthly" },

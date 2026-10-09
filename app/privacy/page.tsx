@@ -53,10 +53,24 @@ export default function PrivacyPage() {
         kids cannot type open-ended messages to an AI.
       </p>
 
+      <h2>Drawings</h2>
+      <p>
+        Some games let kids draw (for example Pixel Peek and Pip&rsquo;s Idea Machine). Drawings stay on the screen and disappear when you
+        leave the page. They are not saved or sent anywhere.
+      </p>
+
+      <h2>Grown-up missions</h2>
+      <p>
+        Section 2 lessons end with an optional &ldquo;Try it with a grown-up&rdquo; mission: a sample prompt a grown-up can type into their
+        own AI account, if they choose to. This site does not connect to any AI service. The &ldquo;Copy&rdquo; button only puts the prompt
+        text on your device&rsquo;s clipboard. We don&rsquo;t track whether a mission is opened, copied, or done.
+      </p>
+
       <h2>Read aloud</h2>
       <p>
-        &ldquo;Read it to me&rdquo; uses your device&rsquo;s built-in speech feature. It reads the lesson&rsquo;s own story text. Some
-        browsers use an online voice to do this, but it only ever reads our story text, never anything a child typed.
+        &ldquo;Read it to me&rdquo; and the &ldquo;Hear it&rdquo; speaker buttons use your device&rsquo;s built-in speech feature. They read
+        the site&rsquo;s own text: stories, instructions, questions, and answer choices. Some browsers use an online voice to do this, but
+        it only ever reads our text, never anything a child typed.
       </p>
 
       <h2>Tell a grown-up email</h2>
@@ -76,7 +90,11 @@ export default function PrivacyPage() {
           <ul>
             <li>No ads. Advertising features, Google signals, and ad personalization are turned off, and ad consent is set to &ldquo;denied.&rdquo;</li>
             <li>We ask Google to anonymize IP addresses. We never send names, emails, certificate nicknames, or anything a child types.</li>
-            <li>The only custom event is &ldquo;lesson finished,&rdquo; with the lesson number and name. Nothing about who finished it.</li>
+            <li>
+              There are two custom events. &ldquo;Lesson finished&rdquo; records the lesson number and name and whether it was the first time
+              on this device. &ldquo;Teacher kit download&rdquo; records which kit was downloaded and which button was used. Nothing about who
+              did it. Game answers, drawings, and grown-up missions are not tracked.
+            </li>
             <li>Google Analytics sets first-party cookies to count visits. You can block them with your browser&rsquo;s settings or a
               content blocker, and the lessons will still work the same.</li>
           </ul>

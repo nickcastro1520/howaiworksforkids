@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { LessonTiles } from "@/components/LessonTiles";
 import { Pip } from "@/components/Pip";
 import { courseJsonLd } from "@/lib/seo";
+import { LESSONS, SECTIONS, SECTION_1, SECTION_2 } from "@/lib/lessons";
 
 const STEPS = [
   { n: 1, title: "Read", text: "A short picture story with Pip. Tap to hear it read out loud." },
@@ -54,7 +55,7 @@ export default function Home() {
               <span>Find out how real AI works.</span>
             </h1>
             <p className="hero-lead">
-              Meet Pip, a baby AI who knows almost nothing. In 7 quick games, you&rsquo;ll teach Pip, test Pip, and catch
+              Meet Pip, a baby AI who knows almost nothing. In {SECTION_1.length} quick games, you&rsquo;ll teach Pip, test Pip, and catch
               Pip&rsquo;s mistakes. That&rsquo;s exactly how real AI works!
             </p>
             <div className="hero-ctas">
@@ -97,11 +98,32 @@ export default function Home() {
         <div className="wrap">
           <div className="section-head">
             <h2 className="section-title">
-              7 games. <span className="hl hl-mint">7 big ideas.</span>
+              {SECTION_1.length} games. <span className="hl hl-mint">{SECTION_1.length} big ideas.</span>
             </h2>
-            <p className="section-sub">Each one takes about 5 minutes. Do them in order, or jump around.</p>
+            <p className="section-sub">
+              {SECTIONS[1].kicker}: {SECTIONS[1].name}. Each one takes about 5 minutes. Do them in order, or jump around.
+            </p>
           </div>
-          <LessonTiles />
+          <LessonTiles section={1} />
+          <div className="section-head s2-head">
+            <p className="small-cap">
+              New &middot; {SECTIONS[2].kicker}
+            </p>
+            <h2 className="section-title">
+              {SECTIONS[2].name}: <span className="hl hl-pink">{SECTION_2.length} more games</span>
+            </h2>
+            <p className="section-sub">
+              Where AI came from, how AI sees pictures, asking clearly, checking answers, and using AI as a helper. Each ends with an optional
+              mission to try with a grown-up. More lessons coming soon.
+            </p>
+          </div>
+          <LessonTiles section={2} />
+          <p className="center">
+            <Link href={SECTIONS[2].path} className="btn btn-big btn-sun">
+              See the {SECTIONS[2].name} trail &rarr;
+            </Link>
+          </p>
+          <p className="muted center">{LESSONS.length} free lessons so far, in two sections.</p>
         </div>
       </section>
 

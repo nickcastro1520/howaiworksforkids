@@ -4,6 +4,7 @@ import { Analytics } from "@/components/Analytics";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
+import { LESSONS } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
 import { siteGraph } from "@/lib/seo";
 import { NICK, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -25,7 +26,7 @@ const display = Fredoka({
 
 const HOME_TITLE = "How Does AI Work? Free AI Lessons & Games for Kids (Ages 6–10)";
 const HOME_DESCRIPTION =
-  "Teach kids about AI with 7 free, hands-on lessons and games. Kids 6–10 teach a tiny AI named Pip and see how real AI learns and makes mistakes.";
+  `Teach kids about AI with ${LESSONS.length} free, hands-on lessons and games. Kids 6–10 teach a tiny AI named Pip and see how real AI learns and makes mistakes.`;
 
 /** Google Search Console HTML-tag verification. Only rendered when NEXT_PUBLIC_GSC_VERIFICATION is set. */
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GSC_VERIFICATION?.trim();

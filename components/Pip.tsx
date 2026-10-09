@@ -4,6 +4,8 @@ type Props = {
   mood?: Mood;
   size?: number;
   lights?: number;
+  /** How many lights Pip's belly shows (one per lesson in the section). */
+  slots?: number;
   wave?: boolean;
   bob?: boolean;
   look?: { x: number; y: number };
@@ -82,6 +84,7 @@ export function Pip({
   mood = "happy",
   size = 200,
   lights = 0,
+  slots = 7,
   wave = false,
   bob = true,
   look,
@@ -132,15 +135,15 @@ export function Pip({
       {/* body */}
       <rect x="58" y="150" width="84" height="70" rx="28" fill="url(#pipShell)" stroke={OUT} strokeWidth="4" />
       <rect x="74" y="168" width="52" height="30" rx="12" fill="#231d4f" />
-      {Array.from({ length: 7 }).map((_, i) => {
+      {Array.from({ length: slots }).map((_, i) => {
         const on = i < lights;
-        const cx = 81 + i * 6.3;
+        const cx = slots > 1 ? 81 + i * (37.8 / (slots - 1)) : 100;
         return (
           <circle
             key={i}
             cx={cx}
             cy="183"
-            r="2.6"
+            r={slots > 7 ? 2.2 : 2.6}
             fill={on ? "#ffd34d" : "#4a4380"}
             className={on ? "pip-light-on" : ""}
           />

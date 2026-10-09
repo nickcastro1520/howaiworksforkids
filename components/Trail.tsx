@@ -1,43 +1,78 @@
 "use client";
 
 import Link from "next/link";
-import { LESSONS } from "@/lib/lessons";
+import { COMING_SOON, SECTIONS, SECTION_1, sectionLessons, type SectionId } from "@/lib/lessons";
 import { useProgress } from "@/lib/progress";
 import { Badge } from "./Badge";
 import { Pip } from "./Pip";
 
-export function Trail() {
+/** A wiggly dotted path that fits any number of stops. */
+function trailPath(stops: number): string {
+  let d = "M30 20 C 80 60, 80 90, 70 120";
+  for (let k = 1; k < stops; k++) {
+    const y = 120 + k * 100;
+    d += k % 2 ? ` S 20 ${y - 30}, 30 ${y}` : ` S 80 ${y - 30}, 70 ${y}`;
+  }
+  return d + ` S 60 ${120 + stops * 100 - 40}, 50 ${120 + stops * 100 - 20}`;
+}
+
+export function Trail({ section = 1 }: { section?: SectionId }) {
   const { done, isDone, reset } = useProgress();
-  const n = LESSONS.filter((l) => isDone(l.slug)).length;
-  const nextUp = LESSONS.find((l) => !isDone(l.slug));
+  const info = SECTIONS[section];
+  const lessons = sectionLessons(section);
+  const soon = COMING_SOON.filter((c) => c.section === section);
+  const total = info.planned;
+  const n = lessons.filter((l) => isDone(l.slug)).length;
+  const nextUp = lessons.find((l) => !isDone(l.slug));
+  const stops = lessons.length + soon.length;
+  const height = 120 + stops * 100;
+  const s1Done = SECTION_1.every((l) => isDone(l.slug));
+  const released = lessons.length;
+
   return (
     <>
+      {section === 2 && !s1Done && (
+        <div className="soft-lock" role="note">
+          <span className="soft-lock-emoji" aria-hidden="true">
+            🧭
+          </span>
+          <p>
+            <b>We suggest Section 1 first.</b> Section 2 builds on what you taught Pip there. But it&rsquo;s not locked: you can start here
+            if you like!{" "}
+            <Link href={SECTIONS[1].path}>Go to Section 1</Link>
+          </p>
+        </div>
+      )}
       <div className="trail-hud">
-        <Pip mood={n === 7 ? "proud" : n > 0 ? "happy" : "wow"} size={120} lights={n} />
+        <Pip mood={n === released ? "proud" : n > 0 ? "happy" : "wow"} size={120} lights={n} slots={total} />
         <div>
-          <p className="small-cap">Pip&rsquo;s brain</p>
+          <p className="small-cap">
+            {info.kicker}: {info.name}
+          </p>
           <p className="hud-big">
-            {n} of 7 lights on
+            {n} of {total} lights on
           </p>
           <div className="hud-bar" aria-hidden="true">
-            <span style={{ width: `${(n / 7) * 100}%` }} />
+            <span style={{ width: `${(n / total) * 100}%` }} />
           </div>
           {nextUp ? (
             <Link href={`/lessons/${nextUp.slug}`} className="btn btn-go">
-              {n === 0 ? "Start with lesson 1" : `Keep going: lesson ${nextUp.number}`} &rarr;
+              {n === 0 ? `Start with lesson ${lessons[0].number}` : `Keep going: lesson ${nextUp.number}`} &rarr;
             </Link>
-          ) : (
+          ) : section === 1 ? (
             <Link href="/finish" className="btn btn-sun">
               Get your certificate &rarr;
             </Link>
+          ) : (
+            <p className="hud-soon">You finished every lesson so far! More are coming soon.</p>
           )}
         </div>
       </div>
 
-      <ol className="trail">
-        <svg className="trail-path" viewBox="0 0 100 700" preserveAspectRatio="none" aria-hidden="true">
+      <ol className="trail" style={{ "--trail-h": `${height}px` } as React.CSSProperties}>
+        <svg className="trail-path" viewBox={`0 0 100 ${height}`} preserveAspectRatio="none" aria-hidden="true">
           <path
-            d="M30 20 C 80 60, 80 90, 70 120 S 20 190, 30 220 S 80 290, 70 320 S 20 390, 30 420 S 80 490, 70 520 S 20 590, 30 620 S 60 680, 50 700"
+            d={trailPath(stops)}
             fill="none"
             stroke="#d9cfee"
             strokeWidth="2.4"
@@ -46,7 +81,7 @@ export function Trail() {
             vectorEffect="non-scaling-stroke"
           />
         </svg>
-        {LESSONS.map((l, i) => {
+        {lessons.map((l, i) => {
           const isOn = isDone(l.slug);
           const isNext = nextUp?.slug === l.slug;
           return (
@@ -70,18 +105,51 @@ export function Trail() {
             </li>
           );
         })}
-        <li className="stop stop-finish">
-          <Link href="/finish" className="finish-flag">
-            <svg viewBox="0 0 60 70" width="56" height="64" aria-hidden="true">
-              <path d="M10 66 V6" stroke="#231d4f" strokeWidth="5" strokeLinecap="round" />
-              <path d="M12 8 H52 L44 22 L52 36 H12 Z" fill="#ffd34d" stroke="#231d4f" strokeWidth="4" strokeLinejoin="round" />
-            </svg>
-            <span>
-              <b>Finish line</b>
-              <small>Your certificate</small>
-            </span>
-          </Link>
-        </li>
+        {soon.map((c, k) => (
+          <li key={c.number} className={`stop ${(lessons.length + k) % 2 ? "stop-right" : "stop-left"} is-soon`}>
+            <div className="stop-card stop-soon">
+              <span className="stop-badge soon-badge" aria-hidden="true">
+                🔒
+              </span>
+              <span className="stop-body">
+                <span className="stop-meta">
+                  Lesson {c.number} &middot; <b className="stop-soon-tag">Coming soon</b>
+                </span>
+                <span className="stop-title">{c.title}</span>
+                <span className="stop-game">
+                  Game: <b>{c.game}</b>
+                </span>
+              </span>
+            </div>
+          </li>
+        ))}
+        {section === 1 ? (
+          <li className="stop stop-finish">
+            <Link href="/finish" className="finish-flag">
+              <svg viewBox="0 0 60 70" width="56" height="64" aria-hidden="true">
+                <path d="M10 66 V6" stroke="#231d4f" strokeWidth="5" strokeLinecap="round" />
+                <path d="M12 8 H52 L44 22 L52 36 H12 Z" fill="#ffd34d" stroke="#231d4f" strokeWidth="4" strokeLinejoin="round" />
+              </svg>
+              <span>
+                <b>Finish line</b>
+                <small>Your certificate</small>
+              </span>
+            </Link>
+          </li>
+        ) : (
+          <li className="stop stop-finish">
+            <div className="finish-flag is-soon">
+              <svg viewBox="0 0 60 70" width="56" height="64" aria-hidden="true">
+                <path d="M10 66 V6" stroke="#8a84a8" strokeWidth="5" strokeLinecap="round" />
+                <path d="M12 8 H52 L44 22 L52 36 H12 Z" fill="#e6e1f3" stroke="#8a84a8" strokeWidth="4" strokeLinejoin="round" />
+              </svg>
+              <span>
+                <b>Final quiz + certificate</b>
+                <small>Coming soon</small>
+              </span>
+            </div>
+          </li>
+        )}
       </ol>
       {done.length > 0 && (
         <p className="center">
@@ -89,7 +157,7 @@ export function Trail() {
             type="button"
             className="link-btn"
             onClick={() => {
-              if (window.confirm("Start over? This turns off all of Pip's lights on this device.")) reset();
+              if (window.confirm("Start over? This turns off all of Pip's lights on this device, in every section.")) reset();
             }}
           >
             Start over

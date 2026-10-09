@@ -11,6 +11,8 @@ export const GLOSSARY = [
   { word: "Made-up answer", means: "When AI says something wrong but sounds sure. Grown-ups call this a hallucination.", lesson: "ai-can-be-wrong", color: "#a66500" },
   { word: "AI-made picture", means: "A picture an AI made. It can look real, but it never happened. A fake video is called a deepfake.", lesson: "real-or-made-up", color: "#c83d89" },
   { word: "Private info", means: "Things that tell who you are or where you are: your full name, address, school, and passwords. Keep them secret.", lesson: "smart-and-safe", color: "#208644" },
+  { word: "Pixel", say: "pik-sul", means: "One tiny square of color. Pictures on a screen are made of lots of pixels. AI looks at pixels to guess what's in a picture.", lesson: "how-ai-sees-pictures", color: "#0b7591" },
+  { word: "Prompt", means: "What you ask an AI to do. A clear prompt with details gets a better answer.", lesson: "say-it-clearly", color: "#8a45d0" },
 ];
 
 /** Anchor id for a word card on /glossary, e.g. "Lopsided data" -> "lopsided-data". */
