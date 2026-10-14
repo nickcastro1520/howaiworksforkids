@@ -14,6 +14,19 @@ export const NICK = {
   email: "nickcastro1520@gmail.com",
 } as const;
 
+/**
+ * Nick's picture book, shown on grown-up pages only (Parents, Teachers), never inside kid lessons.
+ * URL verified 2026-10-13: Amazon paperback listing by Nicolas Castro and Nancy Castro
+ * (ISBN-13 979-8252610078). The BookCard hides itself if `url` is ever emptied.
+ */
+export const BOOK = {
+  title: "The Smart Soccer Ball Mystery",
+  subtitle: "Machine Learning for Kids \u2013 Book 1",
+  authors: "Nick Castro and Nancy Castro",
+  url: "https://www.amazon.com/dp/B0GYH3GPFZ",
+  store: "Amazon",
+} as const;
+
 export const PROGRESS_KEY = "hawfk.progress.v2";
 /** The final quiz result on this device: { score, missed: conceptId[] }. Never sent anywhere. */
 export const QUIZ_KEY = "hawfk-quiz";

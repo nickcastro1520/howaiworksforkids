@@ -7,6 +7,7 @@ import { saveQuiz, useProgress, useQuizResult } from "@/lib/progress";
 import { FINAL_QUIZ_SHOWN as QUIZ, QUIZ_TOTAL, grownupNote } from "@/lib/quiz";
 import { stopSpeaking } from "@/lib/speech";
 import { Confetti } from "./Confetti";
+import { NextLessonCard } from "./Journey";
 import { Pip } from "./Pip";
 import { HearHowToPlay, SayLine } from "./Speak";
 import { TellGrownup } from "./TellGrownup";
@@ -35,6 +36,7 @@ export function FinalQuiz() {
   const top = useRef<HTMLDivElement>(null);
   const s2Done = SECTION_2.filter((l) => done.includes(l.slug)).length;
   const s2All = s2Done === SECTION_2.length;
+  const s2Next = SECTION_2.find((l) => !done.includes(l.slug));
   const item = QUIZ[i];
 
   const scrollTop = () => requestAnimationFrame(() => top.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -245,16 +247,13 @@ export function FinalQuiz() {
         )}
       </div>
 
+      {!s2All && s2Next && <NextLessonCard lesson={s2Next} kicker="Finish Section 2 for your certificate" />}
       <div className="finish-actions">
         {s2All ? (
           <Link href="/finish/section-2" className="btn btn-big btn-sun">
             Get your Section 2 certificate &rarr;
           </Link>
-        ) : (
-          <Link href={SECTIONS[2].path} className="btn btn-big btn-sun">
-            Finish Section 2 for your certificate &rarr;
-          </Link>
-        )}
+        ) : null}
         <button type="button" className="btn btn-plain" onClick={start}>
           Take the quiz again
         </button>

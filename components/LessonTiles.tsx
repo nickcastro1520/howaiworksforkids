@@ -17,7 +17,7 @@ function PixelFish() {
   );
 }
 
-function Mini({ slug }: { slug: string }) {
+export function LessonArt({ slug }: { slug: string }) {
   switch (slug) {
     case "what-is-ai":
       return <Computer size={170} />;
@@ -139,7 +139,7 @@ export function LessonTiles({ section = 1 }: { section?: SectionId }) {
             {isDone(l.slug) && <span className="tile-done">Done &#10003;</span>}
           </span>
           <span className="tile-art" aria-hidden="true">
-            <Mini slug={l.slug} />
+            <LessonArt slug={l.slug} />
           </span>
           <span className="tile-title">{l.title}</span>
           <span className="tile-game">

@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { LessonPlayer } from "@/components/LessonPlayer";
 import { GLOSSARY, termId } from "@/lib/glossary";
-import { getLesson, LESSONS, SECTIONS, sectionLessons } from "@/lib/lessons";
+import { getLesson, LESSONS, SECTIONS, SECTION_2, sectionLessons } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
 import { lessonJsonLd, lessonSeo, pageMeta, videoJsonLd } from "@/lib/seo";
 
@@ -103,9 +103,9 @@ export default async function LessonPage({ params }: Props) {
               <b>{next.title}</b>
             </Link>
           ) : lesson.section === 1 ? (
-            <Link href="/finish" className="pn-card pn-next">
-              <small>Finish line &rarr;</small>
-              <b>Get your certificate</b>
+            <Link href={`/lessons/${SECTION_2[0].slug}`} className="pn-card pn-next" style={{ "--lc": SECTION_2[0].color } as React.CSSProperties}>
+              <small>Section 2 &middot; Lesson {SECTION_2[0].number} &rarr;</small>
+              <b>{SECTION_2[0].title}</b>
             </Link>
           ) : (
             <Link href="/quiz" className="pn-card pn-next">

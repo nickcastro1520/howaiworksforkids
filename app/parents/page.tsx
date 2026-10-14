@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BookCard } from "@/components/BookCard";
 import { JsonLd } from "@/components/JsonLd";
 import { GA_ENABLED } from "@/lib/analytics";
 import { LESSONS, SECTIONS, SECTION_1, SECTION_2, numberWord, sectionLessons } from "@/lib/lessons";
@@ -9,9 +10,9 @@ import { ogAlt } from "@/lib/og";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = pageMeta({
-  title: "Teach Kids About AI: Free Guide for Parents & Teachers",
+  title: "Teach Kids About AI: Free Parent Guide & FAQ",
   description:
-    `How to teach kids about AI at home or in an elementary classroom: what the ${LESSONS.length} free lessons cover, how to use them, safety, privacy, and FAQ.`,
+    `How to teach kids about AI at home: what the ${LESSONS.length} free AI lessons for kids cover, how long they take, how to talk about them, safety, privacy, and FAQ.`,
   path: "/parents",
   ogKey: "parents",
   ogAlt: ogAlt("parents"),
@@ -195,9 +196,11 @@ export default function ParentsPage() {
           </Link>
         </section>
 
+        <BookCard />
+
         <section aria-labelledby="faq">
           <h2 id="faq" className="section-title">
-            Questions
+            Questions parents ask
           </h2>
           <div className="faq">
             {FAQ.map((f) => (

@@ -3,11 +3,13 @@ import { TesterCards } from "@/components/TesterCards";
 import { Glorb, Sparkle } from "@/components/art/Bits";
 import { Book } from "@/components/art/Props";
 import { HeroPip } from "@/components/HeroPip";
+import { BadgeShelf, ProgressLine, StartButton } from "@/components/Journey";
 import { JsonLd } from "@/components/JsonLd";
 import { LessonTiles } from "@/components/LessonTiles";
 import { Pip } from "@/components/Pip";
-import { courseJsonLd } from "@/lib/seo";
+import { courseJsonLd, faqJsonLd, TOTAL_MINUTES } from "@/lib/seo";
 import { LESSONS, SECTIONS, SECTION_1, SECTION_2 } from "@/lib/lessons";
+import { SITE_NAME } from "@/lib/site";
 
 const STEPS = [
   { n: 1, title: "Read", text: "A short picture story with Pip. Tap to hear it read out loud." },
@@ -21,6 +23,30 @@ const PROMISES = [
   { title: "No accounts", text: "No sign-up, no names, no emails from kids." },
   { title: "No chatbot", text: "Kids never chat with a live AI here. Every game runs right in the page." },
   { title: "Stays on your device", text: "Progress is saved in this browser only. We never see it." },
+];
+
+/** Visible on the page below, so FAQPage schema is accurate. */
+const HOME_FAQ = [
+  {
+    q: "How does this site teach how AI works to kids?",
+    a: "Kids don\u2019t just hear that AI learns from examples. They teach a tiny AI named Pip, test it, and fix its mistakes. The games run real, very small versions of real ideas, like a nearest-neighbor sorter and a next-word counter, right in the web page.",
+  },
+  {
+    q: "Are the AI lessons for kids really free?",
+    a: `Yes. All ${LESSONS.length} lessons, the final quiz, both certificates, and the Lesson 1 teacher kit are free. There are no ads, no accounts, and no in-app purchases.`,
+  },
+  {
+    q: "What ages is it for, and how long does it take?",
+    a: `Ages 6 to 10. Each lesson takes about 5 to 9 minutes, about ${Math.round(TOTAL_MINUTES / 5) * 5} minutes for all ${LESSONS.length}. Kids who can\u2019t read yet can tap the speaker buttons to hear everything read aloud.`,
+  },
+  {
+    q: "Can teachers use these AI lessons in class?",
+    a: "Yes. There are no logins, so the lessons work on a projector, shared tablets, or Chromebooks. The Teachers page has a free, print-and-go AI lesson plan for elementary classrooms.",
+  },
+  {
+    q: "Does my child chat with an AI here?",
+    a: "No. There is no chatbot and nothing your child types is sent to an AI. Progress is saved only in this browser.",
+  },
 ];
 
 function StepIcon({ n }: { n: number }) {
@@ -40,6 +66,7 @@ export default function Home() {
   return (
     <>
       <JsonLd data={courseJsonLd()} />
+      <JsonLd data={faqJsonLd(HOME_FAQ)} />
 
       <section className="hero">
         <div className="stars" aria-hidden="true" />
@@ -59,19 +86,27 @@ export default function Home() {
               Pip&rsquo;s mistakes. That&rsquo;s exactly how real AI works!
             </p>
             <div className="hero-ctas">
-              <Link href="/lessons/what-is-ai" className="btn btn-huge btn-sun">
-                Start lesson 1 &rarr;
-              </Link>
-              <Link href="/lessons" className="btn btn-huge btn-ghost-light">
-                See the trail
+              <StartButton />
+              <Link href="/lessons" className="btn btn-big btn-ghost-light">
+                See all lessons
               </Link>
             </div>
+            <ProgressLine light />
           </div>
           <HeroPip />
         </div>
         <svg className="hero-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
           <path d="M0 40 C240 90 480 0 720 30 C960 60 1200 10 1440 40 V90 H0Z" fill="#fff8ec" />
         </svg>
+      </section>
+
+      <section className="shelf" aria-labelledby="my-badges">
+        <div className="wrap">
+          <h2 id="my-badges" className="section-title">
+            Your <span className="hl">badges</span>
+          </h2>
+          <BadgeShelf />
+        </div>
       </section>
 
       <section className="how">
@@ -170,15 +205,34 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="home-faq" aria-labelledby="home-faq">
+        <div className="wrap narrow">
+          <p className="small-cap">For grown-ups</p>
+          <h2 id="home-faq" className="section-title">
+            How AI works for kids: questions from grown-ups
+          </h2>
+          <p className="section-sub">
+            {SITE_NAME} is a free set of AI lessons for kids. It&rsquo;s a simple way to teach kids about AI at home or in an elementary classroom.
+            More in the <Link href="/parents">parent guide</Link> and on the <Link href="/teachers">Teachers page</Link>.
+          </p>
+          <div className="faq">
+            {HOME_FAQ.map((f) => (
+              <details key={f.q}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="final-cta">
         <div className="wrap final-inner">
           <Pip mood="wow" size={150} wave />
           <div>
             <h2 className="section-title">Pip is ready to learn.</h2>
             <p className="section-sub">Are you ready to teach?</p>
-            <Link href="/lessons/what-is-ai" className="btn btn-huge btn-go">
-              Let&rsquo;s go! &rarr;
-            </Link>
+            <StartButton className="btn-go" />
           </div>
         </div>
       </section>

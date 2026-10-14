@@ -1179,3 +1179,77 @@ button.mm-chip:hover { background: #fde4df; }
 .lesson-video-credit { margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--ink-2); }
 @media (max-width: 480px) { .lesson-video { padding: 0.8rem; } .lesson-video-play { width: 68px; height: 68px; } }
 @media print { .lesson-video-frame video, .lesson-video-play { display: none; } }
+
+/* Journey: start button, progress, badge shelf, next-lesson card */
+.btn-start { flex-direction: column; align-items: flex-start; gap: 0.05rem; line-height: 1.15; text-align: left; min-width: min(100%, 300px); }
+.btn-start-main { font-size: 1.3rem; }
+.btn-start-sub { font-size: 0.95rem; font-weight: 800; }
+@media (max-width: 480px) { .hero-ctas .btn, .hud-actions .btn { width: 100%; } .btn-start { align-items: center; text-align: center; } }
+.progress-line { margin-top: 1rem; }
+.progress-line p { margin: 0; font-weight: 800; }
+.progress-line .hud-bar { margin: 0.35rem 0 0; }
+.progress-line.is-light p { color: #ece8ff; }
+.progress-line.is-light b { color: var(--sun); }
+.hud-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; }
+@media (max-width: 560px) { .trail-hud { padding: 1rem; gap: 0.6rem; } .trail-hud > .pip { width: 84px; height: auto; } .trail-hud .hud-big { font-size: 1.5rem; } }
+
+.shelf { padding: 2.5rem 0 0.5rem; }
+.badge-shelf { background: #fff; border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.1rem 1.2rem 1.3rem; margin-top: 1rem; }
+.badge-shelf .progress-line { margin-top: 0; }
+.badge-shelf .hud-bar { width: 100%; max-width: 520px; }
+.badge-shelf-note { margin: 0.5rem 0 0.8rem; color: var(--ink-2); font-weight: 700; }
+.badge-shelf-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 0.4rem; }
+.badge-shelf-item { display: flex; flex-direction: column; align-items: center; min-height: 48px; min-width: 48px; padding: 0.2rem; border-radius: 16px; text-decoration: none; color: var(--ink-2); font-weight: 900; font-size: 0.85rem; }
+.badge-shelf-item:hover, .badge-shelf-item:focus-visible { background: var(--paper); }
+.badge-shelf-item.is-earned { color: var(--ink); }
+
+.next-card { display: flex; align-items: center; gap: 1rem; width: min(100%, 620px); margin: 1.1rem auto 0; text-decoration: none; color: #fff; background: var(--lc, var(--grape)); border: 3px solid var(--ink); border-radius: 26px; box-shadow: 0 6px 0 var(--ink); padding: 0.8rem 1.1rem 0.8rem 0.8rem; transition: transform 0.15s; text-align: left; }
+.next-card:hover, .next-card:focus-visible { transform: translateY(-3px); }
+.next-card:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.next-card-art { flex: none; width: 112px; height: 96px; border-radius: 18px; border: 3px solid var(--ink); background: var(--lt, #fff); display: grid; place-items: center; overflow: hidden; }
+.next-card-art > * { zoom: 0.55; }
+.next-card-body { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.next-card-kicker { font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.9; }
+.next-card-title { font-family: var(--font-display-stack); font-size: clamp(1.25rem, 3.6vw, 1.6rem); line-height: 1.15; }
+.next-card-go { margin-top: 0.35rem; align-self: flex-start; background: var(--sun); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; padding: 0.35rem 1rem; font-weight: 900; min-height: 44px; display: inline-flex; align-items: center; }
+.next-card.is-secondary { background: #fff; color: var(--ink); box-shadow: 0 4px 0 var(--ink); }
+@media (max-width: 420px) { .next-card { gap: 0.7rem; padding: 0.7rem; } .next-card-art { width: 84px; height: 80px; } .next-card-art > * { zoom: 0.42; } }
+@media (prefers-reduced-motion: reduce) { .next-card { transition: none; } }
+
+.section-end { margin: 1.2rem auto 0; width: min(100%, 620px); background: #fff7d6; border: 3px dashed var(--ink); border-radius: 22px; padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.7rem; text-align: center; }
+.section-end-title { margin: 0; font-family: var(--font-display-stack); font-size: 1.4rem; }
+.celebrate .progress-line { width: min(100%, 360px); margin: 0.6rem auto 0; text-align: center; }
+.celebrate .progress-line .hud-bar { width: 100%; }
+.celebrate-actions { margin-top: 1rem; }
+
+/* Grown-up pages: book card */
+.book-card { display: flex; flex-wrap: wrap; gap: 1.2rem 1.6rem; align-items: center; background: #fff; border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.3rem 1.5rem; margin: 2.5rem 0; }
+.book-card-art { flex: none; filter: drop-shadow(0 6px 0 rgba(35,29,79,0.18)); }
+.book-card-body { flex: 1 1 280px; display: flex; flex-direction: column; align-items: flex-start; gap: 0.55rem; }
+.book-card-body p { margin: 0; }
+.book-card-title { margin: 0; font-size: clamp(1.4rem, 3.5vw, 1.9rem); line-height: 1.15; }
+.book-card-title span { display: block; font-size: 0.6em; color: var(--ink-2); margin-top: 0.2rem; }
+.book-card-note { font-size: 0.9rem; color: var(--ink-2); font-weight: 700; }
+@media (max-width: 480px) { .book-card { padding: 1rem; } .book-card .btn { width: 100%; } }
+@media print { .book-card { display: none; } }
+.home-faq { padding: 3rem 0 1rem; }
+.faq details { padding: 0 1.1rem; }
+.faq summary { padding: 0.85rem 0; min-height: 48px; }
+.faq p { margin: 0 0 0.9rem; }
+.next-card-go { min-height: 48px; }
+.trail-hud .hud-text { min-width: 0; }
+@media (max-width: 560px) {
+  .trail-hero { padding: 1.3rem 0 1rem; }
+  .trail-hero .page-lead { font-size: 1.05rem; }
+  .trail-hud { flex-wrap: nowrap; align-items: flex-start; margin-bottom: 1.4rem; }
+  .trail-hud > :first-child { flex: none; width: 70px !important; height: auto !important; }
+  .trail-hud .btn-start, .trail-hud .btn-huge { width: 100%; }
+  .trail-hud .hud-bar { width: 100%; }
+}
+.trail-hud .hud-text { flex: 1 1 260px; }
+.btn-start { border-radius: 26px; }
+@media (max-width: 560px) {
+  .trail-hud { flex-direction: column; align-items: stretch; }
+  .trail-hud > :first-child { display: none; }
+}
+@media (max-width: 560px) { .celebrate-badge svg { width: 120px; height: auto; } }

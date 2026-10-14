@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BookCard } from "@/components/BookCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { KitDownload } from "@/components/KitDownload";
@@ -9,9 +10,9 @@ import { pageMeta, teacherKitJsonLd } from "@/lib/seo";
 import { KIT, KIT_CONTENTS, KIT_PREVIEWS } from "@/lib/teacherKit";
 
 export const metadata: Metadata = pageMeta({
-  title: "Free AI Lesson Plan for Elementary Teachers (Ages 6–10)",
+  title: "AI Lesson Plans for Elementary: Free Teacher Kit (Ages 6–10)",
   description:
-    "A free, print-and-go Lesson 1 teacher kit: a 35-minute guide, unplugged card sort, K–2 and 3–5 worksheets, answer key, and parent letter. No sign-up.",
+    "Free AI lesson plans for elementary classrooms: a print-and-go Lesson 1 kit (35-minute guide, card sort, K–2 and 3–5 worksheets) plus 15 free lessons. No sign-up.",
   path: "/teachers",
   ogKey: "teachers",
   ogAlt: ogAlt("teachers"),
@@ -110,7 +111,7 @@ export default function TeachersPage() {
           <h1 className="page-title">Teach how AI works, with nothing to set up.</h1>
           <p className="page-lead">
             {numberWord(LESSONS.length, true)} free, hands-on lessons for ages 6&ndash;10. Kids teach a tiny AI named Pip, watch it guess, and fix it when it&rsquo;s wrong.
-            Start with the free print-and-go kit for Lesson 1.
+            Start with the free print-and-go Lesson 1 kit, an AI lesson plan for elementary classrooms (K&ndash;5).
           </p>
           <p className="grownup-note">This page is for grown-ups. Kids can head to the <Link href="/lessons">lesson trail</Link>.</p>
         </div>
@@ -249,6 +250,8 @@ export default function TeachersPage() {
             </div>
           </div>
         </section>
+
+        <BookCard />
 
         <section className="teachers-end">
           <div>
