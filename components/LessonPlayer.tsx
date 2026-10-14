@@ -10,6 +10,8 @@ import { NextLessonCard, ProgressLine } from "./Journey";
 import { StoryArt } from "./art/StoryArt";
 import { Badge } from "./Badge";
 import { Confetti } from "./Confetti";
+import { BonusLink } from "./bonus/BonusLink";
+import { play } from "@/lib/sound";
 import { Pip } from "./Pip";
 import { LessonVideo } from "./LessonVideo";
 import { MissionCard } from "./MissionCard";
@@ -147,7 +149,10 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
   function choose(i: number) {
     if (right) return;
     setPicked(i);
-    if (i !== item.answer) setWrong((w) => [...w, i]);
+    if (i !== item.answer) {
+      setWrong((w) => [...w, i]);
+      play("oops");
+    } else play("correct");
   }
 
   return (
@@ -225,6 +230,7 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
   const lights = Math.max(doneHere, 1);
   const allDone = inSection.every((l) => done.includes(l.slug));
   // Always offer somewhere to go: the next lesson, and the certificate or quiz when a section is done.
+  useEffect(() => play("badge"), []);
   const { next: nxt, sectionEnd } = afterBadge(lesson, done.includes(lesson.slug) ? done : [...done, lesson.slug], quiz !== null);
   return (
     <section className="celebrate" aria-label="You earned a badge">
@@ -248,6 +254,7 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
           <Link className={`btn btn-huge ${nxt && sectionEnd.section === 1 ? "btn-sun" : "btn-go"}`} href={sectionEnd.href}>
             {sectionEnd.label} &rarr;
           </Link>
+          <BonusLink section={sectionEnd.section} />
         </div>
       )}
       {nxt && (

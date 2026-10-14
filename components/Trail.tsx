@@ -7,6 +7,7 @@ import { Badge } from "./Badge";
 import { ProgressLine } from "./Journey";
 import { SectionTabs } from "./SectionTabs";
 import { Pip } from "./Pip";
+import { BonusLink } from "./bonus/BonusLink";
 
 /** A wiggly dotted path that fits any number of stops. */
 function trailPath(stops: number): string {
@@ -163,6 +164,7 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
           </li>
         )}
       </ol>
+      <BonusLink section={section} className="trail-bonus" />
       {done.length > 0 && (
         <p className="center">
           <button
