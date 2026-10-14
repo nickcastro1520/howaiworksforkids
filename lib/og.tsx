@@ -69,6 +69,13 @@ const PAGES: Record<string, OgCard> = {
     alt: "About Nick Castro, creator of How AI Works for Kids.",
     accent: "#79f2da",
   },
+  "how-i-built-this": {
+    kicker: "For grown-ups",
+    title: "How I built this",
+    sub: "Next.js, AI tools, tests, and two kid testers.",
+    alt: "How I built How AI Works for Kids: the problem, the tools, and the kid-safe decisions, by Nick Castro.",
+    accent: "#ffd34d",
+  },
   "tested-by-kids": {
     kicker: "Tested by real kids",
     title: "Kid-tested lessons",

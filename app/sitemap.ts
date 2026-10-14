@@ -16,6 +16,7 @@ const PAGES: Entry[] = [
   { path: "/glossary", og: "glossary", priority: 0.6, freq: "monthly" },
   { path: "/tested-by-kids", og: "tested-by-kids", priority: 0.4, freq: "monthly" },
   { path: "/about", og: "about", priority: 0.4, freq: "yearly" },
+  { path: "/how-i-built-this", og: "how-i-built-this", priority: 0.5, freq: "monthly" },
   { path: "/privacy", og: "privacy", priority: 0.3, freq: "yearly" },
 ];
 

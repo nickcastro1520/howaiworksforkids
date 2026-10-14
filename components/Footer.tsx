@@ -21,10 +21,15 @@ export function Footer() {
           <Link href="/teachers">Teacher kit</Link>
           <Link href="/tested-by-kids">Tested by kids</Link>
           <Link href="/about">About</Link>
+          <Link href="/how-i-built-this">How I built this</Link>
           <Link href="/privacy">Privacy</Link>
         </nav>
         <p className="footer-small">
-          Made in {NICK.city} by <a href={NICK.site}>{NICK.name}</a>. Ages 6&ndash;10.
+          Made by{" "}
+          <a href={NICK.site} className="footer-maker">
+            {NICK.name}
+          </a>{" "}
+          in {NICK.city}. For ages 6&ndash;10.
         </p>
       </div>
     </footer>
