@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test lib/ml.test.ts"
+    "test": "tsx --test lib/*.test.ts",
+    "check:site": "node scripts/check-site.mjs http://localhost:3000"
   },
   "dependencies": {
     "next": "16.3.8",
@@ -22,6 +23,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

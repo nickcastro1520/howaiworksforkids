@@ -5,6 +5,12 @@ import { useEffect, useState } from "react";
 import { GLOSSARY, termId } from "@/lib/glossary";
 import { LESSONS } from "@/lib/lessons";
 
+/** "… Grown-ups call this a prediction." -> kid text + an optional "grown-up name" chip. */
+function splitGrownup(means: string): { kid: string; grownup?: string } {
+  const m = means.match(/^(.*?)\s*Grown-ups call (?:this|it|them) (?:an? )?(.+?)\.?$/);
+  return m ? { kid: m[1], grownup: m[2] } : { kid: means };
+}
+
 export function WordBook() {
   const [open, setOpen] = useState<string[]>([]);
   const all = open.length === GLOSSARY.length;
@@ -50,7 +56,12 @@ export function WordBook() {
                   </span>
                   <span className="flip-back">
                     <span className="flip-word-sm">{g.word}</span>
-                    <span className="flip-means">{g.means}</span>
+                    <span className="flip-means">{splitGrownup(g.means).kid}</span>
+                    {splitGrownup(g.means).grownup && (
+                      <span className="gu-chip">
+                        Grown-up name: <b>{splitGrownup(g.means).grownup}</b>
+                      </span>
+                    )}
                   </span>
                 </span>
               </button>

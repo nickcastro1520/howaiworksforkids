@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Lesson } from "@/lib/lessons";
 import { SECTIONS, SECTION_1, sectionLessons } from "@/lib/lessons";
-import { useProgress } from "@/lib/progress";
+import { afterBadge } from "@/lib/journey";
+import { useProgress, useQuizResult } from "@/lib/progress";
+import { NextLessonCard, ProgressLine } from "./Journey";
 import { StoryArt } from "./art/StoryArt";
 import { Badge } from "./Badge";
 import { Confetti } from "./Confetti";
@@ -216,13 +218,14 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
 
 function Celebrate({ lesson }: { lesson: Lesson }) {
   const { done } = useProgress();
+  const quiz = useQuizResult();
   const section = SECTIONS[lesson.section];
   const inSection = sectionLessons(lesson.section);
   const doneHere = inSection.filter((l) => done.includes(l.slug)).length;
   const lights = Math.max(doneHere, 1);
   const allDone = inSection.every((l) => done.includes(l.slug));
-  const after = inSection.slice(inSection.findIndex((l) => l.slug === lesson.slug) + 1);
-  const nxt = after.find((l) => !done.includes(l.slug)) ?? inSection.find((l) => !done.includes(l.slug));
+  // Always offer somewhere to go: the next lesson, and the certificate or quiz when a section is done.
+  const { next: nxt, sectionEnd } = afterBadge(lesson, done.includes(lesson.slug) ? done : [...done, lesson.slug], quiz !== null);
   return (
     <section className="celebrate" aria-label="You earned a badge">
       <Confetti />
@@ -236,6 +239,30 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
         <p className="celebrate-idea">{lesson.bigIdea}</p>
         <SayLine text={`You earned the ${lesson.badge} badge! ${lesson.bigIdea}`} label="your badge" size="md" />
       </div>
+      {sectionEnd && (
+        <div className="section-end" role="note">
+          <p className="section-end-title">
+            <span aria-hidden="true">🎉</span>{" "}
+            {sectionEnd.section === 1 ? "You finished Section 1!" : allDone && !quiz ? "You finished Section 2! One more step:" : "You finished Section 2!"}
+          </p>
+          <Link className={`btn btn-huge ${nxt && sectionEnd.section === 1 ? "btn-sun" : "btn-go"}`} href={sectionEnd.href}>
+            {sectionEnd.label} &rarr;
+          </Link>
+        </div>
+      )}
+      {nxt && (
+        <NextLessonCard
+          lesson={nxt}
+          secondary={sectionEnd?.section === 2}
+          kicker={
+            sectionEnd?.section === 1 && nxt.section === 2
+              ? `Up next: ${SECTIONS[2].kicker}, ${SECTIONS[2].name}`
+              : sectionEnd?.section === 2
+                ? "You can still play"
+                : "Next lesson"
+          }
+        />
+      )}
       <div className="celebrate-pip">
         <Pip mood="proud" size={110} lights={lights} slots={section.planned} wave />
         <p>
@@ -246,25 +273,13 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
           ) : (
             <>
               {section.kicker}: <b>{lights} of {section.planned}</b> lights on!
-              {allDone && <> Ready for the final quiz!</>}
+              {allDone && !quiz && <> Ready for the final quiz!</>}
             </>
           )}
         </p>
       </div>
+      <ProgressLine />
       <div className="celebrate-actions">
-        {allDone && lesson.section === 1 ? (
-          <Link className="btn btn-big btn-go" href="/finish">
-            Get your certificate &rarr;
-          </Link>
-        ) : allDone ? (
-          <Link className="btn btn-big btn-go" href="/quiz">
-            Take the final quiz &rarr;
-          </Link>
-        ) : nxt ? (
-          <Link className="btn btn-big btn-go" href={`/lessons/${nxt.slug}`}>
-            Next: {nxt.short} &rarr;
-          </Link>
-        ) : null}
         <Link className="btn btn-plain" href={section.path}>
           Back to the trail
         </Link>

@@ -5,11 +5,13 @@ import { ogAlt } from "@/lib/og";
 import { JsonLd } from "@/components/JsonLd";
 import { glossaryJsonLd, pageMeta } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { GLOSSARY } from "@/lib/glossary";
+import { numberWord } from "@/lib/lessons";
 
 export const metadata: Metadata = pageMeta({
   title: "AI Words for Kids: A Kid-Friendly AI Glossary",
   description:
-    "What do AI words mean? Twelve AI terms explained in plain kid words: AI, pattern, data, training, model, chatbot, bias, hallucination, deepfake, and more.",
+    `What do AI words mean? ${numberWord(GLOSSARY.length, true)} AI terms explained in plain kid words: AI, pattern, data, training, model, chatbot, bias, hallucination, deepfake, and more.`,
   path: "/glossary",
   ogKey: "glossary",
   ogAlt: ogAlt("glossary"),

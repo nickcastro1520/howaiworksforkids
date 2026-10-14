@@ -24,9 +24,9 @@ const display = Fredoka({
   display: "swap",
 });
 
-const HOME_TITLE = "How Does AI Work? Free AI Lessons & Games for Kids (Ages 6–10)";
+const HOME_TITLE = "How AI Works for Kids: Free AI Lessons & Games (Ages 6–10)";
 const HOME_DESCRIPTION =
-  `Teach kids about AI with ${LESSONS.length} free, hands-on lessons and games. Kids 6–10 teach a tiny AI named Pip and see how real AI learns and makes mistakes.`;
+  `Free AI lessons for kids ages 6–10: ${LESSONS.length} hands-on games where kids teach a tiny AI named Pip and see how real AI learns. No ads, no sign-up.`;
 
 /** Google Search Console HTML-tag verification. Only rendered when NEXT_PUBLIC_GSC_VERIFICATION is set. */
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GSC_VERIFICATION?.trim();

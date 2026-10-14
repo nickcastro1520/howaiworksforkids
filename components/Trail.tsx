@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { SECTIONS, SECTION_1, sectionLessons, type SectionId } from "@/lib/lessons";
+import { SECTIONS, SECTION_1, SECTION_2, sectionLessons, type SectionId } from "@/lib/lessons";
 import { useProgress, useQuizResult } from "@/lib/progress";
 import { Badge } from "./Badge";
+import { ProgressLine } from "./Journey";
+import { SectionTabs } from "./SectionTabs";
 import { Pip } from "./Pip";
 
 /** A wiggly dotted path that fits any number of stops. */
@@ -31,6 +33,51 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
 
   return (
     <>
+      <div className="trail-hud">
+        <Pip mood={n === released ? "proud" : n > 0 ? "happy" : "wow"} size={120} lights={n} slots={total} />
+        <div className="hud-text">
+          <p className="small-cap">
+            {info.kicker}: {info.name}
+          </p>
+          <p className="hud-big">
+            {n} of {total} lights on
+          </p>
+          <div className="hud-bar" aria-hidden="true">
+            <span style={{ width: `${(n / total) * 100}%` }} />
+          </div>
+          {nextUp ? (
+            <Link href={`/lessons/${nextUp.slug}`} className="btn btn-huge btn-go btn-start">
+              <span className="btn-start-main">
+                {n === 0 ? `Start Lesson ${nextUp.number}` : `Keep going: Lesson ${nextUp.number}`} <span aria-hidden="true">&rarr;</span>
+              </span>
+              <span className="btn-start-sub">{nextUp.title}</span>
+            </Link>
+          ) : section === 1 ? (
+            <div className="hud-actions">
+              <Link href={`/lessons/${SECTION_2[0].slug}`} className="btn btn-huge btn-go btn-start">
+                <span className="btn-start-main">
+                  Start Section 2: Lesson {SECTION_2[0].number} <span aria-hidden="true">&rarr;</span>
+                </span>
+                <span className="btn-start-sub">{SECTION_2[0].title}</span>
+              </Link>
+              <Link href="/finish" className="btn btn-sun">
+                Get your certificate &rarr;
+              </Link>
+            </div>
+          ) : quiz ? (
+            <Link href="/finish/section-2" className="btn btn-huge btn-sun">
+              Get your Section 2 certificate &rarr;
+            </Link>
+          ) : (
+            <Link href="/quiz" className="btn btn-huge btn-sun">
+              Take the final quiz &rarr;
+            </Link>
+          )}
+          <ProgressLine />
+        </div>
+      </div>
+
+      <SectionTabs current={section} />
       {section === 2 && !s1Done && (
         <div className="soft-lock" role="note">
           <span className="soft-lock-emoji" aria-hidden="true">
@@ -43,38 +90,6 @@ export function Trail({ section = 1 }: { section?: SectionId }) {
           </p>
         </div>
       )}
-      <div className="trail-hud">
-        <Pip mood={n === released ? "proud" : n > 0 ? "happy" : "wow"} size={120} lights={n} slots={total} />
-        <div>
-          <p className="small-cap">
-            {info.kicker}: {info.name}
-          </p>
-          <p className="hud-big">
-            {n} of {total} lights on
-          </p>
-          <div className="hud-bar" aria-hidden="true">
-            <span style={{ width: `${(n / total) * 100}%` }} />
-          </div>
-          {nextUp ? (
-            <Link href={`/lessons/${nextUp.slug}`} className="btn btn-go">
-              {n === 0 ? `Start with lesson ${lessons[0].number}` : `Keep going: lesson ${nextUp.number}`} &rarr;
-            </Link>
-          ) : section === 1 ? (
-            <Link href="/finish" className="btn btn-sun">
-              Get your certificate &rarr;
-            </Link>
-          ) : quiz ? (
-            <Link href="/finish/section-2" className="btn btn-sun">
-              Get your Section 2 certificate &rarr;
-            </Link>
-          ) : (
-            <Link href="/quiz" className="btn btn-sun">
-              Take the final quiz &rarr;
-            </Link>
-          )}
-        </div>
-      </div>
-
       <ol className="trail" style={{ "--trail-h": `${height}px` } as React.CSSProperties}>
         <svg className="trail-path" viewBox={`0 0 100 ${height}`} preserveAspectRatio="none" aria-hidden="true">
           <path

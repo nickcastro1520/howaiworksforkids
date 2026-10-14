@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { SectionTabs } from "@/components/SectionTabs";
 import { Trail } from "@/components/Trail";
 import { SECTIONS, SECTION_2 } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
@@ -39,7 +38,6 @@ export default function Section2Page() {
         </p>
       </header>
       <div className="wrap narrow">
-        <SectionTabs current={2} />
         <Trail section={2} />
       </div>
     </div>

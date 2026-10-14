@@ -7,6 +7,7 @@ import { useProgress, useQuizResult } from "@/lib/progress";
 import { QUIZ_TOTAL, grownupNote } from "@/lib/quiz";
 import { Badge } from "./Badge";
 import { Confetti } from "./Confetti";
+import { NextLessonCard } from "./Journey";
 import { Pip } from "./Pip";
 import { TellGrownup } from "./TellGrownup";
 
@@ -37,6 +38,8 @@ export function Certificate({ section = 1 }: { section?: SectionId }) {
   const lessonsDone = n === total;
   const needsQuiz = section === 2;
   const all = lessonsDone && (!needsQuiz || quiz !== null);
+  const s2Next = sectionLessons(2).find((l) => !isDone(l.slug));
+  const s1Next = sectionLessons(1).find((l) => !isDone(l.slug));
   const today = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
   if (!all) {
@@ -128,15 +131,21 @@ export function Certificate({ section = 1 }: { section?: SectionId }) {
         </div>
       </div>
 
+      {section === 1 && s2Next && (
+        <div className="no-print">
+          <NextLessonCard lesson={s2Next} kicker={`Up next: ${SECTIONS[2].kicker}, ${SECTIONS[2].name}`} />
+        </div>
+      )}
+      {section === 2 && s1Next && (
+        <div className="no-print">
+          <NextLessonCard lesson={s1Next} kicker="You can still play this Section 1 lesson" secondary />
+        </div>
+      )}
       <div className="finish-actions no-print">
         <button type="button" className="btn btn-big btn-go" onClick={() => window.print()}>
           Print my certificate
         </button>
-        {section === 1 ? (
-          <Link href={SECTIONS[2].path} className="btn btn-big btn-sun">
-            Next: {SECTIONS[2].kicker}, {SECTIONS[2].name} &rarr;
-          </Link>
-        ) : (
+        {section === 1 ? null : (
           <Link href="/quiz" className="btn btn-big btn-sun">
             Take the quiz again
           </Link>

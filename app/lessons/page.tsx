@@ -5,12 +5,11 @@ import { ogAlt } from "@/lib/og";
 import { JsonLd } from "@/components/JsonLd";
 import { courseJsonLd, pageMeta } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { SectionTabs } from "@/components/SectionTabs";
 import { LESSONS, SECTIONS, SECTION_1, SECTION_2 } from "@/lib/lessons";
 
 export const metadata: Metadata = pageMeta({
   title: `AI Lessons for Kids: ${LESSONS.length} Free Interactive AI Games`,
-  description: `A free ${LESSONS.length}-lesson AI course for elementary students, ages 6–10, in two sections. Each lesson has a story, a hands-on AI game, a quick check, and a badge.`,
+  description: `Free AI lessons for kids ages 6–10: ${LESSONS.length} short stories and hands-on AI games in two sections, each with a quick check and a badge. Start with Lesson 1.`,
   path: "/lessons",
   ogKey: "lessons",
   ogAlt: ogAlt("lessons"),
@@ -33,7 +32,6 @@ export default function LessonsPage() {
         </p>
       </header>
       <div className="wrap narrow">
-        <SectionTabs current={1} />
         <Trail section={1} />
         <aside className="s2-teaser" aria-labelledby="s2-teaser">
           <p className="small-cap">{s2.kicker}</p>
