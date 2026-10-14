@@ -18,6 +18,21 @@ export type OgCard = {
 };
 
 const PAGES: Record<string, OgCard> = {
+  "play-sort-training-data": {
+    kicker: "Bonus game · Section 1",
+    title: "Sort the Training Data",
+    sub: "Beat the clock. Teach Pip with good examples.",
+    alt: "Sort the Training Data: a free bonus AI game for kids where you sort pictures into bins to train Pip.",
+    accent: "#33c4b0",
+  },
+  "play-guess-the-next-word": {
+    kicker: "Bonus game · Section 2",
+    title: "Guess the Next Word",
+    sub: "Pick the likely next word, like a chatbot.",
+    alt: "Guess the Next Word: a free bonus game for kids where you pick the most likely next word in a sentence.",
+    accent: "#ff8fc7",
+    strip: 8,
+  },
   home: {
     kicker: "Ages 6–10 · Free · No sign-up",
     title: "Teach a tiny AI.",

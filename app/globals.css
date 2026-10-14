@@ -1333,3 +1333,69 @@ button.mm-chip:hover { background: #fde4df; }
    so they cost style + layout work every frame. Hold them at their first frame (the same rest
    pose) until the page has loaded and gone idle; components/MotionStart.tsx then starts them. */
 html:not(.anim-on) :is(.pip-blink, .pip-glow, .pip-wave, .node-pulse) { animation-play-state: paused; }
+
+/* ---------- Sound toggle ---------- */
+.sound-toggle { display: inline-grid; place-items: center; width: 48px; height: 48px; flex: none; border-radius: 999px; border: 2.5px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; }
+.sound-toggle[aria-pressed="true"] { background: var(--sun); }
+.header-inner .sound-toggle { margin-left: auto; margin-right: 0.4rem; }
+
+/* ---------- Bonus games ---------- */
+.bonus-link { display: flex; align-items: center; gap: 0.9rem; margin: 1.4rem auto 0; max-width: 34rem; padding: 0.9rem 1.1rem; min-height: 72px; background: #fff; color: var(--ink); text-decoration: none; border: 3px solid var(--ink); border-radius: 22px; box-shadow: 0 5px 0 var(--ink); text-align: left; }
+.bonus-link:hover { transform: translateY(-2px); }
+.bonus-link small { display: block; font-weight: 800; color: var(--pink); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.78rem; }
+.bonus-link b { display: block; font-family: var(--font-display-stack); font-size: 1.3rem; }
+.bonus-link-blurb { display: block; color: var(--ink-2); font-size: 0.95rem; }
+.bonus-link-emoji { font-size: 2.2rem; flex: none; }
+.bonus-link-go { margin-left: auto; font-size: 1.6rem; font-weight: 900; flex: none; }
+.section-end .bonus-link { margin-top: 1rem; }
+.bonus-page .page-hero { padding-bottom: 1.2rem; }
+.bonus-card { background: #fff; border: 3px solid var(--ink); border-radius: 26px; box-shadow: 0 6px 0 var(--ink); padding: 1.2rem; margin: 1.2rem 0; }
+.bonus-start { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.8rem; }
+.bonus-big { font-family: var(--font-display-stack); font-size: 1.45rem; line-height: 1.25; }
+.bonus-best { font-weight: 900; color: var(--mint); }
+.bonus-best.is-new { color: var(--pink); font-size: 1.2rem; }
+.bonus-hud { display: flex; justify-content: space-between; gap: 0.6rem; }
+.bonus-chip { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 40px; padding: 0.3rem 0.9rem; border-radius: 999px; background: var(--paper); border: 2.5px solid var(--ink); font-weight: 900; font-variant-numeric: tabular-nums; }
+.bonus-chip.is-low { background: #ffe1dc; color: #9b2c1a; }
+.bonus-timebar { height: 10px; border-radius: 99px; background: #eee8ff; margin: 0.7rem 0 0.4rem; overflow: hidden; }
+.bonus-timebar span { display: block; height: 100%; background: var(--sun); border-radius: 99px; transition: width 1s linear; }
+.bonus-flash { min-height: 3em; margin-top: 0.8rem; font-weight: 800; text-align: center; }
+.bonus-flash.is-ok { color: var(--mint); }
+.bonus-flash.is-no { color: #b9361f; }
+.bonus-note { color: var(--ink-2); margin: 1rem 0 1.4rem; }
+.sort-prompt { text-align: center; font-weight: 900; margin-top: 0.4rem; }
+.sort-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 150px; height: 150px; margin: 0.6rem auto 1rem; background: var(--paper); border: 3px solid var(--ink); border-radius: 28px; box-shadow: 0 5px 0 var(--ink); touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; position: relative; z-index: 2; }
+.sort-item.is-dragging { cursor: grabbing; box-shadow: 0 12px 24px rgba(35,29,79,0.3); }
+.sort-emoji { font-size: 4rem; line-height: 1; }
+.sort-name { font-weight: 900; font-size: 1.1rem; margin-top: 0.3rem; }
+.sort-bins { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.sort-bin { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; min-height: 120px; border: 3px dashed var(--ink); border-radius: 22px; background: #eaf6ff; color: var(--ink); font-weight: 900; font-size: 1.2rem; cursor: pointer; }
+.sort-bin-1 { background: #fff0f7; }
+.sort-bin.is-over { border-style: solid; background: var(--sun); }
+.sort-bin-emoji { font-size: 2.4rem; }
+.sort-bin kbd { font: inherit; font-size: 0.85rem; color: var(--ink-2); }
+.nw-sentence { display: flex; align-items: center; gap: 0.8rem; margin: 1rem 0; }
+.nw-sentence p { flex: 1; font-family: var(--font-display-stack); font-size: clamp(1.4rem, 5vw, 1.9rem); line-height: 1.2; background: var(--paper); border: 3px solid var(--ink); border-radius: 22px 22px 22px 6px; padding: 0.8rem 1rem; }
+.nw-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.nw-opt { min-height: 64px; border: 3px solid var(--ink); border-radius: 18px; background: #fff; color: var(--ink); font-weight: 900; font-size: 1.15rem; box-shadow: 0 4px 0 var(--ink); cursor: pointer; padding: 0.4rem; }
+.nw-opt.is-right { background: #c9f2e3; }
+.nw-opt.is-wrong { background: #ffd9d2; }
+.nw-opt:disabled { opacity: 0.55; cursor: default; }
+.nw-why { margin-top: 1rem; text-align: center; display: grid; gap: 0.6rem; justify-items: center; }
+.nw-why .is-ok { color: var(--mint); font-weight: 800; }
+.nw-why .is-no { color: #b9361f; font-weight: 800; }
+@media (prefers-reduced-motion: no-preference) {
+  .sort-item:not(.is-dragging) { animation: pop 0.3s cubic-bezier(.3,1.6,.6,1) both; }
+  .nw-sentence p { animation: fadeUp 0.35s ease both; }
+  .bonus-link { transition: transform 0.15s; }
+}
+@media (prefers-reduced-motion: reduce) { .bonus-timebar span { transition: none; } }
+@media (max-width: 430px) {
+  .header-inner { gap: 0.3rem; width: calc(100% - 1rem); }
+  .header-inner .sound-toggle { margin-right: 0; }
+  .main-nav { gap: 0; }
+  .main-nav a { padding: 0.45rem 0.4rem; font-size: 0.86rem; }
+  .brain-pill { padding: 0.45rem 0.6rem; }
+  .nw-opts { grid-template-columns: 1fr; }
+}
+@media (hover: none) { .sort-bin kbd { display: none; } }

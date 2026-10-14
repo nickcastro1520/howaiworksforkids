@@ -10,6 +10,8 @@ const PAGES: Entry[] = [
   { path: "/lessons", og: "lessons", priority: 0.9, freq: "weekly" },
   { path: SECTIONS[2].path, og: "section-2", priority: 0.85, freq: "weekly" },
   ...LESSONS.map((l): Entry => ({ path: `/lessons/${l.slug}`, og: l.slug, priority: 0.8, freq: "monthly" })),
+  { path: "/play/sort-training-data", og: "play-sort-training-data", priority: 0.6, freq: "monthly" },
+  { path: "/play/guess-the-next-word", og: "play-guess-the-next-word", priority: 0.6, freq: "monthly" },
   { path: "/quiz", og: "quiz", priority: 0.6, freq: "monthly" },
   { path: "/parents", og: "parents", priority: 0.7, freq: "monthly" },
   { path: "/teachers", og: "teachers", priority: 0.7, freq: "monthly" },

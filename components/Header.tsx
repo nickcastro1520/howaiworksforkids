@@ -6,6 +6,7 @@ import { countDone } from "@/lib/journey";
 import { LESSONS } from "@/lib/lessons";
 import { useProgress } from "@/lib/progress";
 import { LogoMark } from "./Logo";
+import { SoundToggle } from "./SoundToggle";
 
 const NAV = [
   { href: "/lessons", label: "Lessons" },
@@ -39,6 +40,7 @@ export function Header() {
             </Link>
           ))}
         </nav>
+        <SoundToggle />
         <Link href="/lessons" className="brain-pill" aria-label={`${n} of ${total} lessons done. See all lessons.`}>
           <span className="brain-dots" aria-hidden="true">
             {Array.from({ length: total }).map((_, i) => (
