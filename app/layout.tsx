@@ -3,6 +3,7 @@ import { Fredoka, Nunito } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { MotionStart } from "@/components/MotionStart";
 import { JsonLd } from "@/components/JsonLd";
 import { LESSONS } from "@/lib/lessons";
 import { ogAlt } from "@/lib/og";
@@ -90,6 +91,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main">{children}</main>
         <Footer />
         <Analytics />
+        <MotionStart />
       </body>
     </html>
   );

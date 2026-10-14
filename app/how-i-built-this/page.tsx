@@ -21,16 +21,14 @@ export const metadata: Metadata = pageMeta({
 
 /**
  * Verifiable facts only. Re-measure before changing any number here.
- * Lighthouse: mobile preset, local production build (next build + next start), measured 2026-10-14.
+ * Lighthouse: only numbers measured on the live site (howaiworksforkids.com), mobile preset, with
+ * performance as the median of 3 runs. Set LIGHTHOUSE_MEASURED_ON to the day they were taken.
+ * Leave LIGHTHOUSE empty rather than keep numbers that no longer match the live site.
  */
 const REPO = "https://github.com/nickcastro1520/howaiworksforkids";
-const CHECKED_ON = "October 14, 2026";
 const UNIT_TESTS = 27;
-const LIGHTHOUSE: { page: string; perf: number; a11y: number; bp: number; seo: number }[] = [
-  { page: "Home", perf: 92, a11y: 100, bp: 100, seo: 100 },
-  { page: "A lesson (Lesson 4)", perf: 93, a11y: 100, bp: 100, seo: 100 },
-  { page: "This page", perf: 95, a11y: 100, bp: 100, seo: 100 },
-];
+const LIGHTHOUSE_MEASURED_ON = "";
+const LIGHTHOUSE: { page: string; perf: number; a11y: number; bp: number; seo: number }[] = [];
 
 const TOOLS = [
   {
@@ -260,8 +258,14 @@ export default function HowIBuiltThisPage() {
           <h2 id="checks" className="section-title">
             Quality checks
           </h2>
+          {LIGHTHOUSE.length === 0 ? (
+            <p>
+              I run Lighthouse on mobile on the key pages before each change goes live, and again on the live site after it ships. I only post scores here when they come from the live site, with the date they were measured.
+            </p>
+          ) : (
+            <>
           <p>
-            Lighthouse scores on mobile, measured on a production build on {CHECKED_ON}. Each category is out of 100; performance is the middle score of repeated runs, since it varies a little each time.
+            Lighthouse scores on mobile, measured on the live site on {LIGHTHOUSE_MEASURED_ON}. Each category is out of 100; performance is the middle score of 3 runs, since it varies a little each time. Scores change as the site changes, so treat these as a snapshot from that day.
           </p>
           <div className="built-table-wrap">
             <table className="built-table">
@@ -287,6 +291,8 @@ export default function HowIBuiltThisPage() {
               </tbody>
             </table>
           </div>
+            </>
+          )}
         </section>
 
         <section className="built-end" aria-labelledby="contact">
