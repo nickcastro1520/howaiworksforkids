@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SECTIONS, getLesson, sectionLessons, type SectionId } from "@/lib/lessons";
+import { countDone } from "@/lib/journey";
+import { LESSONS } from "@/lib/lessons";
 import { useProgress } from "@/lib/progress";
 import { LogoMark } from "./Logo";
 
@@ -15,13 +16,9 @@ const NAV = [
 export function Header() {
   const path = usePathname();
   const { done } = useProgress();
-  // The pill follows the section you're in (the final quiz and its certificate count as Section 2; Section 1 everywhere else).
-  const slug = path?.startsWith("/lessons/") ? path.slice("/lessons/".length) : "";
-  const s2Page = path === "/quiz" || path === "/finish/section-2";
-  const section: SectionId = s2Page || slug === "section-2" || getLesson(slug)?.section === 2 ? 2 : 1;
-  const info = SECTIONS[section];
-  const slots = info.planned;
-  const n = sectionLessons(section).filter((l) => done.includes(l.slug)).length;
+  // Same source and count as the badge shelf ("X of 15"): every lesson in the course.
+  const n = countDone(done);
+  const total = LESSONS.length;
   return (
     <header className="site-header">
       <a href="#main" className="skip">
@@ -42,17 +39,15 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Link href={info.path} className="brain-pill">
+        <Link href="/lessons" className="brain-pill" aria-label={`${n} of ${total} lessons done. See all lessons.`}>
           <span className="brain-dots" aria-hidden="true">
-            {Array.from({ length: slots }).map((_, i) => (
+            {Array.from({ length: total }).map((_, i) => (
               <i key={i} className={i < n ? "on" : ""} />
             ))}
           </span>
-          <span className="brain-n">
-            {section === 2 && <span className="brain-sec">S2 </span>}
-            {n}/{slots}
+          <span className="brain-n" aria-hidden="true">
+            {n}/{total} <span className="brain-word">lessons</span>
           </span>
-          <span className="sr-only">: Pip&rsquo;s brain lights on in {info.kicker}</span>
         </Link>
       </div>
     </header>

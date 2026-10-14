@@ -82,7 +82,7 @@ export default function Home() {
               <span>Find out how real AI works.</span>
             </h1>
             <p className="hero-lead">
-              Meet Pip, a baby AI who knows almost nothing. In {SECTION_1.length} quick games, you&rsquo;ll teach Pip, test Pip, and catch
+              Meet Pip, a baby AI who knows almost nothing. In {LESSONS.length} quick games, you&rsquo;ll teach Pip, test Pip, and catch
               Pip&rsquo;s mistakes. That&rsquo;s exactly how real AI works!
             </p>
             <div className="hero-ctas">
