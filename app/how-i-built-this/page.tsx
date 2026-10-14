@@ -23,6 +23,7 @@ export const metadata: Metadata = pageMeta({
  * Verifiable facts only. Re-measure before changing any number here.
  * Lighthouse: mobile preset, local production build (next build + next start), measured 2026-10-14.
  */
+const REPO = "https://github.com/nickcastro1520/howaiworksforkids";
 const CHECKED_ON = "October 14, 2026";
 const UNIT_TESTS = 27;
 const LIGHTHOUSE: { page: string; perf: number; a11y: number; bp: number; seo: number }[] = [
@@ -58,8 +59,20 @@ const TOOLS = [
   },
   {
     title: "Automated checks on every release",
-    text: `${UNIT_TESTS} unit tests cover the tiny models and the lesson logic. Browser scripts check every page at phone and desktop sizes for tap targets of at least 48px, sideways scrolling, console errors, broken links, and that every badge screen points to a next step. Lighthouse runs before each pull request.`,
+    text: `GitHub Actions runs on every pull request: lint, ${UNIT_TESTS} unit tests for the tiny models and lesson logic, a production build, and a crawl of the built site that fails on broken links, missing alt text, or leftover placeholder text. I also run browser scripts at phone and desktop sizes (tap targets of at least 48px, sideways scrolling, console errors, a next step on every badge screen) and Lighthouse before each merge.`,
   },
+];
+
+type Who = "me" | "auto";
+const FLOW: { step: string; text: string; who: Who }[] = [
+  { step: "Plan", text: "I write the goal, the kid-safe rules, and what \u201cdone\u201d means.", who: "me" },
+  { step: "Build on a branch", text: "I build it with AI coding assistants, then read and edit every change.", who: "me" },
+  { step: "Open a pull request", text: "Every change goes through a GitHub pull request. Nothing goes straight to the live site.", who: "me" },
+  { step: "CI checks", text: `GitHub Actions: lint, ${UNIT_TESTS} unit tests, production build, and a broken-link crawl.`, who: "auto" },
+  { step: "Preview deploy", text: "Vercel builds a separate preview site for the pull request.", who: "auto" },
+  { step: "Browser + Lighthouse", text: "Scripts check phone and desktop sizes; Lighthouse scores the key pages.", who: "auto" },
+  { step: "Review", text: "I try the preview on my phone and laptop, often with Nathan and Nolan.", who: "me" },
+  { step: "Merge and ship", text: "When I approve, merging to main makes Vercel deploy the live site.", who: "auto" },
 ];
 
 const DECISIONS = [
@@ -182,6 +195,38 @@ export default function HowIBuiltThisPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section aria-labelledby="flow">
+          <h2 id="flow" className="section-title">
+            How a change ships
+          </h2>
+          <p>
+            The same loop for every change, from a one-word fix to a new lesson. Automated steps catch mistakes early; I make the call
+            on anything a kid will see.
+          </p>
+          <p className="flow-key" aria-hidden="true">
+            <span className="flow-tag is-me">Me</span> I do it <span className="flow-tag is-auto">Auto</span> runs automatically
+          </p>
+          <ol className="flow">
+            {FLOW.map((f, i) => (
+              <li key={f.step} className={`flow-step is-${f.who}`}>
+                <span className="flow-n" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span className={`flow-tag is-${f.who}`}>
+                  <span className="sr-only">{f.who === "me" ? "Done by me: " : "Automated: "}</span>
+                  <span aria-hidden="true">{f.who === "me" ? "Me" : "Auto"}</span>
+                </span>
+                <h3>{f.step}</h3>
+                <p>{f.text}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="muted">
+            The CI workflow (<code>.github/workflows/ci.yml</code>) and the site crawler (<code>scripts/check-site.mjs</code>) are in
+            the <a href={REPO}>public GitHub repo</a>.
+          </p>
         </section>
 
         <section aria-labelledby="decisions">

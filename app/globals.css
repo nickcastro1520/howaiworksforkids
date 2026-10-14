@@ -1298,3 +1298,32 @@ button.mm-chip:hover { background: #fde4df; }
 .built-results { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
 .built-body .section-title + p, .built-body .section-title + ul { margin-top: 0.7rem; }
 .built-end .section-title + p { margin-top: 0.6rem; }
+
+/* How I built this: shipping flow */
+.flow { list-style: none; padding: 0; margin: 1.2rem 0 0.8rem; display: grid; gap: 1.6rem; grid-template-columns: 1fr; counter-reset: none; }
+@media (min-width: 720px) { .flow { grid-template-columns: repeat(2, 1fr); gap: 1.6rem 2.2rem; } }
+@media (min-width: 1080px) { .flow { grid-template-columns: repeat(4, 1fr); } }
+.flow-step { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 1rem 1rem 1.1rem; box-shadow: 0 4px 0 var(--ink); }
+.flow-step.is-auto { background: #e9f7f3; }
+.flow-step h3 { font-size: 1.2rem; margin: 0.5rem 0 0.3rem; }
+.flow-step p { margin: 0; color: var(--ink-2); font-weight: 600; }
+.flow-n { position: absolute; top: -14px; left: 14px; width: 34px; height: 34px; border-radius: 50%; background: var(--sun); border: 3px solid var(--ink); display: grid; place-items: center; font-weight: 900; font-size: 0.95rem; }
+.flow-tag { display: inline-block; margin-left: 2.2rem; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.1rem 0.55rem; border-radius: 999px; border: 2px solid var(--ink); }
+.flow-tag.is-me { background: #ffe6f3; }
+.flow-tag.is-auto { background: #c9efe5; }
+.flow-key { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; font-weight: 700; color: var(--ink-2); margin-top: 0.8rem; }
+.flow-key .flow-tag { margin-left: 0.6rem; }
+.flow-key .flow-tag:first-child { margin-left: 0; }
+/* arrows between steps */
+.flow-step::after { content: ""; position: absolute; left: 50%; bottom: -1.45rem; width: 0; height: 0; border-left: 9px solid transparent; border-right: 9px solid transparent; border-top: 11px solid var(--ink); transform: translateX(-50%); }
+.flow-step:last-child::after { display: none; }
+@media (min-width: 720px) {
+  .flow-step::after { left: auto; right: -1.6rem; top: 50%; bottom: auto; transform: translateY(-50%); border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 11px solid var(--ink); border-right: 0; }
+  .flow-step:nth-child(2n)::after { display: none; }
+}
+@media (min-width: 1080px) {
+  .flow-step:nth-child(2n)::after { display: block; }
+  .flow-step:nth-child(4n)::after { display: none; }
+}
+.flow-step .flow-tag { position: absolute; top: 12px; right: 12px; margin: 0; }
+.flow-step h3 { margin-top: 1.2rem; }
