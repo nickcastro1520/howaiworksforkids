@@ -27,7 +27,7 @@ export function Analytics() {
       <Script id="ga-setup" strategy="afterInteractive">
         {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('consent','default',${consent});gtag('set','ads_data_redaction',true);gtag('js',new Date());gtag('config',${JSON.stringify(GA_ID)},${config});`}
       </Script>
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+      <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="lazyOnload" />
     </>
   );
 }

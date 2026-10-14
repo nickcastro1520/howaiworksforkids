@@ -1327,3 +1327,8 @@ button.mm-chip:hover { background: #fde4df; }
 }
 .flow-step .flow-tag { position: absolute; top: 12px; right: 12px; margin: 0; }
 .flow-step h3 { margin-top: 1.2rem; }
+
+/* Perf: these animate elements inside inline SVGs, which the browser can't move on the GPU,
+   so they cost style + layout work every frame. Hold them at their first frame (the same rest
+   pose) until the page has loaded and gone idle; components/MotionStart.tsx then starts them. */
+html:not(.anim-on) :is(.pip-blink, .pip-glow, .pip-wave, .node-pulse) { animation-play-state: paused; }
