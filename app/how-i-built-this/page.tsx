@@ -70,9 +70,9 @@ const FLOW: { step: string; text: string; who: Who }[] = [
   { step: "Open a pull request", text: "Every change goes through a GitHub pull request. Nothing goes straight to the live site.", who: "me" },
   { step: "CI checks", text: `GitHub Actions: lint, ${UNIT_TESTS} unit tests, production build, and a broken-link crawl.`, who: "auto" },
   { step: "Preview deploy", text: "Vercel builds a separate preview site for the pull request.", who: "auto" },
-  { step: "Browser + Lighthouse", text: "Scripts check phone and desktop sizes; Lighthouse scores the key pages.", who: "auto" },
+  { step: "Browser + Lighthouse", text: "I run browser scripts at phone and desktop sizes, and Lighthouse on the key pages.", who: "me" },
   { step: "Review", text: "I try the preview on my phone and laptop, often with Nathan and Nolan.", who: "me" },
-  { step: "Merge and ship", text: "When I approve, merging to main makes Vercel deploy the live site.", who: "auto" },
+  { step: "Merge and ship", text: "When I approve, I merge to main and Vercel deploys the live site.", who: "me" },
 ];
 
 const DECISIONS = [
