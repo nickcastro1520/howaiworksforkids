@@ -119,7 +119,7 @@ const PAGES: Record<string, OgCard> = {
 
 for (const l of LESSONS) {
   PAGES[l.slug] = {
-    kicker: `${l.section === 1 ? `Lesson ${l.number} of ${SECTION_1.length}` : `${SECTIONS[2].kicker} · Lesson ${l.number}`} · about ${l.minutes} min`,
+    kicker: `${SECTIONS[l.section].kicker} · Lesson ${l.number} · about ${l.minutes} min`,
     title: l.title,
     sub: `Game: ${l.game}`,
     alt: `Lesson ${l.number}, ${l.title}: a free AI lesson for kids ages 6–10 with the game ${l.game}.`,

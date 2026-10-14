@@ -64,15 +64,9 @@ export default async function LessonPage({ params }: Props) {
             {lesson.title}
           </h1>
           <p className="lesson-meta">
-            {lesson.section === 1 ? (
-              <>
-                Lesson {lesson.number} of {inSection.length}
-              </>
-            ) : (
-              <>
-                Lesson {lesson.number} &middot; {section.kicker}: {section.name}
-              </>
-            )}{" "}
+            <>
+              Lesson {lesson.number} &middot; {section.kicker}: {section.name}
+            </>{" "}
             &middot; About {lesson.minutes} minutes &middot; Game: <b>{lesson.game}</b>
           </p>
         </div>
