@@ -75,6 +75,24 @@ export default async function LessonPage({ params }: Props) {
         <LessonPlayer lesson={lesson} />
       </div>
 
+      <section className="wrap lesson-about" aria-labelledby="about-lesson">
+        <h2 id="about-lesson" className="lesson-more-title">
+          About this lesson
+        </h2>
+        <p>{lesson.summary}</p>
+        <p>
+          <b>Big idea:</b> {lesson.bigIdea} <b>Game:</b> {lesson.game}. {lesson.gameBlurb}
+        </p>
+        <details className="story-text">
+          <summary>Read Pip&rsquo;s whole story as text</summary>
+          <ol>
+            {lesson.story.map((p, i) => (
+              <li key={i}>{p.text}</li>
+            ))}
+          </ol>
+        </details>
+      </section>
+
       <nav className="wrap lesson-more" aria-labelledby="more-lessons">
         <h2 id="more-lessons" className="lesson-more-title">
           Keep exploring

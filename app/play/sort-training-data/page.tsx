@@ -11,7 +11,7 @@ const G = BONUS.sort;
 export const metadata: Metadata = pageMeta({
   title: "Sort the Training Data: Free AI Game for Kids",
   description:
-    "A free bonus AI game for kids 6–10: sort pictures into the right bins before the timer runs out and see how good training data teaches an AI. Tap, drag, or use the keyboard. No sign-up.",
+    "Free AI game for kids 6–10: sort pictures into the right bins before time runs out, and see how good training data teaches an AI. Tap, drag, or use keys.",
   path: G.path,
   ogKey: `play-${G.slug}`,
   ogAlt: ogAlt(`play-${G.slug}`),

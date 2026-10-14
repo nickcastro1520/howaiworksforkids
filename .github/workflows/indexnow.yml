@@ -1,0 +1,32 @@
+name: IndexNow
+
+# Pings IndexNow with every URL in the live sitemap: daily, and after each push to main
+# (after a short wait so the Vercel production deploy is live).
+on:
+  schedule:
+    - cron: "17 11 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: true
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Wait for the production deploy
+        if: github.event_name == 'push'
+        run: sleep 180
+      - name: Submit sitemap URLs
+        run: node scripts/indexnow.mjs

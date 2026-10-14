@@ -11,7 +11,7 @@ const G = BONUS.nextWord;
 export const metadata: Metadata = pageMeta({
   title: "Guess the Next Word: Free Chatbot Game for Kids",
   description:
-    "A free bonus AI game for kids 6–10: Pip starts a sentence and you pick the most likely next word from 3, with a friendly reason for each. Learn how chatbots write, one word at a time.",
+    "Free chatbot game for kids 6–10: Pip starts a sentence, you pick the most likely next word from 3, and learn why. See how chatbots write one word at a time.",
   path: G.path,
   ogKey: `play-${G.slug}`,
   ogAlt: ogAlt(`play-${G.slug}`),

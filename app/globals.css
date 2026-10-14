@@ -1399,3 +1399,7 @@ html:not(.anim-on) :is(.pip-blink, .pip-glow, .pip-wave, .node-pulse) { animatio
   .nw-opts { grid-template-columns: 1fr; }
 }
 @media (hover: none) { .sort-bin kbd { display: none; } }
+
+.lesson-about { margin-top: 2rem; display: grid; gap: 0.7rem; }
+.story-text summary { cursor: pointer; font-weight: 900; min-height: 48px; display: flex; align-items: center; color: var(--sky); }
+.story-text ol { padding-left: 1.4rem; display: grid; gap: 0.4rem; }
