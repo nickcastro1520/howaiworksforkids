@@ -69,6 +69,13 @@ const PAGES: Record<string, OgCard> = {
     alt: `A guide for parents and teachers: how to use ${LESSONS.length} free AI lessons for kids at home or in class.`,
     accent: "#ffd34d",
   },
+  "explain-ai-to-kids": {
+    kicker: "For parents & teachers",
+    title: "Explain AI to an 8-year-old",
+    sub: "Simple words · A game for every idea",
+    alt: "How to explain AI to an 8-year-old: simple explanations for parents, each paired with a free kid-safe game.",
+    accent: "#ffd34d",
+  },
   teachers: {
     kicker: "For teachers & homeschool",
     title: "Free AI lesson kit",

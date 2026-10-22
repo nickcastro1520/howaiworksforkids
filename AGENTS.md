@@ -4,7 +4,7 @@
 A kid-safe, interactive site that explains AI to kids ages 6–10. Kids learn by teaching a tiny AI named Pip.
 It is also a portfolio piece for Nick Castro's job hunt in AI enablement and training. His sons Nathan (8) and Nolan (11) are the test users.
 
-## Current status (updated 2026-10-21)
+## Current status (updated 2026-10-22)
 **Live:**
 - 15 lessons in 2 sections (Section 1: lessons 1–7; Section 2 "Pip Grows Up": lessons 8–15), a final quiz, and a certificate.
 - Progress tracking, a 15-badge shelf, and Next lesson cards.
@@ -13,11 +13,12 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - IndexNow: submits daily and after each push to main.
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
 
-**Open pull requests:** none.
+**Open pull requests:** "How to explain AI to an 8-year-old" guide at /explain-ai-to-kids (branch explain-ai-to-kids). Waiting for Nick to review the preview; do not merge without his OK.
 
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+- **2026-10-22:** Added a parent guide, /explain-ai-to-kids, targeting "how to explain AI to an 8-year-old". Pages that rank now give advice only; ours links every tip to a real game. Linked from /parents and /teachers, in the sitemap (so IndexNow picks it up), with FAQ schema.
 - **2026-10-21:** Added AGENTS.md so every AI on the project stays in sync without Nick relaying messages.
 - **2026-10-20:** SEO changes need Nick's OK through Nov 16, so he can review the first month before changes ship on their own.
 - **2026-10-14 (PR #18):** IndexNow and lesson summaries that work without JavaScript, so search engines find and read pages faster.
@@ -32,6 +33,7 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - **2026-10-05:** Bought the domain. Ages 6–10 only, to keep the site focused.
 
 ## Next steps
+- Nick reviews the /explain-ai-to-kids preview; merge after his OK.
 - Nathan and Nolan test Section 2 and the bonus games. Use only their real feedback on the site.
 - Fix the 53px sideways scroll on 320px-wide screens.
 - Keep an eye on home-page speed variance.

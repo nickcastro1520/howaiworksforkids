@@ -267,6 +267,7 @@ export default function TeachersPage() {
           <nav className="teachers-more" aria-label="More for grown-ups">
             <span>More for grown-ups:</span>
             <Link href="/parents">Parents &amp; Teachers guide and FAQ</Link>
+            <Link href="/explain-ai-to-kids">How to explain AI to kids</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/tested-by-kids">Tested by kids</Link>
           </nav>
