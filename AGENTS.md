@@ -12,8 +12,9 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - Pages: /parents, /teachers (free Lesson 1 kit), and /how-i-built-this.
 - IndexNow: submits daily and after each push to main.
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
+- Parent guide /explain-ai-to-kids ("How to explain AI to an 8-year-old"): live since 2026-10-22 (PR #19).
 
-**Open pull requests:** "How to explain AI to an 8-year-old" guide at /explain-ai-to-kids (branch explain-ai-to-kids). Waiting for Nick to review the preview; do not merge without his OK.
+**Open pull requests:** none.
 
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
@@ -33,7 +34,6 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - **2026-10-05:** Bought the domain. Ages 6–10 only, to keep the site focused.
 
 ## Next steps
-- Nick reviews the /explain-ai-to-kids preview; merge after his OK.
 - Nathan and Nolan test Section 2 and the bonus games. Use only their real feedback on the site.
 - Fix the 53px sideways scroll on 320px-wide screens.
 - Keep an eye on home-page speed variance.
