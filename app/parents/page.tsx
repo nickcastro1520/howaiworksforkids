@@ -80,6 +80,10 @@ export default function ParentsPage() {
             <Link href="/teachers" className="text-link">
               Get the free Lesson 1 teacher kit
             </Link>
+            . New to this?{" "}
+            <Link href="/explain-ai-to-kids" className="text-link">
+              How to explain AI to an 8-year-old
+            </Link>
             . Curious how the site was made?{" "}
             <Link href="/how-i-built-this" className="text-link">
               How I built this
