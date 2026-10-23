@@ -19,6 +19,8 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+
+- 2026-10-23: Every site change gets reported to the SEO & AEO Desk bot with the changed URLs.
 - **2026-10-22:** Added a parent guide, /explain-ai-to-kids, targeting "how to explain AI to an 8-year-old". Pages that rank now give advice only; ours links every tip to a real game. Linked from /parents and /teachers, in the sitemap (so IndexNow picks it up), with FAQ schema.
 - **2026-10-21:** Added AGENTS.md so every AI on the project stays in sync without Nick relaying messages.
 - **2026-10-20:** SEO changes need Nick's OK through Nov 16, so he can review the first month before changes ship on their own.
@@ -40,6 +42,8 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - First weekly SEO report on Oct 26.
 
 ## Rules
+
+- After any site change (new or edited pages, URLs, titles, content), message the SEO & AEO Desk bot with priority true: what changed plus the full URLs, so it can request indexing and do its SEO/AEO work. (Nick, 2026-10-23)
 - Read AGENTS.md at the start of every session. Update it at the end with what changed and what's next, then commit.
 - Grok is the main builder. Claude is used for reviews and big decisions, and reads AGENTS.md to catch up.
 - Only one AI edits a repo at a time. If Claude has an open pull request on your repo, don't edit until it's merged.
