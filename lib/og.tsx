@@ -76,6 +76,13 @@ const PAGES: Record<string, OgCard> = {
     alt: "How to explain AI to an 8-year-old: simple explanations for parents, each paired with a free kid-safe game.",
     accent: "#ffd34d",
   },
+  "is-ai-safe-for-kids": {
+    kicker: "For parents",
+    title: "Is AI safe for kids?",
+    sub: "Expert advice by age · 5 real risks · Family rules",
+    alt: "Is AI safe for kids? A calm parent guide for ages 6 to 10: expert advice by age, five real risks, and simple family rules.",
+    accent: "#ffd34d",
+  },
   teachers: {
     kicker: "For teachers & homeschool",
     title: "Free AI lesson kit",

@@ -15,6 +15,7 @@ const PAGES: Entry[] = [
   { path: "/quiz", og: "quiz", priority: 0.6, freq: "monthly" },
   { path: "/parents", og: "parents", priority: 0.7, freq: "monthly" },
   { path: "/explain-ai-to-kids", og: "explain-ai-to-kids", priority: 0.7, freq: "monthly" },
+  { path: "/is-ai-safe-for-kids", og: "is-ai-safe-for-kids", priority: 0.7, freq: "monthly" },
   { path: "/teachers", og: "teachers", priority: 0.7, freq: "monthly" },
   { path: "/glossary", og: "glossary", priority: 0.6, freq: "monthly" },
   { path: "/tested-by-kids", og: "tested-by-kids", priority: 0.4, freq: "monthly" },
