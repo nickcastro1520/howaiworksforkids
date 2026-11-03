@@ -199,6 +199,12 @@ export default function ParentsPage() {
               &ldquo;Tell a grown-up&rdquo; email note.
             </li>
           </ul>
+          <p>
+            Wondering about chatbots and other AI apps at home?{" "}
+            <Link href="/is-ai-safe-for-kids" className="text-link">
+              Is AI safe for kids? A parent guide
+            </Link>
+          </p>
           <Link href="/privacy" className="btn btn-sun">
             Read the privacy notice
           </Link>
