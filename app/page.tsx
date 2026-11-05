@@ -213,7 +213,7 @@ export default function Home() {
           </h2>
           <p className="section-sub">
             {SITE_NAME} is a free set of AI lessons for kids. It&rsquo;s a simple way to teach kids about AI at home or in an elementary classroom.
-            More in the <Link href="/parents">parent guide</Link> and on the <Link href="/teachers">Teachers page</Link>.
+            More in the <Link href="/parents">parent guide</Link> and on the <Link href="/teachers">Teachers page</Link>. New to this? Try <Link href="/explain-ai-to-kids">how to explain AI to an 8-year-old</Link>.
           </p>
           <div className="faq">
             {HOME_FAQ.map((f) => (
