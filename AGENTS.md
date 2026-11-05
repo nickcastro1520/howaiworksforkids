@@ -4,7 +4,7 @@
 A kid-safe, interactive site that explains AI to kids ages 6–10. Kids learn by teaching a tiny AI named Pip.
 It is also a portfolio piece for Nick Castro's job hunt in AI enablement and training. His sons Nathan (8) and Nolan (11) are the test users.
 
-## Current status (updated 2026-10-22)
+## Current status (updated 2026-11-04)
 **Live:**
 - 15 lessons in 2 sections (Section 1: lessons 1–7; Section 2 "Pip Grows Up": lessons 8–15), a final quiz, and a certificate.
 - Progress tracking, a 15-badge shelf, and Next lesson cards.
@@ -14,11 +14,13 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
 - Parent guide /explain-ai-to-kids ("How to explain AI to an 8-year-old"): live since 2026-10-22 (PR #19).
 
-**Open pull requests:** none.
+**Open pull requests:** #20 (/is-ai-safe-for-kids parent guide) — preview only, waiting on Nick's OK.
 
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+
+- **2026-11-04:** SEO internal links (Nick: "Yes"): homepage FAQ intro links /explain-ai-to-kids; "Play it again →" at the end of Lesson 2 (→ /play/sort-training-data) and Lesson 3 (→ /play/guess-the-next-word).
 
 - 2026-10-23: Every site change gets reported to the SEO & AEO Desk bot with the changed URLs.
 - **2026-10-22:** Added a parent guide, /explain-ai-to-kids, targeting "how to explain AI to an 8-year-old". Pages that rank now give advice only; ours links every tip to a real game. Linked from /parents and /teachers, in the sitemap (so IndexNow picks it up), with FAQ schema.

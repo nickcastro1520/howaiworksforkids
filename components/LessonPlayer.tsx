@@ -221,6 +221,11 @@ function QuickCheck({ lesson, onPass }: { lesson: Lesson; onPass: () => void }) 
   );
 }
 
+const REPLAY: Record<string, string> = {
+  "learning-from-examples": "/play/sort-training-data",
+  "guess-the-next-word": "/play/guess-the-next-word",
+};
+
 function Celebrate({ lesson }: { lesson: Lesson }) {
   const { done } = useProgress();
   const quiz = useQuizResult();
@@ -290,6 +295,11 @@ function Celebrate({ lesson }: { lesson: Lesson }) {
         <Link className="btn btn-plain" href={section.path}>
           Back to the trail
         </Link>
+        {REPLAY[lesson.slug] && (
+          <Link className="btn btn-sun" href={REPLAY[lesson.slug]}>
+            Play it again →
+          </Link>
+        )}
       </div>
       {lesson.mission && <MissionCard mission={lesson.mission} color={lesson.color} />}
       <aside className="talk-card">
