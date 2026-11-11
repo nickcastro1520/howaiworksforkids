@@ -10,9 +10,15 @@ import { SoundToggle } from "./SoundToggle";
 
 const NAV = [
   { href: "/lessons", label: "Lessons" },
+  { href: "/bot-camp", label: "Bot Camp" },
   { href: "/glossary", label: "Word Book" },
   { href: "/parents", label: "Grown-ups" },
 ];
+
+function navIsOn(path: string | null, href: string) {
+  const base = href.endsWith("/") && href !== "/" ? href.slice(0, -1) : href;
+  return Boolean(path?.startsWith(base));
+}
 
 export function Header() {
   const path = usePathname();
@@ -35,7 +41,7 @@ export function Header() {
         </Link>
         <nav className="main-nav" aria-label="Main">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className={path?.startsWith(item.href) ? "is-on" : ""} aria-current={path?.startsWith(item.href) ? "page" : undefined}>
+            <Link key={item.href} href={item.href} className={navIsOn(path, item.href) ? "is-on" : ""} aria-current={navIsOn(path, item.href) ? "page" : undefined}>
               {item.label}
             </Link>
           ))}

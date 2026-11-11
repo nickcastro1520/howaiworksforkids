@@ -159,6 +159,15 @@ button:disabled { cursor: default; }
 
 /* home: bento */
 .games { padding: 3.5rem 0; }
+.bot-camp-card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 1.5rem; margin: 2.4rem 0 1.6rem; background: #fff; border: 3px solid var(--ink); border-left: 12px solid var(--mint); border-radius: 26px; padding: 1.2rem 1.4rem; box-shadow: 0 6px 0 var(--ink); }
+.bot-camp-card-copy { flex: 1 1 16rem; display: grid; gap: 0.35rem; }
+.bot-camp-card-copy h2 { font-family: var(--font-display-stack); font-size: 2rem; margin: 0; }
+.bot-camp-card-copy p:last-child { color: var(--ink-2); font-size: 1.1rem; max-width: 36rem; }
+.bot-camp-card .btn { flex: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .bot-camp-card { transition: transform 0.18s; }
+  .bot-camp-card:hover { transform: translateY(-3px); }
+}
 .bento { display: grid; gap: 1.2rem; grid-template-columns: 1fr; }
 @media (min-width: 640px) { .bento { grid-template-columns: 1fr 1fr; } .tile-1 { grid-column: span 2; } }
 @media (min-width: 1000px) {

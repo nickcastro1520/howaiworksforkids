@@ -33,6 +33,13 @@ const PAGES: Record<string, OgCard> = {
     accent: "#ff8fc7",
     strip: 8,
   },
+  "bot-camp": {
+    kicker: "Free hands-on labs · Ages 6–10",
+    title: "Bot Camp",
+    sub: "Don't just read about AI. Train one.",
+    alt: "Bot Camp: seven free hands-on labs where kids train small, real AIs in the browser. No sign-up.",
+    accent: "#33c4b0",
+  },
   home: {
     kicker: "Ages 6–10 · Free · No sign-up",
     title: "Teach a tiny AI.",

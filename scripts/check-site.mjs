@@ -28,6 +28,9 @@ async function visit(path) {
   }
   if (!(res.headers.get("content-type") || "").includes("text/html")) return;
   const html = await res.text();
+  // Bot Camp is a third-party self-contained page served as-is. Check that it
+  // returns 200, but skip heading/alt/placeholder rules that would require editing it.
+  if (path === "/bot-camp" || path === "/bot-camp/" || path.startsWith("/bot-camp/")) return;
   const h1s = (html.match(/<h1[\s>]/gi) || []).length;
   if (h1s !== 1) problems.push(`${path}: ${h1s} <h1> elements`);
   for (const img of html.match(/<img\b[^>]*>/gi) || []) if (!/\balt=/.test(img)) problems.push(`${path}: <img> without alt`);
