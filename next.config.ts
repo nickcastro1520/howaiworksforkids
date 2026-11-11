@@ -31,6 +31,35 @@ const CSP = [
   "upgrade-insecure-requests",
 ].join("; ");
 
+// Bot Camp is a self-contained page (public/bot-camp/index.html) with its own inline CSS/JS
+// and Google Fonts stylesheets. The rest of the site stays on the tighter CSP above.
+const BOT_CAMP_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "connect-src 'self'",
+  "media-src 'self' blob:",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const SECURITY_HEADERS = [
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  { key: "Content-Security-Policy", value: CSP },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+];
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   async redirects() {
@@ -40,19 +69,33 @@ const nextConfig: NextConfig = {
       permanent: true,
     }));
   },
+  async rewrites() {
+    // trailingSlash is unset (false), so Next.js 308s /bot-camp/ to /bot-camp before rewrites.
+    // This rewrite serves the static file at the canonical /bot-camp URL.
+    return {
+      beforeFiles: [
+        { source: "/bot-camp", destination: "/bot-camp/index.html" },
+      ],
+    };
+  },
   async headers() {
     return [
       {
         source: "/:path*",
-        headers: [
-          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-          { key: "Content-Security-Policy", value: CSP },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()" },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-        ],
+        headers: SECURITY_HEADERS,
+      },
+      // Last matching CSP wins. Scoped to Bot Camp so Google Fonts can load there only.
+      {
+        source: "/bot-camp",
+        headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
+      },
+      {
+        source: "/bot-camp/",
+        headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
+      },
+      {
+        source: "/bot-camp/:path*",
+        headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
       },
     ];
   },

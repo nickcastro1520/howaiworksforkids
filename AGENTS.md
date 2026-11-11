@@ -4,7 +4,7 @@
 A kid-safe, interactive site that explains AI to kids ages 6–10. Kids learn by teaching a tiny AI named Pip.
 It is also a portfolio piece for Nick Castro's job hunt in AI enablement and training. His sons Nathan (8) and Nolan (11) are the test users.
 
-## Current status (updated 2026-11-04)
+## Current status (updated 2026-11-11)
 **Live:**
 - 15 lessons in 2 sections (Section 1: lessons 1–7; Section 2 "Pip Grows Up": lessons 8–15), a final quiz, and a certificate.
 - Progress tracking, a 15-badge shelf, and Next lesson cards.
@@ -13,12 +13,16 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - IndexNow: submits daily and after each push to main.
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
 - Parent guide /explain-ai-to-kids ("How to explain AI to an 8-year-old"): live since 2026-10-22 (PR #19).
+- SEO internal links live since 2026-11-04 (PR #21): homepage FAQ intro links /explain-ai-to-kids; "Play it again →" at the end of Lessons 2 and 3.
+- Bot Camp at /bot-camp: seven free hands-on labs, served as Claude built the self-contained page. Main-nav link and homepage feature card included. packUrl is empty until Nick gives the sales URL. The paid classroom pack PDF is not published.
 
 **Open pull requests:** #20 (/is-ai-safe-for-kids parent guide) — preview only, waiting on Nick's OK.
 
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+
+- **2026-11-11:** Bot Camp ships as Claude's self-contained page at /bot-camp, served as-is (no rewrite, split, minify, or site layout/scripts). "Bot Camp" is in the main nav, and the homepage has a feature card ("Don't just read about AI. Train one. Seven free hands-on labs." / "Open Bot Camp"). packUrl stays empty until Nick gives the classroom-pack sales URL. The paid Bot-Camp-Classroom-Pack.pdf is not in the repo and is not published.
 
 - **2026-11-04:** SEO internal links (Nick: "Yes"): homepage FAQ intro links /explain-ai-to-kids; "Play it again →" at the end of Lesson 2 (→ /play/sort-training-data) and Lesson 3 (→ /play/guess-the-next-word).
 
