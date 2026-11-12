@@ -157,7 +157,7 @@ export default function Home() {
             <div className="bot-camp-card-copy">
               <p className="small-cap">Free hands-on labs</p>
               <h2 id="bot-camp-card">Bot Camp</h2>
-              <p>Don&rsquo;t just read about AI. Train one. Seven free hands-on labs.</p>
+              <p>Don&rsquo;t just read about AI. Train one. Nine free hands-on labs.</p>
             </div>
             <Link href="/bot-camp" className="btn btn-big btn-sun">
               Open Bot Camp

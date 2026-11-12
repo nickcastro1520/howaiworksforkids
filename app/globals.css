@@ -1412,3 +1412,14 @@ html:not(.anim-on) :is(.pip-blink, .pip-glow, .pip-wave, .node-pulse) { animatio
 .lesson-about { margin-top: 2rem; display: grid; gap: 0.7rem; }
 .story-text summary { cursor: pointer; font-weight: 900; min-height: 48px; display: flex; align-items: center; color: var(--sky); }
 .story-text ol { padding-left: 1.4rem; display: grid; gap: 0.4rem; }
+
+/* Bot Camp teacher sample */
+.bc-teachers { padding: 3rem 0 2rem; }
+.bc-teachers-note { font-weight: 800; color: var(--ink-2); margin: 0.2rem 0 1.4rem; }
+.bc-sample-form { display: grid; gap: 1rem; margin: 1.2rem 0 1.6rem; max-width: 32rem; }
+.bc-sample-check { display: flex; align-items: flex-start; gap: 0.7rem; font-weight: 800; }
+.bc-sample-check input { width: 1.2rem; height: 1.2rem; margin-top: 0.15rem; flex: none; accent-color: var(--mint); }
+.bc-sample-fine { color: var(--ink-2); margin: 0; }
+.bc-sample-error { color: #9b2c1a; font-weight: 800; margin: 0; }
+.bc-sample-soon, .bc-sample-done { background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 1.1rem 1.2rem; box-shadow: 0 5px 0 var(--ink); margin: 1.2rem 0 1.6rem; max-width: 36rem; }
+.bc-sample-done a { font-weight: 900; }

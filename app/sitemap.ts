@@ -13,6 +13,7 @@ const PAGES: Entry[] = [
   { path: "/play/sort-training-data", og: "play-sort-training-data", priority: 0.6, freq: "monthly" },
   { path: "/play/guess-the-next-word", og: "play-guess-the-next-word", priority: 0.6, freq: "monthly" },
   { path: "/bot-camp", og: "bot-camp", priority: 0.8, freq: "weekly" },
+  { path: "/bot-camp/teachers", og: "bot-camp-teachers", priority: 0.7, freq: "monthly" },
   { path: "/quiz", og: "quiz", priority: 0.6, freq: "monthly" },
   { path: "/parents", og: "parents", priority: 0.7, freq: "monthly" },
   { path: "/explain-ai-to-kids", og: "explain-ai-to-kids", priority: 0.7, freq: "monthly" },

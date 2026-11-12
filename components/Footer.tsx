@@ -19,6 +19,7 @@ export function Footer() {
           <Link href="/finish">Certificate</Link>
           <Link href="/parents">Parents &amp; Teachers</Link>
           <Link href="/teachers">Teacher kit</Link>
+          <Link href="/bot-camp/teachers">Bot Camp for teachers</Link>
           <Link href="/tested-by-kids">Tested by kids</Link>
           <Link href="/about">About</Link>
           <Link href="/how-i-built-this">How I built this</Link>

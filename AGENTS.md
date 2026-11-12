@@ -14,13 +14,17 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
 - Parent guide /explain-ai-to-kids ("How to explain AI to an 8-year-old"): live since 2026-10-22 (PR #19).
 - SEO internal links live since 2026-11-04 (PR #21): homepage FAQ intro links /explain-ai-to-kids; "Play it again →" at the end of Lessons 2 and 3.
-- Bot Camp at /bot-camp: seven free hands-on labs, served as Claude built the self-contained page. Main-nav link and homepage feature card included. packUrl is empty until Nick gives the sales URL. The paid classroom pack PDF is not published.
+- Bot Camp at /bot-camp: a self-contained lab page, with a main-nav link and a homepage feature card. packUrl is empty until the classroom pack listing is live. The paid classroom pack PDF is not published.
 
-**Open pull requests:** #20 (/is-ai-safe-for-kids parent guide) — preview only, waiting on Nick's OK.
+**Open pull requests:**
+- #20 (/is-ai-safe-for-kids parent guide) — preview only, waiting on Nick's OK.
+- `bot-camp-teachers` (Bot Camp Part 1 update) — preview only, waiting on Nick's OK: 9-station lab page, homepage card wording "Nine free hands-on labs.", /bot-camp/teachers sample form, /bot-camp/pack click redirect. Do not merge until Nick says so.
 
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+
+- **2026-11-11 (evening, preview):** Bot Camp Part 1 update, not live until Nick says so. The lab page is replaced with the 9-station version (Doodle Brain, Self-Driving School, Treat Hunt, Parrot Bot, Guess Machine, Fair or Unfair?, Taste Twins, Smart Rockets, Robot Eyes), served as-is; packUrl stays empty. The sash shows "N of 9 patches." Homepage card text is now "Don't just read about AI. Train one. Nine free hands-on labs." New page /bot-camp/teachers uses the Launch Kit "Free sample page" wording. The form posts to Kit once KIT_FORM_ID is set; until then it shows a coming-soon state. Grade is a custom field; the new-lessons checkbox is a Kit tag. Teacher emails go to Kit only, not our database; unsubscribe any time; nothing from kids. The free sample PDF is not hosted as a public file — attach Bot-Camp-Free-Sample.pdf in Kit (email copy is in the Launch Kit). /bot-camp/pack 302s to BOT_CAMP_PACK_URL (or /bot-camp/teachers if unset) and will count clicks; set packUrl in index.html to https://howaiworksforkids.com/bot-camp/pack only after the store listing is live. Visit and pack-click totals need a free Upstash Redis (or Vercel KV) via the Vercel Marketplace; do not add any script to index.html. The paid Bot-Camp-Classroom-Pack.pdf is not published.
 
 - **2026-11-11:** Bot Camp ships as Claude's self-contained page at /bot-camp, served as-is (no rewrite, split, minify, or site layout/scripts). "Bot Camp" is in the main nav, and the homepage has a feature card ("Don't just read about AI. Train one. Seven free hands-on labs." / "Open Bot Camp"). packUrl stays empty until Nick gives the classroom-pack sales URL. The paid Bot-Camp-Classroom-Pack.pdf is not in the repo and is not published.
 
