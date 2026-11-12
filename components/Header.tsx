@@ -40,11 +40,25 @@ export function Header() {
           </span>
         </Link>
         <nav className="main-nav" aria-label="Main">
-          {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className={navIsOn(path, item.href) ? "is-on" : ""} aria-current={navIsOn(path, item.href) ? "page" : undefined}>
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) => {
+            const on = navIsOn(path, item.href);
+            const className = on ? "is-on" : "";
+            const current = on ? ("page" as const) : undefined;
+            // /bot-camp is a static HTML file, not a Next.js route. A <Link>
+            // prefetch would request ?_rsc= and 404 in the console.
+            if (item.href === "/bot-camp") {
+              return (
+                <a key={item.href} href={item.href} className={className} aria-current={current}>
+                  {item.label}
+                </a>
+              );
+            }
+            return (
+              <Link key={item.href} href={item.href} className={className} aria-current={current}>
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
         <SoundToggle />
         <Link href="/lessons" className="brain-pill" aria-label={`${n} of ${total} lessons done. See all lessons.`}>

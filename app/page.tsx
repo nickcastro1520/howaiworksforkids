@@ -159,9 +159,9 @@ export default function Home() {
               <h2 id="bot-camp-card">Bot Camp</h2>
               <p>Don&rsquo;t just read about AI. Train one. Nine free hands-on labs.</p>
             </div>
-            <Link href="/bot-camp" className="btn btn-big btn-sun">
+            <a href="/bot-camp" className="btn btn-big btn-sun">
               Open Bot Camp
-            </Link>
+            </a>
           </aside>
           <p className="center">
             <Link href={SECTIONS[2].path} className="btn btn-big btn-sun">
