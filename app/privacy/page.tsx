@@ -146,9 +146,9 @@ export default function PrivacyPage() {
         You can unsubscribe any time. We do not store those emails in our own database.
       </p>
       <p>
-        We may also count visits to the Bot Camp labs page and clicks on &ldquo;Get the classroom pack&rdquo; as daily totals
-        only, stored in our hosting provider&rsquo;s file storage. Those counts do not include names, emails, IP addresses,
-        browser types, or anything anyone draws or types in the labs.
+        We may also count visits to the Bot Camp labs page, successful teacher-sample requests, and clicks on
+        &ldquo;Get the classroom pack&rdquo; as daily totals only, stored in our hosting provider&rsquo;s file storage.
+        Those counts do not include names, emails, IP addresses, browser types, or anything anyone draws or types in the labs.
       </p>
 
       <h2>Hosting</h2>

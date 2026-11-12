@@ -14,7 +14,7 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
 - Parent guide /explain-ai-to-kids ("How to explain AI to an 8-year-old"): live since 2026-10-22 (PR #19).
 - SEO internal links live since 2026-11-04 (PR #21): homepage FAQ intro links /explain-ai-to-kids; "Play it again →" at the end of Lessons 2 and 3.
-- Bot Camp at /bot-camp: the 9-station lab page (Doodle Brain, Self-Driving School, Treat Hunt, Parrot Bot, Guess Machine, Fair or Unfair?, Taste Twins, Smart Rockets, Robot Eyes), served as-is. Live since 2026-11-11 (PR #23, main `7cbd6e9`). Homepage card: "Don't just read about AI. Train one. Nine free hands-on labs." /bot-camp/teachers uses the Launch Kit wording; the form stays coming-soon until KIT_FORM_ID is set. /bot-camp/pack 302s to /bot-camp/teachers until BOT_CAMP_PACK_URL is set. packUrl in index.html is empty until the classroom pack listing is live. Visit and pack-click counters use a private Vercel Blob store on the Hobby free tier (daily write caps so monthly advanced operations stay under 2,000). /bot-camp and /bot-camp/index.html send a Link canonical header; the HTML file itself is unchanged (sha256 bc60b6ce…). The paid classroom pack PDF is not published.
+- Bot Camp at /bot-camp: the 9-station lab page (Doodle Brain, Self-Driving School, Treat Hunt, Parrot Bot, Guess Machine, Fair or Unfair?, Taste Twins, Smart Rockets, Robot Eyes), served as-is. Live since 2026-11-11 (PR #23, main `7cbd6e9`). Homepage card: "Don't just read about AI. Train one. Nine free hands-on labs." /bot-camp/teachers uses the Launch Kit wording; the form stays coming-soon until KIT_FORM_ID is set. /bot-camp/pack 302s to /bot-camp/teachers until BOT_CAMP_PACK_URL is set. packUrl in index.html is empty until the classroom pack listing is live. Visit, pack-click, and sample-sent counters use a private Vercel Blob store on the Hobby free tier (daily write caps so monthly advanced operations stay under 2,000). The teachers form is connected to Kit (form ID in KIT_FORM_ID); KIT_NEW_LESSONS_TAG_ID stays unset on the free plan, and the opt-in is sent as fields[new_lessons_opt_in] only when the box is ticked. /bot-camp and /bot-camp/index.html send a Link canonical header; the HTML file itself is unchanged (sha256 bc60b6ce…). The paid classroom pack PDF is not published.
 
 **Open pull requests:**
 - #20 (/is-ai-safe-for-kids parent guide) — preview only, waiting on Nick's OK.
@@ -22,6 +22,8 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+
+- **2026-11-11 (night):** The /bot-camp/teachers form is live with KIT_FORM_ID (Kit form 10178091). The route POSTs to the Kit form subscription endpoint with fields[grade] and, only when the box is ticked, fields[new_lessons_opt_in]. KIT_NEW_LESSONS_TAG_ID is left unset (no tag on the free plan). Successful submits increment a daily sample-sent total in Blob; the email itself stays in Kit only. Daily write caps are 35 visit / 15 pack / 10 sample writes, still under the Hobby 2,000 advanced-operations monthly limit.
 
 - **2026-11-11 (late evening):** Bot Camp counters switched to a private Vercel Blob store on the Hobby free tier (no card). Marketplace Upstash Redis was not used because every listed plan required a payment method. Counts are exact for the first 15 events of a day, then sampled, and writing stops after 40 visit writes and 20 pack-click writes per day so monthly put/list operations stay under the 2,000 Hobby cap. Concurrent writes may slightly undercount. Nothing kids draw or type, and no IPs or user agents, is stored. /bot-camp and /bot-camp/index.html send a Link: rel="canonical" header; the lab HTML stays byte-identical. /bot-camp/teachers has a descriptive title and meta description, one h1, a visible FAQ (What is Bot Camp? / What ages? / Do kids need an account?), LearningResource JSON-LD (isAccessibleForFree, educationalLevel grades 3–6), and BreadcrumbList Home > Bot Camp > Teachers. Links to the static lab page use a plain <a> (and ?_rsc= requests return 204) so Next.js prefetch does not 404. The form stays coming-soon until KIT_FORM_ID is set. packUrl stays empty until the store listing is live.
 
@@ -48,7 +50,7 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - **2026-10-05:** Bought the domain. Ages 6–10 only, to keep the site focused.
 
 ## Next steps
-- Set KIT_FORM_ID (and optional KIT_API_KEY plus the new-lessons tag) so /bot-camp/teachers can collect sample emails; attach Bot-Camp-Free-Sample.pdf in Kit.
+- Confirm Bot-Camp-Free-Sample.pdf is attached to the Kit form confirmation email.
 - Classroom pack store listing at $12 still needs Nick's OK on the seller plan before publishing; do not set packUrl until it is live.
 - Nathan and Nolan test Section 2 and the bonus games. Use only their real feedback on the site.
 - Fix the 53px sideways scroll on 320px-wide screens.
