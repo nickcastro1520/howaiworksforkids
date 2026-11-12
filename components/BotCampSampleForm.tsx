@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { isKitSubscribeAccepted, kitChallengeUrl, kitSubscribeUrl, kitSubscriptionBody, kitSubscriptionFields } from "@/lib/kitForm";
 
-type Props = { ready: boolean };
+type Props = { ready: boolean; formId?: string };
 
-export function BotCampSampleForm({ ready }: Props) {
+export function BotCampSampleForm({ ready, formId = "" }: Props) {
   const [email, setEmail] = useState("");
   const [grade, setGrade] = useState("");
   const [newLessons, setNewLessons] = useState(false);
@@ -13,22 +14,35 @@ export function BotCampSampleForm({ ready }: Props) {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!ready) return;
+    if (!ready || !formId) return;
     setStatus("sending");
     setError("");
+    const fields = kitSubscriptionFields({ grade: grade.trim(), newLessons });
     try {
-      const res = await fetch("/api/bot-camp/sample", {
+      // Post from the browser so Kit sees the visitor, not our server. Server-side
+      // posts are held in bot protection (HTTP 200, status: quarantined).
+      const kitRes = await fetch(kitSubscribeUrl(formId), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, grade, newLessons }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+        body: kitSubscriptionBody(email.trim(), fields),
       });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; message?: string };
-      if (res.ok && data.ok) {
+      const kitData: unknown = await kitRes.json().catch(() => null);
+      if (isKitSubscribeAccepted(kitData)) {
+        await fetch("/api/bot-camp/sample", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, grade, newLessons, kitAccepted: true }),
+        }).catch(() => undefined);
         setStatus("done");
         return;
       }
+      const challenge = kitChallengeUrl(kitData);
+      if (challenge) {
+        window.location.href = challenge;
+        return;
+      }
       setStatus("error");
-      setError(data.message || "Something went wrong. Please try again in a moment.");
+      setError("Something went wrong. Please try again in a moment.");
     } catch {
       setStatus("error");
       setError("Something went wrong. Please try again in a moment.");

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BotCampSampleForm } from "@/components/BotCampSampleForm";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { isKitConfigured } from "@/lib/botCamp";
+import { isKitConfigured, kitFormId } from "@/lib/botCamp";
 import { ogAlt } from "@/lib/og";
 import { BOT_CAMP_TEACHERS_FAQ, botCampTeachersJsonLd, faqJsonLd, pageMeta } from "@/lib/seo";
 
@@ -36,7 +36,7 @@ export default function BotCampTeachersPage() {
       </p>
       <p className="bc-teachers-note">For teachers and parents; we don&rsquo;t collect anything from kids.</p>
 
-      <BotCampSampleForm ready={isKitConfigured()} />
+      <BotCampSampleForm ready={isKitConfigured()} formId={kitFormId()} />
 
       <section className="faq" aria-labelledby="bc-teachers-faq">
         <h2 id="bc-teachers-faq" className="section-title">

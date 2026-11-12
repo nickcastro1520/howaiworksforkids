@@ -9,6 +9,8 @@ import {
   chicagoDate,
   counterBlobPath,
   isBotCampVisitPath,
+  isKitSubscribeAccepted,
+  kitChallengeUrl,
   kitSubscriptionBody,
   kitSubscriptionFields,
   planIncrement,
@@ -100,4 +102,36 @@ test("kit subscription fields include grade and opt-in only when ticked, and nev
   assert.equal(params.get("fields[new_lessons_opt_in]"), "true");
   assert.equal(params.get("tags[]"), null);
   assert.equal(params.get("tags"), null);
+});
+
+test("isKitSubscribeAccepted is false for quarantined 200s and true only for real accepts", () => {
+  assert.equal(isKitSubscribeAccepted(null), false);
+  assert.equal(isKitSubscribeAccepted("ok"), false);
+  assert.equal(
+    isKitSubscribeAccepted({
+      consent: { enabled: false },
+      status: "quarantined",
+      url: "https://app.kit.com/forms/guards/aebe600a-7f1e-4d67-beaf-4c9e797e9f7b",
+    }),
+    false,
+  );
+  assert.equal(isKitSubscribeAccepted({ status: "error" }), false);
+  assert.equal(isKitSubscribeAccepted({ status: "success" }), true);
+  assert.equal(isKitSubscribeAccepted({ status: "unconfirmed" }), true);
+  assert.equal(isKitSubscribeAccepted({ subscription: { id: 123, state: "active" } }), true);
+  assert.equal(isKitSubscribeAccepted({ subscription: { id: 1, state: "quarantined" } }), false);
+  assert.equal(isKitSubscribeAccepted({}), false);
+});
+
+test("kitChallengeUrl only returns a Kit guard URL for quarantined responses", () => {
+  assert.equal(kitChallengeUrl({ status: "success", url: "https://app.kit.com/forms/guards/abc" }), null);
+  assert.equal(kitChallengeUrl({ status: "quarantined" }), null);
+  assert.equal(kitChallengeUrl({ status: "quarantined", url: "https://evil.example/forms/guards/abc" }), null);
+  assert.equal(
+    kitChallengeUrl({
+      status: "quarantined",
+      url: "https://app.kit.com/forms/guards/aebe600a-7f1e-4d67-beaf-4c9e797e9f7b",
+    }),
+    "https://app.kit.com/forms/guards/aebe600a-7f1e-4d67-beaf-4c9e797e9f7b",
+  );
 });
