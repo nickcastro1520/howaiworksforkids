@@ -201,6 +201,8 @@ main{min-width:0}
 .seg{max-width:100%}
 .seg button{flex:1 1 auto;white-space:nowrap}
 @media (max-width:520px){.duo{grid-template-columns:1fr}.seg button{padding:0 9px;font-size:14px}}
+.tri{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tri .btn{padding:0 6px}
 
 /* 11-doodle.css */
 /* Doodle Brain */
@@ -331,6 +333,41 @@ main{min-width:0}
 .ey-k button.neg{background:var(--berry);color:var(--on-accent)}
 .ey-math{flex:1;min-width:180px;font-size:14.5px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 @media (max-width:520px){.ey-duo{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* 93-tictac.css */
+/* Tic-Tac-Toe Trainer */
+.tt-board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:320px;margin:0 auto}
+.tt-cell{aspect-ratio:1;border:3px solid var(--ink);border-radius:14px;background:var(--card);font-family:var(--f-sign);font-weight:800;font-size:54px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0;touch-action:manipulation}
+.tt-cell:disabled{cursor:default}
+.tt-cell.x{color:var(--ember)}.tt-cell.o{color:var(--lake)}
+.tt-cell.last{background:var(--bg2)}
+.tt-beads{font-family:var(--f-body);font-size:13px;font-weight:600;color:var(--ink2)}
+.tt-recent{display:flex;gap:4px;flex-wrap:wrap;min-height:16px}
+.tt-recent i{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.tt-recent i.w{background:var(--pine)}.tt-recent i.l{background:var(--ember)}
+
+/* 94-versus.css */
+/* Head to Head */
+.vs-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.vs-team{border:3px solid var(--ink);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.vs-team h3{font-size:20px}
+.vs-ember{border-color:var(--ember)}.vs-ember h3{color:var(--ember)}
+.vs-lake{border-color:var(--lake)}.vs-lake h3{color:var(--lake)}
+.vs-team .chip{min-height:34px;padding:0 10px;font-size:14px}
+.vs-read{font-size:13px;color:var(--ink2)}
+.vs-score{font-family:var(--f-sign);font-weight:800;font-size:19px}
+@media (max-width:520px){.vs-panels{grid-template-columns:1fr}}
+
+/* 95-finale.css */
+/* Camp Finale */
+.fn-box{display:flex;flex-direction:column;gap:10px}
+.fn-q{font-family:var(--f-sign);font-weight:800;font-size:22px;line-height:1.2}
+.fn-opt{justify-content:flex-start;text-align:left;min-height:52px;font-size:16px;padding:8px 14px}
+.fn-opt:disabled{opacity:1;cursor:default}
+.fn-opt.yes{background:var(--pine);color:var(--on-accent)}
+.fn-opt.no{background:var(--berry);color:var(--on-accent)}
+.fn-miss{display:flex;flex-wrap:wrap;gap:6px}
+.fn-chip{display:inline-flex;align-items:center;text-decoration:none;font-size:14px;min-height:34px}
 
 </style>
 </head>
@@ -2458,6 +2495,534 @@ BC.register({
     var off = BC.onTheme(draw);
     renderK(); draw(); say('You see a rocket. I see a grid of numbers. Switch to Numbers to see what I get.');
     return function(){ si.destroy(); so.destroy(); off(); };
+  }
+});
+})(window.BC);
+
+/* 91-keeper.js */
+(function(BC){
+'use strict';
+/* ================= Beat the Keeper: pure logic (no DOM) ================= */
+var NAMES = ['left', 'center', 'right'];
+// history = array of 0/1/2. Returns the keeper's read of the next shot.
+function predict(history){
+  var n = history.length, c2 = [0, 0, 0], c1 = [0, 0, 0], c0 = [0, 0, 0], i;
+  for (i = 0; i < n; i++){
+    c0[history[i]]++;
+    if (i >= 1 && n >= 1 && history[i - 1] === history[n - 1]) c1[history[i]]++;
+    if (i >= 2 && n >= 2 && history[i - 2] === history[n - 2] && history[i - 1] === history[n - 1]) c2[history[i]]++;
+  }
+  function tot(a){ return a[0] + a[1] + a[2]; }
+  var use = tot(c2) >= 2 ? c2 : tot(c1) >= 2 ? c1 : tot(c0) >= 3 ? c0 : null, used = use === c2 ? 2 : use === c1 ? 1 : use === c0 ? 0 : -1;
+  if (!use) return { probs: [1 / 3, 1 / 3, 1 / 3], used: -1, seen: 0 };
+  var t = tot(use); return { probs: use.map(function(v){ return v / t; }), used: used, seen: t };
+}
+function dive(pred, rnd){ var best = [], mx = -1; pred.probs.forEach(function(p, i){ if (p > mx + 1e-9){ mx = p; best = [i]; } else if (Math.abs(p - mx) < 1e-9) best.push(i); }); return best[Math.floor(rnd() * best.length)]; }
+var K = BC.sim.keeper = { NAMES: NAMES, predict: predict, dive: dive };
+
+BC.register({
+  id: 'keeper', order: 100, name: 'Beat the Keeper', minutes: 6, thread: '--ember', big: [3],
+  tagline: 'A robot goalie studies where you shoot. Can you stay unpredictable?',
+  does: 'Take penalties against a goalie that predicts the next shot from the pattern of earlier ones.',
+  icon: '<path d="M14 44V22h36v22"/><path d="M14 30h36M26 22v22M38 22v22" stroke-width="1.4"/><circle cx="32" cy="48" r="3.5"/>',
+  missions: [
+    { id: 'ten', text: 'Take 10 penalties.' },
+    { id: 'same', text: 'Shoot the same side 5 times in a row. Watch the keeper catch on.' },
+    { id: 'seven', text: 'Score 7 or more in a round of 10 against the learning keeper.' },
+    { id: 'random', text: 'Switch the keeper to Just guessing and play a full round. Compare your scores.' }
+  ],
+  how: [
+    'The keeper cannot see where you are aiming. It only remembers where you shot before.',
+    'Before each kick it looks at your last two shots and asks: after those two, where does this player usually go next? Then it dives that way.',
+    'If you always shoot the same way, or repeat a pattern like left, right, left, right, the keeper learns it within a few kicks.',
+    'The only way to beat it is to be hard to predict. Apps that guess your next word, your next video or your next purchase work from your past choices in the same way.'
+  ],
+  words: [
+    ['pattern', 'Something you do again and again.'],
+    ['predict', 'Make a smart guess about what comes next.'],
+    ['history', 'A record of what happened before.'],
+    ['random', 'With no pattern at all, so nobody can predict it.']
+  ],
+  ask: [
+    'How did the keeper know where you would shoot?',
+    'Is it easy to be truly random? What did you catch yourself doing?',
+    'What apps guess what you will do next? What history do they use?',
+    'When is it helpful for a computer to predict you? When is it not?'
+  ],
+  grown: '<p>The keeper is a small <strong>sequence predictor</strong>. It counts which side followed each pair of earlier shots, falls back to the last single shot, then to overall frequency, and dives to the most likely side. It is the same counting idea as Parrot Bot, applied to behavior.</p><p>People are poor at being random: they avoid repeats and fall into alternation. Against a random shooter the keeper saves about one kick in three, so a round of 7 or more goals is beatable only by breaking patterns.</p><p>This opens a good talk about <strong>behavioral prediction</strong>: recommendation feeds, autocomplete and ad systems learn from the same kind of history.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.pine; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = C.woodink; ctx.lineWidth = 3; ctx.strokeRect(30, 22, 100, 50);
+    var k = Math.floor(t * 0.9) % 3, f = (t * 0.9) % 1, kx = 80 + (k - 1) * 30 * Math.min(1, f * 2);
+    ctx.fillStyle = C.card; ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5; BC.rr(ctx, kx - 9, 42, 18, 22, 5); ctx.fill(); ctx.stroke();
+    var bx = 80 + ((k + 1) % 3 - 1) * 34 * f, by = 92 - 44 * f; ctx.fillStyle = '#fffaf0'; ctx.beginPath(); ctx.arc(bx, by, 5, 0, 6.2832); ctx.fill(); ctx.stroke();
+  },
+  mount: function(root, api){
+    var el = BC.el, rnd = BC.rng((Math.random() * 1e9) | 0), W = 480, H = 300, ZX = [130, 240, 350];
+    var history = [], mode = 'learn', round = { shots: 0, goals: 0 }, lastLearn = null, lastRandom = null, streakSame = 0, total = 0, anim = null, lastPred = null, playedLearnRound = false;
+    var cv = el('canvas', { 'aria-label': 'A soccer goal with a robot keeper. Choose left, center or right to shoot.' }), note = el('p', { class: 'note' }), bars = el('div', { class: 'bars' });
+    var sShot = BC.stat('Kick'), sGoal = BC.stat('Goals this round'), sLearn = BC.stat('Best vs learning'), sRand = BC.stat('Best vs guessing');
+    function say(s){ note.textContent = s; }
+    var modeSeg = BC.seg([{ id: 'learn', label: 'Keeper learns you' }, { id: 'random', label: 'Just guessing' }], 'learn', function(id){ mode = id; round = { shots: 0, goals: 0 }; BC.sfx('tap'); say(id === 'learn' ? 'I am watching your pattern again. New round.' : 'Now I ignore your history and dive at random. New round.'); renderBars(); }, 'Keeper brain');
+    function renderBars(){
+      bars.innerHTML = ''; var p = lastPred;
+      K.NAMES.forEach(function(nm, i){ var fill = el('i'); fill.style.width = (p ? Math.round(p.probs[i] * 100) : 0) + '%'; bars.appendChild(el('div', { class: 'barrow' + (p && anim && anim.dive === i ? ' top' : '') }, el('span', { class: 'nm', text: nm }), el('span', { class: 'tr' }, fill), el('span', { class: 'pc', text: p ? Math.round(p.probs[i] * 100) + '%' : '' }))); });
+    }
+    function shoot(z){
+      if (anim && anim.t < 1) return;
+      var pred = mode === 'learn' ? K.predict(history) : { probs: [1 / 3, 1 / 3, 1 / 3], used: -1, seen: 0 }, d = K.dive(pred, rnd), goal = d !== z;
+      lastPred = pred; anim = { t: 0, z: z, dive: d, goal: goal }; BC.sfx('tap');
+      streakSame = history.length && history[history.length - 1] === z ? streakSame + 1 : 1;
+      history.push(z); total++; round.shots++; if (goal) round.goals++;
+      var why = mode === 'random' ? 'I guessed ' + K.NAMES[d] + ' without looking at your history.' : pred.used === 2 ? 'After your last two shots you usually go ' + K.NAMES[d] + ', so I dove ' + K.NAMES[d] + '.' : pred.used === 1 ? 'After a ' + K.NAMES[history[history.length - 2]] + ' shot you usually go ' + K.NAMES[d] + ', so I dove ' + K.NAMES[d] + '.' : pred.used === 0 ? 'You shoot ' + K.NAMES[d] + ' the most, so I dove ' + K.NAMES[d] + '.' : 'I do not know you yet, so I guessed.';
+      setTimeout(function(){
+        BC.sfx(goal ? 'good' : 'bad'); say((goal ? 'Goal! ' : 'Saved! ') + why); renderBars();
+        if (total >= 10) api.mission('ten'); if (streakSame >= 5 && mode === 'learn') api.mission('same');
+        if (round.shots >= 10){
+          if (mode === 'learn'){ lastLearn = Math.max(lastLearn || 0, round.goals); playedLearnRound = true; if (round.goals >= 7) api.mission('seven'); }
+          else { lastRandom = Math.max(lastRandom || 0, round.goals); if (playedLearnRound) api.mission('random'); }
+          say('Round over: ' + round.goals + ' of 10. ' + (mode === 'learn' ? (round.goals >= 7 ? 'You kept me guessing!' : 'I read your pattern. Mix it up more.') : 'With pure guessing I save about 1 in 3.') + ' New round starts with your next kick.');
+          round = { shots: 0, goals: 0 };
+        }
+        stats();
+      }, BC.reduced ? 10 : 520);
+      stats();
+    }
+    function stats(){ sShot.val.textContent = round.shots + ' of 10'; sGoal.val.textContent = round.goals; sLearn.val.textContent = lastLearn == null ? '-' : lastLearn; sRand.val.textContent = lastRandom == null ? '-' : lastRandom; }
+    cv.addEventListener('pointerdown', function(e){ e.preventDefault(); var p = st.pt(e); if (p.y > 230) return; shoot(p.x < 185 ? 0 : p.x < 295 ? 1 : 2); });
+    root.appendChild(el('div', { class: 'row' }, modeSeg));
+    root.appendChild(el('div', { class: 'stage' }, cv));
+    root.appendChild(el('div', { class: 'tri' }, [0, 1, 2].map(function(z){ return el('button', { class: 'btn', type: 'button', 'aria-label': 'Shoot ' + K.NAMES[z], text: K.NAMES[z].charAt(0).toUpperCase() + K.NAMES[z].slice(1), onclick: function(){ shoot(z); } }); })));
+    root.appendChild(el('div', { class: 'stats' }, sShot, sGoal, sLearn, sRand));
+    root.appendChild(note);
+    root.appendChild(el('p', { class: 'cap', text: 'Where the keeper thought you would shoot' })); root.appendChild(bars);
+    var st = BC.stage(cv, W, H); stats(); renderBars(); say('Pick a side and shoot. I will start guessing, then I will start learning you.');
+    var stop = BC.loop(function(dt){
+      var C = BC.colors(), ctx = st.begin(); if (anim && anim.t < 1) anim.t = Math.min(1, anim.t + dt / (BC.reduced ? 0.01 : 0.5));
+      ctx.fillStyle = C.pine; ctx.fillRect(0, 0, W, H); ctx.fillStyle = C.bg2; ctx.globalAlpha = 0.12; for (var s = 0; s < 6; s += 2) ctx.fillRect(0, 150 + s * 25, W, 25); ctx.globalAlpha = 1;
+      ctx.strokeStyle = C.woodink; ctx.lineWidth = 1; ctx.globalAlpha = 0.5; for (var x = 80; x <= 400; x += 20){ ctx.beginPath(); ctx.moveTo(x, 40); ctx.lineTo(x, 190); ctx.stroke(); } for (var y = 40; y <= 190; y += 20){ ctx.beginPath(); ctx.moveTo(75, y); ctx.lineTo(405, y); ctx.stroke(); } ctx.globalAlpha = 1;
+      ctx.lineWidth = 7; ctx.strokeStyle = C.woodink; ctx.beginPath(); ctx.moveTo(75, 192); ctx.lineTo(75, 38); ctx.lineTo(405, 38); ctx.lineTo(405, 192); ctx.stroke();
+      ctx.strokeStyle = C.woodink; ctx.globalAlpha = 0.6; ctx.setLineDash([5, 6]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(185, 40); ctx.lineTo(185, 190); ctx.moveTo(295, 40); ctx.lineTo(295, 190); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+      var k = anim ? anim.t : 0, kx = 240 + (anim ? (ZX[anim.dive] - 240) * k : 0), lean = anim ? (anim.dive - 1) * 0.5 * k : 0;
+      ctx.save(); ctx.translate(kx, 150); ctx.rotate(lean); ctx.strokeStyle = C.ink; ctx.lineWidth = 2.5; ctx.fillStyle = C.card; BC.rr(ctx, -20, -34, 40, 32, 9); ctx.fill(); ctx.stroke(); ctx.fillStyle = C.ember; BC.rr(ctx, -16, 0, 32, 34, 7); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = C.ink; ctx.beginPath(); ctx.arc(-7, -19, 4, 0, 6.2832); ctx.arc(7, -19, 4, 0, 6.2832); ctx.fill(); ctx.fillStyle = C.sun; ctx.beginPath(); ctx.arc(-27, -6 - 20 * k, 8, 0, 6.2832); ctx.arc(27, -6 - 20 * k, 8, 0, 6.2832); ctx.fill(); ctx.stroke(); ctx.restore();
+      var bx = 240, by = 262, br = 13; if (anim){ var tx = ZX[anim.z], ty = 120; bx = 240 + (tx - 240) * k; by = 262 + (ty - 262) * k; br = 13 - 5 * k; }
+      ctx.fillStyle = '#fffaf0'; ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(bx, by, br, 0, 6.2832); ctx.fill(); ctx.stroke();
+      if (anim && anim.t >= 1){ ctx.font = '800 44px Verdana, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = anim.goal ? C.sun : C.card; ctx.strokeStyle = C.ink; ctx.lineWidth = 5; ctx.strokeText(anim.goal ? 'GOAL!' : 'SAVED', 240, 250); ctx.fillText(anim.goal ? 'GOAL!' : 'SAVED', 240, 250); }
+    });
+    return function(){ stop(); st.destroy(); };
+  }
+});
+})(window.BC);
+
+/* 92-lander.js */
+(function(BC){
+'use strict';
+/* ================= Moon Lander School: pure logic (no DOM) ================= */
+var H0 = 100, THRUST = 16, SAFE = 3, DT = 1 / 30, LIMIT = 45, N = 12;
+var PLANETS = { moon: { name: 'Moon', g: 1.62 }, mars: { name: 'Mars', g: 3.71 }, earth: { name: 'Earth', g: 9.81 } };
+function gauss(rnd){ var u = 1 - rnd(), v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.283185307 * v); }
+// A brain is two dials: burn when falling faster than (k1 * height + k2).
+function rookie(rnd){ return { k1: rnd() * 0.3, k2: 10 + rnd() * 26 }; }
+function lander(brain, fuel){ return { brain: brain, h: H0, v: 0, fuel: fuel, t: 0, burning: false, state: 0, speed: 0 }; } // state 0 flying, 1 landed, 2 crashed
+function step(l, g, burn){
+  if (l.state) return;
+  l.burning = !!burn && l.fuel > 0;
+  if (l.burning) l.fuel = Math.max(0, l.fuel - DT);
+  l.v += (g - (l.burning ? THRUST : 0)) * DT; l.h -= l.v * DT; l.t += DT;
+  if (l.h <= 0){ l.h = 0; l.speed = Math.abs(l.v); l.state = l.v <= SAFE ? 1 : 2; l.burning = false; }
+  else if (l.t > LIMIT || l.h > H0 * 1.6){ l.speed = 99; l.state = 2; l.burning = false; }
+}
+function wants(l){ return l.v > l.brain.k1 * l.h + l.brain.k2; }
+function newSim(seed, fuel){ var s = { rnd: BC.rng(seed), brains: [], landers: [], gen: 1, fuel: fuel, hist: [], best: 99, done: false }; for (var i = 0; i < N; i++) s.brains.push(rookie(s.rnd)); spawn(s); return s; }
+function spawn(s){ s.landers = s.brains.map(function(b){ return lander(b, s.fuel); }); s.done = false; }
+function stepAll(s, g){ var fly = 0; s.landers.forEach(function(l){ step(l, g, wants(l)); if (!l.state) fly++; }); if (!fly) s.done = true; }
+function evolve(s, mut){
+  var rnd = s.rnd, ranked = s.landers.slice().sort(function(a, b){ return a.speed - b.speed || b.fuel - a.fuel; });
+  var soft = s.landers.filter(function(l){ return l.state === 1; }).length; s.hist.push(soft); if (ranked[0].speed < s.best) s.best = ranked[0].speed;
+  var next = [ranked[0].brain, ranked[1].brain];
+  while (next.length < N){ var p = ranked[Math.floor(rnd() * rnd() * 5)].brain; next.push({ k1: Math.max(0, p.k1 + gauss(rnd) * 0.06 * mut), k2: p.k2 + gauss(rnd) * 4 * mut }); }
+  s.brains = next; s.gen++; spawn(s); return soft;
+}
+var S = BC.sim.lander = { H0: H0, SAFE: SAFE, DT: DT, N: N, PLANETS: PLANETS, lander: lander, step: step, wants: wants, newSim: newSim, spawn: spawn, stepAll: stepAll, evolve: evolve };
+
+function drawLander(ctx, x, y, l, C, big){
+  var k = big ? 1.7 : 1; ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+  if (l.burning){ ctx.fillStyle = C.sun; ctx.beginPath(); ctx.moveTo(-4, 0); ctx.lineTo(0, 10 + Math.random() * 6); ctx.lineTo(4, 0); ctx.closePath(); ctx.fill(); }
+  ctx.strokeStyle = C.ink; ctx.lineWidth = 1.4; ctx.fillStyle = l.state === 2 ? C.ink2 : l.state === 1 ? C.pine : C.card;
+  ctx.beginPath(); ctx.moveTo(-7, 0); ctx.lineTo(-5, -11); ctx.lineTo(5, -11); ctx.lineTo(7, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-6, 0); ctx.lineTo(-10, 5); ctx.moveTo(6, 0); ctx.lineTo(10, 5); ctx.stroke();
+  ctx.fillStyle = C.lake; ctx.beginPath(); ctx.arc(0, -6, 2.6, 0, 6.2832); ctx.fill(); ctx.restore();
+}
+
+BC.register({
+  id: 'lander', order: 110, name: 'Moon Lander School', minutes: 8, thread: '--plum', big: [3, 2],
+  tagline: 'Land it yourself. Then watch twelve landers learn to do it better.',
+  does: 'Fly a lander by hand, then evolve a two-dial landing rule and test it on a planet with different gravity.',
+  icon: '<path d="M24 34l3-14h10l3 14z"/><path d="M25 34l-6 9M39 34l6 9M17 43h6M41 43h6"/><circle cx="32" cy="26" r="2.6"/>',
+  missions: [
+    { id: 'fly', text: 'Fly it yourself. Touch down at 3 meters per second or slower.' },
+    { id: 'watch', text: 'Switch to AI learns. Watch Generation 1 crash.' },
+    { id: 'soft', text: 'Train until 6 or more landers touch down softly in one generation.' },
+    { id: 'planet', text: 'Move your trained landers to a different planet. Do they still land?' }
+  ],
+  how: [
+    'Each lander has a tiny brain with just two dials. Together the dials make one rule: fire the engine when I am falling faster than this.',
+    'In Generation 1 the dials are set at random. Most landers wait far too long and smash into the ground.',
+    'Camp keeps the brains with the gentlest landings, copies them, and nudges the dials a little. After a few generations the landers brake at the right moment.',
+    'Now change the planet. Gravity on Earth pulls six times harder than on the Moon. A rule tuned for the Moon fires too late on Earth. An AI only knows the world it practiced in.'
+  ],
+  words: [
+    ['gravity', 'The pull that makes things fall. It is weaker on the Moon than on Earth.'],
+    ['rule', 'An instruction of the form: when this happens, do that.'],
+    ['parameter', 'A dial inside an AI. Learning means finding good settings for the dials.'],
+    ['generation', 'One round of practice for the whole group.']
+  ],
+  ask: [
+    'Who landed more gently, you or the trained landers? Why?',
+    'The brain has only two dials. Doodle Brain has thousands. What can more dials do?',
+    'Why did the Moon-trained landers struggle on Earth?',
+    'Real rockets do land themselves. What would have to be different from this one?'
+  ],
+  grown: '<p>The controller is a two-parameter policy: burn when downward speed exceeds k1 times height plus k2. A small <strong>evolutionary search</strong> tunes the two numbers, ranking landers by touchdown speed.</p><p>Because the whole brain is two numbers, students can see what <strong>parameters</strong> are before meeting networks with thousands of them. The planet switch shows <strong>distribution shift</strong>: a policy tuned under one gravity fails under another.</p><p>Physics is simplified: one dimension, constant thrust, no atmosphere. Real landing guidance is solved with control theory and optimization rather than evolution.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, w, h); ctx.fillStyle = C.line; ctx.fillRect(0, 84, w, 16);
+    for (var i = 0; i < 4; i++){ var k = ((t * 0.3 + i * 0.25) % 1), y = 12 + 66 * (i % 2 ? k * k : Math.min(1, k * 1.15)); drawLander(ctx, 32 + i * 32, y + 6, { burning: i % 2 === 0 && k > 0.5, state: 0 }, C, false); }
+  },
+  mount: function(root, api){
+    var el = BC.el, W = 480, HH = 320, GY = 292, PX = 2.5;
+    var mode = 'you', planet = 'moon', fuel = 12, me = S.lander({ k1: 0, k2: 0 }, fuel), burning = false, myBest = null, sim = S.newSim((Math.random() * 1e9) | 0, fuel), speed = 1, hold = 0, trainedOn = null, pending = false, started = false;
+    var cv = el('canvas', { 'aria-label': 'Landers descending toward the ground. Hold Burn to fire the engine.' }), note = el('p', { class: 'note' });
+    var sA = BC.stat('Height'), sB = BC.stat('Speed'), sC = BC.stat('Fuel'), sD = BC.stat('Your best');
+    function say(s){ note.textContent = s; }
+    var burnBtn = el('button', { class: 'btn primary', type: 'button', text: 'Hold to burn' });
+    function down(e){ if (e) e.preventDefault(); burning = true; if (mode === 'you' && !started && !me.state){ started = true; } }
+    function up(){ burning = false; }
+    burnBtn.addEventListener('pointerdown', down); ['pointerup', 'pointercancel', 'pointerleave'].forEach(function(ev){ burnBtn.addEventListener(ev, up); });
+    burnBtn.addEventListener('keydown', function(e){ if (e.key === ' ' || e.key === 'Enter'){ down(e); } }); burnBtn.addEventListener('keyup', up);
+    var goBtn = el('button', { class: 'btn', type: 'button', text: 'Drop the lander', onclick: function(){ me = S.lander({ k1: 0, k2: 0 }, fuel); started = true; BC.sfx('tap'); say('Falling! Hold Burn to slow down. Save some fuel for the end.'); } });
+    var modeSeg = BC.seg([{ id: 'you', label: 'You fly' }, { id: 'ai', label: 'AI learns' }], 'you', function(id){ mode = id; youRow.hidden = id !== 'you'; aiRow.hidden = id !== 'ai'; BC.sfx('tap'); labels(); if (id === 'ai'){ S.spawn(sim); say(sim.gen === 1 ? 'Generation 1. Twelve landers with random dials.' : 'Back to school. Generation ' + sim.gen + '.'); } else say('Press Drop the lander, then hold Burn to slow down.'); }, 'Who flies');
+    var planetSeg = BC.seg([{ id: 'moon', label: 'Moon' }, { id: 'mars', label: 'Mars' }, { id: 'earth', label: 'Earth' }], 'moon', function(id){ if (trainedOn && id !== planet && mode === 'ai') pending = true; planet = id; S.spawn(sim); me = S.lander({ k1: 0, k2: 0 }, fuel); started = false; BC.sfx('tap'); say(pending ? 'New planet! These brains practiced under different gravity. Watch.' : S.PLANETS[id].name + ' gravity: things fall at ' + S.PLANETS[id].g + ' meters per second faster, every second.'); }, 'Planet');
+    var speedSeg = BC.seg([{ id: '1', label: '1x' }, { id: '4', label: '4x' }], '1', function(id){ speed = +id; }, 'Speed');
+    var fresh = el('button', { class: 'btn sm', type: 'button', text: 'New rookies', onclick: function(){ sim = S.newSim((Math.random() * 1e9) | 0, fuel); trainedOn = null; pending = false; BC.sfx('tap'); say('Twelve new landers with random dials.'); } });
+    var youRow = el('div', { class: 'row' }, goBtn, burnBtn), aiRow = el('div', { class: 'row', hidden: true }, speedSeg, fresh);
+    function labels(){ var ai = mode === 'ai'; sA.lastChild.textContent = ai ? 'Generation' : 'Height'; sB.lastChild.textContent = ai ? 'Soft landings' : 'Speed'; sC.lastChild.textContent = ai ? 'Gentlest ever' : 'Fuel'; sD.lastChild.textContent = ai ? 'Best brain rule' : 'Your best'; }
+    root.appendChild(el('div', { class: 'row' }, modeSeg, planetSeg));
+    root.appendChild(el('div', { class: 'stage' }, cv)); root.appendChild(youRow); root.appendChild(aiRow);
+    root.appendChild(el('div', { class: 'stats' }, sA, sB, sC, sD)); root.appendChild(note);
+    var st = BC.stage(cv, W, HH); labels(); say('Press Drop the lander, then hold Burn to slow down. Touch down at 3 or slower.');
+    var acc = 0;
+    var stop = BC.loop(function(dt){
+      var g = S.PLANETS[planet].g, C = BC.colors(), ctx = st.begin(), i;
+      acc += dt; var steps = 0; while (acc >= S.DT && steps < 8){ acc -= S.DT; steps++;
+        if (mode === 'you'){ if (started && !me.state){ S.step(me, g, burning); if (me.state){ BC.sfx(me.state === 1 ? 'good' : 'bad'); if (me.state === 1){ api.mission('fly'); if (myBest == null || me.speed < myBest) myBest = me.speed; say('Touchdown at ' + me.speed.toFixed(1) + ' meters per second. Soft landing! Now see if the AI can beat you.'); } else say(me.speed > 90 ? 'You flew off into space. Ease off the engine.' : 'Crash at ' + me.speed.toFixed(1) + ' meters per second. Burn earlier, or save fuel for the end.'); } } }
+        else for (var k = 0; k < speed * 3; k++){
+          if (sim.done){ hold++; if (hold > (speed > 1 ? 8 : 30)){ hold = 0; var soft = S.evolve(sim, 1); api.mission('watch');
+              if (pending){ pending = false; api.mission('planet'); say(soft >= 6 ? 'They coped! This rule works on ' + S.PLANETS[planet].name + ' too.' : 'Only ' + soft + ' landed softly. Their rule was tuned for different gravity. Let them practice here.'); }
+              else if (soft >= 6){ api.mission('soft'); trainedOn = planet; say(soft + ' soft landings. These brains have learned ' + S.PLANETS[planet].name + '. Try another planet.'); }
+              else say('Generation ' + sim.gen + '. ' + soft + ' soft landings last time. The gentlest brains were copied.'); }
+            break; }
+          S.stepAll(sim, g);
+        } }
+      ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, W, HH); var r = BC.rng(4); ctx.fillStyle = C.ink2; for (i = 0; i < 40; i++){ ctx.globalAlpha = 0.2 + r() * 0.5; ctx.fillRect(r() * W, r() * 270, 1.6, 1.6); } ctx.globalAlpha = 1;
+      ctx.fillStyle = planet === 'mars' ? C.ember : planet === 'earth' ? C.pine : C.line; ctx.fillRect(0, GY, W, HH - GY); ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, GY); ctx.lineTo(W, GY); ctx.stroke();
+      if (mode === 'you'){ drawLander(ctx, 240, GY - 8 - me.h * PX, me, C, true); sA.val.textContent = Math.round(me.h) + ' m'; sB.val.textContent = (me.state ? me.speed : Math.abs(me.v)).toFixed(1); sC.val.textContent = me.fuel.toFixed(1) + ' s'; sD.val.textContent = myBest == null ? '-' : myBest.toFixed(1); }
+      else { sim.landers.forEach(function(l, j){ drawLander(ctx, 30 + j * 38, GY - 5 - Math.min(l.h, 105) * PX, l, C, false); });
+        var b = sim.brains[0]; sA.val.textContent = sim.gen; sB.val.textContent = sim.landers.filter(function(l){ return l.state === 1; }).length + ' of ' + S.N; sC.val.textContent = sim.best > 90 ? '-' : sim.best.toFixed(1); sD.val.textContent = b.k2.toFixed(0) + ' + ' + b.k1.toFixed(2) + 'h'; }
+    });
+    return function(){ stop(); st.destroy(); };
+  }
+});
+})(window.BC);
+
+/* 93-tictac.js */
+(function(BC){
+'use strict';
+/* ================= Tic-Tac-Toe Trainer: pure logic (no DOM) ================= */
+// The machine plays X and moves first. For every board it has seen, it keeps a box of beads:
+// more beads on a square means it is more likely to play there.
+var LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+function winner(b){ for (var i = 0; i < 8; i++){ var l = LINES[i]; if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[1]] === b[l[2]]) return b[l[0]]; } return b.indexOf('') < 0 ? 'draw' : null; }
+function newBrain(){ return { boxes: {}, games: 0, w: 0, d: 0, l: 0, recent: [] }; }
+function box(brain, b){
+  var key = b.map(function(c){ return c || '-'; }).join(''), bx = brain.boxes[key];
+  if (!bx){ var empties = b.filter(function(c){ return !c; }).length, start = empties >= 9 ? 4 : empties >= 7 ? 3 : empties >= 5 ? 2 : 1; bx = brain.boxes[key] = b.map(function(c){ return c ? 0 : start; }); }
+  return bx;
+}
+function choose(brain, b, rnd){
+  var bx = box(brain, b), total = 0, i; for (i = 0; i < 9; i++) total += bx[i];
+  if (total <= 0){ for (i = 0; i < 9; i++) if (!b[i]){ bx[i] = 1; total++; } }
+  var r = rnd() * total; for (i = 0; i < 9; i++){ r -= bx[i]; if (bx[i] > 0 && r < 0) return i; }
+  for (i = 0; i < 9; i++) if (!b[i]) return i; return -1;
+}
+// moves = [{board (before the move), move}], result from the machine's side: 'w', 'd' or 'l'
+function learn(brain, moves, result){
+  var delta = result === 'w' ? 3 : result === 'd' ? 1 : -3;
+  moves.forEach(function(m){ var bx = box(brain, m.board); bx[m.move] = Math.max(0, bx[m.move] + delta); });
+  brain.games++; brain[result]++; brain.recent.push(result); if (brain.recent.length > 20) brain.recent.shift();
+}
+function sparring(b, rnd){ // practice partner (O): takes a win, blocks a loss, otherwise random. Sometimes just random.
+  var empty = [], i; for (i = 0; i < 9; i++) if (!b[i]) empty.push(i);
+  if (rnd() > 0.1) for (var pass = 0; pass < 2; pass++){ var who = pass ? 'X' : 'O'; for (i = 0; i < empty.length; i++){ var t = b.slice(); t[empty[i]] = who; if (winner(t) === who) return empty[i]; } }
+  return empty[Math.floor(rnd() * empty.length)];
+}
+function practice(brain, n, rnd){
+  for (var g = 0; g < n; g++){
+    var b = ['', '', '', '', '', '', '', '', ''], moves = [], res = null;
+    while (!res){ var m = choose(brain, b, rnd); moves.push({ board: b.slice(), move: m }); b[m] = 'X'; res = winner(b); if (res) break; b[sparring(b, rnd)] = 'O'; res = winner(b); }
+    learn(brain, moves, res === 'X' ? 'w' : res === 'O' ? 'l' : 'd');
+  }
+}
+var X = BC.sim.tictac = { winner: winner, newBrain: newBrain, box: box, choose: choose, learn: learn, sparring: sparring, practice: practice };
+
+BC.register({
+  id: 'tictac', order: 120, name: 'Tic-Tac-Toe Trainer', minutes: 8, thread: '--lake', big: [3],
+  tagline: 'This machine starts out terrible. Every loss makes it a little smarter.',
+  does: 'Play against a bead-box learning machine, then let it practice hundreds of games and try to beat it again.',
+  icon: '<path d="M26 17v30M38 17v30M17 26h30M17 38h30"/><path d="M19 19l4 4M23 19l-4 4"/><circle cx="32" cy="32" r="2.6"/>',
+  missions: [
+    { id: 'beat', text: 'Beat the machine while it is still a beginner.' },
+    { id: 'five', text: 'Play 5 games. Turn on Show beads and watch them change.' },
+    { id: 'practice', text: 'Press Practice 500 games three times.' },
+    { id: 'rematch', text: 'Play 3 games against the trained machine. Can you still win?' }
+  ],
+  how: [
+    'For every board it meets, the machine keeps a box of beads. Each empty square has some beads. To move, it picks one bead without looking.',
+    'If the machine wins, every move it made gets 3 extra beads. A tie earns 1 extra. If it loses, each move it made loses 3 beads.',
+    'Bad moves slowly run out of beads and stop being picked. Good moves pile up beads and get picked more. Nobody tells the machine the rules of good play.',
+    'A real machine like this was built in 1961 out of 304 matchboxes and colored beads. Its inventor, Donald Michie, called it MENACE. Game-playing AIs today learn the same way, by playing millions of games.'
+  ],
+  words: [
+    ['trial and error', 'Trying things and keeping what works.'],
+    ['reward', 'Extra beads for moves that led to a win.'],
+    ['practice', 'Playing many games to get better. Computers can play thousands in a second.'],
+    ['strategy', 'A plan for which move to make in each situation.']
+  ],
+  ask: [
+    'Why was the machine easy to beat at first?',
+    'It took the machine hundreds of games to get good. How many did it take you?',
+    'The machine never learned the rules of tic-tac-toe. So what did it learn?',
+    'What could go wrong if a machine practiced only against a weak player?'
+  ],
+  grown: '<p>This is a software version of <strong>MENACE</strong> (Matchbox Educable Noughts and Crosses Engine), built by Donald Michie in 1961 from 304 matchboxes. It is one of the earliest examples of <strong>reinforcement learning</strong>.</p><p>Each board state has its own bead counts. Moves are sampled in proportion to beads. After a game, every move the machine made is reinforced: plus 3 for a win, plus 1 for a draw, minus 3 for a loss (the original used minus 1; the bigger penalty makes it learn faster). This version stores every board it meets without merging rotations, so it needs more practice than the original.</p><p>Practice runs against a sparring partner that usually takes wins and blocks losses. The last campfire question matters: a learner is only as good as the opponents and data it trains on.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = C.ink; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); [[66, 16, 66, 84], [94, 16, 94, 84], [44, 38, 116, 38], [44, 62, 116, 62]].forEach(function(l){ ctx.moveTo(l[0], l[1]); ctx.lineTo(l[2], l[3]); }); ctx.stroke();
+    var seq = [[0, 'X'], [4, 'O'], [8, 'X'], [2, 'O'], [6, 'X']], n = Math.floor((t * 1.5) % (seq.length + 2));
+    seq.slice(0, n).forEach(function(s){ var x = 54 + (s[0] % 3) * 26, y = 27 + Math.floor(s[0] / 3) * 23; ctx.strokeStyle = s[1] === 'X' ? C.ember : C.lake; ctx.beginPath(); if (s[1] === 'X'){ ctx.moveTo(x - 6, y - 6); ctx.lineTo(x + 6, y + 6); ctx.moveTo(x + 6, y - 6); ctx.lineTo(x - 6, y + 6); } else ctx.arc(x, y, 7, 0, 6.2832); ctx.stroke(); });
+  },
+  mount: function(root, api){
+    var el = BC.el, rnd = BC.rng((Math.random() * 1e9) | 0), brain = X.newBrain(), b, moves, over, lastBox = null, lastMove = -1, showBeads = false, humanGames = 0, practiced = 0, afterPractice = 0, timer = 0;
+    var grid = el('div', { class: 'tt-board', role: 'group', 'aria-label': 'Tic-tac-toe board' }), note = el('p', { class: 'note' }), dots = el('div', { class: 'tt-recent', 'aria-hidden': 'true' });
+    var sG = BC.stat('Games it has played'), sW = BC.stat('Machine wins'), sD = BC.stat('Ties'), sL = BC.stat('Machine losses');
+    function say(s){ note.textContent = s; }
+    var again = el('button', { class: 'btn primary', type: 'button', text: 'New game', onclick: function(){ BC.sfx('tap'); start(); } });
+    var beadsBtn = el('button', { class: 'chip', type: 'button', text: 'Show beads', 'aria-pressed': 'false', onclick: function(){ showBeads = !showBeads; beadsBtn.setAttribute('aria-pressed', String(showBeads)); render(); } });
+    var pracBtn = el('button', { class: 'btn go', type: 'button', text: 'Practice 500 games', onclick: function(){ X.practice(brain, 500, rnd); practiced += 500; afterPractice = 0; if (practiced >= 1500) api.mission('practice'); BC.sfx('good'); start(); say('I just played 500 practice games in a blink. I have now played ' + brain.games + ' games. Try me.'); } });
+    var wipeBtn = el('button', { class: 'btn sm', type: 'button', text: 'Empty the bead boxes', onclick: function(){ brain = X.newBrain(); practiced = 0; BC.sfx('tap'); start(); say('All my boxes are back to how they started. I am a beginner again.'); } });
+    function render(){
+      grid.innerHTML = '';
+      for (var i = 0; i < 9; i++) (function(i){
+        var beads = showBeads && lastBox && !b[i] ? lastBox[i] : null;
+        grid.appendChild(el('button', { type: 'button', class: 'tt-cell' + (b[i] === 'X' ? ' x' : b[i] === 'O' ? ' o' : '') + (i === lastMove ? ' last' : ''), disabled: !!b[i] || over, 'aria-label': 'Square ' + (i + 1) + (b[i] ? ', ' + b[i] : ', empty'), onclick: function(){ human(i); } }, b[i] ? b[i] : (beads != null ? el('span', { class: 'tt-beads', text: beads + (beads === 1 ? ' bead' : ' beads') }) : '')));
+      })(i);
+      sG.val.textContent = brain.games; sW.val.textContent = brain.w; sD.val.textContent = brain.d; sL.val.textContent = brain.l;
+      dots.innerHTML = ''; brain.recent.forEach(function(r){ dots.appendChild(el('i', { class: r })); });
+    }
+    function finish(res){
+      over = true; var r = res === 'X' ? 'w' : res === 'O' ? 'l' : 'd'; X.learn(brain, moves, r); humanGames++;
+      if (r === 'l'){ BC.sfx('good'); if (practiced === 0) api.mission('beat'); say('You won! Every move I made this game just lost 3 beads. I am less likely to play that way again.'); }
+      else if (r === 'w'){ BC.sfx('bad'); say('I won. Every move I made this game earned 3 extra beads.'); }
+      else { BC.sfx('tap'); say('A tie. Each of my moves earned 1 extra bead.'); }
+      if (humanGames >= 5) api.mission('five');
+      if (practiced >= 1500){ afterPractice++; if (afterPractice >= 3) api.mission('rematch'); }
+      render();
+    }
+    function machine(){
+      lastBox = X.box(brain, b).slice(); var m = X.choose(brain, b, rnd); moves.push({ board: b.slice(), move: m }); b[m] = 'X'; lastMove = m; BC.sfx('pop');
+      var res = X.winner(b); if (res) finish(res); else render();
+    }
+    function human(i){ if (over || b[i]) return; b[i] = 'O'; lastMove = -1; BC.sfx('tap'); var res = X.winner(b); if (res){ finish(res); return; } render(); over = true; timer = setTimeout(function(){ over = false; machine(); }, BC.reduced ? 10 : 380); }
+    function start(){ clearTimeout(timer); b = ['', '', '', '', '', '', '', '', '']; moves = []; over = false; lastMove = -1; machine(); }
+    root.appendChild(grid);
+    root.appendChild(el('div', { class: 'row' }, again, beadsBtn));
+    root.appendChild(note);
+    root.appendChild(el('div', { class: 'stats' }, sG, sW, sD, sL));
+    root.appendChild(el('p', { class: 'cap', text: 'Its last 20 games: green = machine won, gray = tie, orange = machine lost' })); root.appendChild(dots);
+    root.appendChild(el('div', { class: 'row' }, pracBtn, wipeBtn));
+    start(); say('I am X and I go first. You are O. I have never played before, so I am picking squares at random.');
+    return function(){ clearTimeout(timer); };
+  }
+});
+})(window.BC);
+
+/* 94-versus.js */
+(function(BC){
+'use strict';
+/* ================= Head to Head: two trained brains race on a track neither has seen ================= */
+var D = BC.sim.drive, GENS = 10;
+function bump(th, at, wid){ var d = Math.atan2(Math.sin(th - at), Math.cos(th - at)); return Math.exp(-(d * d) / (wid * wid)); }
+function blob(cx, cy, rx, ry, fn){ var pts = []; for (var i = 0; i < 200; i++){ var th = i / 200 * Math.PI * 2, r = fn(th); pts.push({ x: cx + Math.cos(th) * rx * r, y: cy + Math.sin(th) * ry * r }); } return pts; }
+var MYSTERY = [
+  { name: 'Kidney Lake', raw: blob(300, 200, 226, 142, function(th){ return 1 - 0.33 * bump(th, 2.6, 0.5) - 0.16 * bump(th, 5.5, 0.45); }) },
+  { name: 'Pinch Pass', raw: blob(300, 200, 228, 140, function(th){ return 1 - 0.3 * bump(th, 4.71, 0.5) - 0.3 * bump(th, 1.57, 0.5); }) },
+  { name: 'Three Bends', raw: blob(300, 200, 222, 140, function(th){ return 1 - 0.16 * bump(th, 0.6, 0.5) - 0.16 * bump(th, 2.7, 0.5) - 0.16 * bump(th, 4.8, 0.5); }) }
+];
+function newTeam(seed){ return { sim: D.newSim(D.buildTrack(D.PRESETS[0].raw), 30, seed), gens: 0, best: 0, picks: { oval: true }, tracks: null }; }
+// practice: each generation runs on the next chosen track in turn
+function train(team, tracks, gens){
+  var ids = Object.keys(team.picks).filter(function(k){ return team.picks[k]; }); if (!ids.length) ids = ['oval'];
+  var last = 0;
+  for (var g = 0; g < gens; g++){ D.setTrack(team.sim, tracks[ids[(team.gens + g) % ids.length]]); var guard = 0; while (!team.sim.done && guard++ < 4000) D.step(team.sim, 1 / 60); last = D.evolve(team.sim); }
+  team.gens += gens; team.best = last; return last;
+}
+function champion(team){ return team.sim.pop[0]; }
+function newRace(track, a, b){ var sim = D.newSim(track, 2, 1); sim.pop = [a, b]; D.setTrack(sim, track); return sim; }
+var V = BC.sim.versus = { MYSTERY: MYSTERY, GENS: GENS, newTeam: newTeam, train: train, champion: champion, newRace: newRace };
+
+BC.register({
+  id: 'versus', order: 130, name: 'Head to Head', minutes: 10, thread: '--berry', big: [3, 5],
+  tagline: 'Two players each train a car. Then both race on a track nobody practiced.',
+  does: 'Compete by choosing practice tracks for a learning car, then race on an unseen track to see whose training generalizes.',
+  icon: '<path d="M14 40c6-14 30-14 36 0"/><rect x="18" y="38" width="10" height="6" rx="2"/><rect x="36" y="30" width="10" height="6" rx="2"/><path d="M32 16v8M28 20h8"/>',
+  missions: [
+    { id: 'train', text: 'Both players: pick practice tracks and train your team.' },
+    { id: 'race', text: 'Race on the mystery track.' },
+    { id: 'finish', text: 'Train a car that finishes 2 full laps of a mystery track.' },
+    { id: 'three', text: 'Play 3 races. Who trained the better driver?' }
+  ],
+  how: [
+    'Each player has a team of 30 cars, just like Self-Driving School. Every press of Train runs 10 generations in a blink.',
+    'You choose which tracks your team practices on. More practice makes a better driver on those tracks.',
+    'The race is on a mystery track that neither team has seen. A car that only practiced the Oval has only ever turned one way.',
+    'The winner is usually the player whose car practiced on the most different roads. Getting good at new things, and not only at the practice set, is called <b>generalizing</b>. It is the whole point of training an AI.'
+  ],
+  words: [
+    ['generalize', 'Do well on new things, not only on what you practiced.'],
+    ['training set', 'The examples or tracks an AI practices on.'],
+    ['test', 'Trying the AI on something it has never seen, to find out what it really learned.'],
+    ['overfit', 'Getting too used to the practice set, so new things go badly.']
+  ],
+  ask: [
+    'Which practice plan won? Why do you think so?',
+    'Is more practice on one track better than a little practice on three?',
+    'Why is the race on a track nobody practiced, and not on a practice track?',
+    'How is this like studying for a test by only memorizing last year\'s answers?'
+  ],
+  grown: '<p>This is a <strong>train and test split</strong> turned into a game. Each team evolves driving networks on the tracks its player selects, then the best network from each team is evaluated on a held-out track.</p><p>Teams trained on a single oval usually <strong>overfit</strong>: they learn a constant turn and fail at the first bend the other way. Teams that rotate through varied tracks tend to win, although evolution is random and upsets happen, which is itself worth discussing.</p><p>One student can play both sides to run an experiment: same number of generations, different practice plans.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, w, h); ctx.beginPath(); ctx.ellipse(80, 50, 54, 29, 0, 0, 6.2832); ctx.strokeStyle = C.ink; ctx.lineWidth = 21; ctx.stroke(); ctx.strokeStyle = C.road; ctx.lineWidth = 18; ctx.stroke();
+    [[C.ember, 1.3, 0, 51], [C.lake, 1.15, 0.5, 57]].forEach(function(c){ var a = t * c[1] + c[2], x = 80 + Math.cos(a) * c[3], y = 50 + Math.sin(a) * (c[3] - 25); ctx.save(); ctx.translate(x, y); ctx.rotate(Math.atan2(Math.cos(a) * 29, -Math.sin(a) * 54)); ctx.fillStyle = c[0]; ctx.strokeStyle = C.ink; ctx.lineWidth = 1.2; BC.rr(ctx, -6, -3.5, 12, 7, 2); ctx.fill(); ctx.stroke(); ctx.restore(); });
+  },
+  mount: function(root, api){
+    var el = BC.el, tracks = {}; D.PRESETS.forEach(function(p){ tracks[p.id] = D.buildTrack(p.raw); });
+    var teams = [V.newTeam((Math.random() * 1e9) | 0), V.newTeam((Math.random() * 1e9) | 0)], NAMES = ['Orange team', 'Blue team'], COL = ['ember', 'lake'];
+    var race = null, raceTrack = tracks.oval, raceName = '', wins = [0, 0], races = 0, hold = 0, mi = Math.floor(Math.random() * 3), result = '';
+    var cv = el('canvas', { 'aria-label': 'Race track. An orange car and a blue car race on it.' }), note = el('p', { class: 'note' }), panels = el('div', { class: 'vs-panels' }), score = el('p', { class: 'vs-score' });
+    function say(s){ note.textContent = s; }
+    function panel(i){
+      var t = teams[i], box = el('div', { class: 'vs-team vs-' + COL[i] });
+      box.appendChild(el('h3', { text: NAMES[i] }));
+      box.appendChild(el('p', { class: 'cap', text: 'Practice on' }));
+      box.appendChild(el('div', { class: 'row' }, D.PRESETS.map(function(p){ return el('button', { class: 'chip', type: 'button', text: p.name, 'aria-pressed': String(!!t.picks[p.id]), onclick: function(){ t.picks[p.id] = !t.picks[p.id]; if (!Object.keys(t.picks).some(function(k){ return t.picks[k]; })) t.picks[p.id] = true; BC.sfx('tap'); renderPanels(); } }); })));
+      box.appendChild(el('button', { class: 'btn sm go', type: 'button', text: 'Train ' + V.GENS + ' generations', onclick: function(){ var last = V.train(t, tracks, V.GENS); BC.sfx('good'); if (teams[0].gens && teams[1].gens) api.mission('train'); say(NAMES[i] + ' practiced ' + V.GENS + ' more generations. Its best car now gets ' + (last >= 1 ? last.toFixed(1) + ' laps' : Math.round(last * 100) + '% of a lap') + ' on its last practice track.'); renderPanels(); } }));
+      box.appendChild(el('p', { class: 'vs-read', text: t.gens ? t.gens + ' generations trained' : 'Not trained yet' }));
+      return box;
+    }
+    function renderPanels(){ panels.innerHTML = ''; panels.appendChild(panel(0)); panels.appendChild(panel(1)); raceBtn.disabled = !(teams[0].gens && teams[1].gens); score.textContent = 'Races won: Orange ' + wins[0] + ', Blue ' + wins[1]; }
+    var raceBtn = el('button', { class: 'btn primary', type: 'button', text: 'Race on a mystery track', onclick: function(){
+      var m = V.MYSTERY[mi % V.MYSTERY.length]; mi++; raceTrack = D.buildTrack(m.raw); raceName = m.name; race = V.newRace(raceTrack, V.champion(teams[0]), V.champion(teams[1])); result = ''; hold = 0; BC.sfx('tap'); say('Mystery track: ' + raceName + '. Neither car has ever seen it. Go!'); } });
+    var resetBtn = el('button', { class: 'btn sm', type: 'button', text: 'New teams', onclick: function(){ teams = [V.newTeam((Math.random() * 1e9) | 0), V.newTeam((Math.random() * 1e9) | 0)]; race = null; result = ''; BC.sfx('tap'); renderPanels(); say('Two fresh teams with random brains.'); } });
+    root.appendChild(panels); root.appendChild(el('div', { class: 'row' }, raceBtn, resetBtn)); root.appendChild(el('div', { class: 'stage' }, cv)); root.appendChild(score); root.appendChild(note);
+    var st = BC.stage(cv, D.W, D.H); renderPanels(); say('Each player: choose practice tracks, then press Train. Train as many times as you like before the race.');
+    function finish(){
+      var a = race.cars[0], b = race.cars[1], n = raceTrack.n, la = a.best / n, lb = b.best / n, w = a.fin && !b.fin ? 0 : b.fin && !a.fin ? 1 : Math.abs(la - lb) < 0.02 ? -1 : la > lb ? 0 : 1;
+      races++; api.mission('race'); if (a.fin || b.fin) api.mission('finish'); if (races >= 3) api.mission('three');
+      function d(l, c){ return c.fin ? 'finished 2 laps' : 'crashed after ' + (l >= 1 ? l.toFixed(1) + ' laps' : Math.round(l * 100) + '% of a lap'); }
+      if (w >= 0){ wins[w]++; BC.sfx('win'); result = NAMES[w] + ' wins!'; } else { BC.sfx('tap'); result = 'A tie!'; }
+      say(result + ' Orange ' + d(la, a) + '. Blue ' + d(lb, b) + '. Look at what each team practiced on.'); renderPanels();
+    }
+    var stop = BC.loop(function(){
+      if (race && !result){ for (var s = 0; s < 2; s++){ if (race.done){ hold++; if (hold > 20) finish(); break; } D.step(race, 1 / 60); } }
+      var C = BC.colors(), ctx = st.begin(); D.drawTrack(ctx, raceTrack, C);
+      if (race) race.cars.forEach(function(c, i){ ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.a); ctx.globalAlpha = c.alive ? 1 : 0.45; ctx.fillStyle = C[COL[i]]; ctx.strokeStyle = C.ink; ctx.lineWidth = 2; BC.rr(ctx, -10, -6, 20, 12, 3.5); ctx.fill(); ctx.stroke(); ctx.restore(); });
+      else { ctx.fillStyle = C.bg2; ctx.globalAlpha = 0.8; ctx.fillRect(0, 0, D.W, D.H); ctx.globalAlpha = 1; ctx.fillStyle = C.ink; ctx.font = '700 22px Verdana, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('The mystery track is hidden until the race', D.W / 2, D.H / 2); }
+      if (result){ ctx.font = '800 40px Verdana, sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 6; ctx.strokeStyle = C.ink; ctx.fillStyle = C.sun; ctx.strokeText(result, D.W / 2, D.H / 2 + 12); ctx.fillText(result, D.W / 2, D.H / 2 + 12); }
+    });
+    return function(){ stop(); st.destroy(); };
+  }
+});
+})(window.BC);
+
+/* 95-finale.js */
+(function(BC){
+'use strict';
+/* ================= Camp Finale: spot the AI idea out in the real world ================= */
+var QUESTIONS = [
+  { q: 'A photo app is shown thousands of pictures labeled cat or dog. Later it sorts new pictures by itself.', o: ['Learning from examples', 'Following a map of questions', 'Trying random flight plans'], a: 0, why: 'That is learning from labeled examples, like Doodle Brain.' },
+  { q: 'Your phone keyboard suggests the next word while you type.', o: ['Finding edges in a picture', 'Predicting the next word', 'Evolving the best design'], a: 1, why: 'It predicts what usually comes next, like Parrot Bot.' },
+  { q: 'A robot vacuum tries different paths and earns points for cleaning fast. Over time it finds better routes.', o: ['Learning from rewards and penalties', 'Finding taste twins', 'Reading a grid of pixels'], a: 0, why: 'Trying, scoring and adjusting is reinforcement learning, like Treat Hunt.' },
+  { q: 'A hiring program learned from ten years of past hires. Now it keeps choosing the same kind of person.', o: ['It is hallucinating', 'It copied bias from its examples', 'It needs more mutation'], a: 1, why: 'Unfair examples make an unfair AI, like Picker in Fair or Unfair?' },
+  { q: 'A help line asks: Is it plugged in? Is the light on? Each answer leads to the next question.', o: ['A decision tree', 'A neural network', 'A genetic algorithm'], a: 0, why: 'A map of yes-or-no questions is a decision tree, like Guess Machine.' },
+  { q: 'Engineers let a computer try thousands of antenna shapes, keep the best ones, mix them, and try again.', o: ['Predicting the next word', 'Keeping the best tries and mixing them', 'Asking yes-or-no questions'], a: 1, why: 'Keep, mix and change is a genetic algorithm, like Smart Rockets.' },
+  { q: 'A camera stores a photo as a grid of numbers. A program slides a small window over it to find outlines.', o: ['A filter finding edges', 'A recommender', 'A reward'], a: 0, why: 'Pictures are numbers and filters find edges, like Robot Eyes.' },
+  { q: 'A music app notices that people who like your songs also like a band you never heard. It plays that band for you.', o: ['Finding people with tastes like yours', 'Learning a maze', 'Evolving rockets'], a: 0, why: 'That is a recommender finding your taste twins.' },
+  { q: 'A self-driving car practiced only on sunny highways. On a snowy city street it makes mistakes.', o: ['It has too many patches', 'It only knows what it practiced on', 'It forgot its training'], a: 1, why: 'An AI struggles with things unlike its practice, as in Self-Driving School and Head to Head.' },
+  { q: 'A chess program gets stronger by playing millions of games and remembering which moves led to wins.', o: ['Learning by practice and results', 'Sorting by cabin color', 'Looking back two words'], a: 0, why: 'Reinforcing winning moves is how the Tic-Tac-Toe Trainer learns.' },
+  { q: 'A video app guesses what you will tap next from everything you tapped before.', o: ['Predicting you from your history', 'Finding edges', 'Wiping its memory'], a: 0, why: 'It predicts from your past pattern, like the keeper in Beat the Keeper.' },
+  { q: 'A chatbot states a made-up fact and sounds completely sure about it.', o: ['A mutation', 'A hallucination', 'A filter bubble'], a: 1, why: 'A confident false answer is called a hallucination. Always check.' },
+  { q: 'A drawing AI knows only sun, fish and house. You draw a cat. It says: fish, 96% sure.', o: ['It can only pick from the answers it was taught', 'It secretly knows it is a cat', 'It is broken'], a: 0, why: 'A classifier has no way to say none of these, as you saw in Doodle Brain.' },
+  { q: 'A team hides the unfair clue from their AI, but it finds another clue that means almost the same thing.', o: ['The reward was too small', 'A stand-in clue kept the bias alive', 'The AI got lucky'], a: 1, why: 'That is the cap standing in for cabin color in Fair or Unfair?' }
+];
+BC.sim.finale = { QUESTIONS: QUESTIONS };
+
+BC.register({
+  id: 'finale', order: 999, name: 'Camp Finale', minutes: 6, thread: '--sun', big: [1, 2, 3, 4, 5],
+  tagline: 'Earn every other patch first. Then prove you can spot AI ideas out in the real world.',
+  does: 'Match ten real-world situations to the AI idea behind them. A review of every station.',
+  icon: '<path d="M32 15l4.6 9.6 10.4 1.3-7.7 7.2 2 10.4-9.3-5.2-9.3 5.2 2-10.4-7.7-7.2 10.4-1.3z"/>',
+  missions: [{ id: 'pass', text: 'Earn every other patch, then get 8 or more of 10 right in the finale.' }],
+  how: [
+    'Every station at Bot Camp is a small version of something real. The finale checks whether you can recognize those ideas outside of camp.',
+    'You get ten situations. For each one, pick the AI idea behind it. Miss one and Flint tells you which station to revisit.'
+  ],
+  words: [['review', 'Looking back at what you learned to make it stick.']],
+  ask: ['Which AI idea do you see most often in your own day?', 'Which station would you add to Bot Camp? What would it teach?'],
+  grown: '<p>The finale is a ten-item check drawn at random from a bank of fourteen. Each item maps a real-world situation to the concept behind one station, and each explanation names the station to revisit. It works as an end-of-unit assessment. A score of 8 or more earns the final patch.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, w, h); ctx.save(); ctx.translate(80, 50); ctx.rotate(Math.sin(t * 1.5) * 0.15); ctx.fillStyle = C.sun; ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.beginPath();
+    for (var i = 0; i < 10; i++){ var a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 13 : 30; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+  },
+  mount: function(root, api){
+    var el = BC.el, rnd = BC.rng((Math.random() * 1e9) | 0), missing = BC.labs.filter(function(l){ return l.id !== 'finale' && !BC.labDone(l); });
+    var box = el('div', { class: 'fn-box' }); root.appendChild(box);
+    var qs, i, right, answered;
+    function locked(){
+      box.innerHTML = ''; box.appendChild(el('p', { class: 'fn-q', text: 'The finale is locked.' }));
+      box.appendChild(el('p', { text: 'Earn these patches first (' + missing.length + ' to go):' }));
+      box.appendChild(el('div', { class: 'fn-miss' }, missing.map(function(l){ return el('a', { class: 'chip fn-chip', href: '#' + l.id, text: l.name }); })));
+      box.appendChild(el('button', { class: 'btn sm', type: 'button', text: 'Practice the finale anyway', onclick: function(){ BC.sfx('tap'); begin(); } }));
+      box.appendChild(el('p', { class: 'cap', text: 'A practice run does not earn the patch.' }));
+    }
+    function begin(){ var pool = QUESTIONS.slice(); qs = []; while (qs.length < 10){ qs.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]); } i = 0; right = 0; show(); }
+    function show(){
+      var q = qs[i]; answered = false; box.innerHTML = '';
+      box.appendChild(el('p', { class: 'cap', text: 'Question ' + (i + 1) + ' of 10. Right so far: ' + right }));
+      box.appendChild(el('p', { class: 'fn-q', text: q.q })); box.appendChild(el('p', { text: 'Which AI idea is this?' }));
+      var fb = el('p', { class: 'note', hidden: true }), next = el('button', { class: 'btn primary', type: 'button', hidden: true, text: i === 9 ? 'See my score' : 'Next question', onclick: function(){ BC.sfx('tap'); i++; if (i >= 10) done(); else show(); } });
+      q.o.forEach(function(text, k){ var b = el('button', { class: 'btn fn-opt', type: 'button', text: text, onclick: function(){
+        if (answered) return; answered = true; var ok = k === q.a; if (ok) right++; BC.sfx(ok ? 'good' : 'bad');
+        Array.prototype.forEach.call(box.querySelectorAll('.fn-opt'), function(x, j){ x.disabled = true; if (j === q.a) x.classList.add('yes'); else if (j === k) x.classList.add('no'); });
+        fb.textContent = (ok ? 'Right. ' : 'Not this time. ') + q.why; fb.hidden = false; next.hidden = false; try { next.focus({ preventScroll: true }); } catch (e) {} } }); box.appendChild(b); });
+      box.appendChild(fb); box.appendChild(next);
+    }
+    function done(){
+      box.innerHTML = ''; var pass = right >= 8, can = missing.length === 0;
+      box.appendChild(el('p', { class: 'fn-q', text: 'You got ' + right + ' of 10.' }));
+      box.appendChild(el('p', { text: pass ? (can ? 'That is a pass. You can spot AI ideas in the real world.' : 'That would be a pass! Earn the other patches, then come back for the final one.') : 'You need 8 to pass. Read the explanations, revisit a station or two, and try again.' }));
+      box.appendChild(el('button', { class: 'btn', type: 'button', text: 'Try again with new questions', onclick: function(){ BC.sfx('tap'); begin(); } }));
+      if (pass && can) api.mission('pass');
+    }
+    if (missing.length) locked(); else begin();
+    return function(){};
   }
 });
 })(window.BC);
