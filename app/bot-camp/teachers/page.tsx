@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = pageMeta({
   title: "Free AI lesson for teachers (grades 3–6)",
   description:
-    "Get a free Doodle Brain lesson plan and student worksheet. Bot Camp has nine free browser labs for grades 3–6. No sign-up, no student accounts, and drawings stay on the device.",
+    "Get a free Doodle Brain lesson plan and student worksheet. Bot Camp has fourteen free browser labs for grades 3–6. No sign-up, no student accounts, and drawings stay on the device.",
   path: "/bot-camp/teachers",
   ogKey: "bot-camp-teachers",
   ogAlt: ogAlt("bot-camp-teachers"),

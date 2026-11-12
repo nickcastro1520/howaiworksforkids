@@ -323,7 +323,7 @@ export function teacherKitJsonLd() {
 export const BOT_CAMP_TEACHERS_FAQ = [
   {
     q: "What is Bot Camp?",
-    a: "Bot Camp is nine free hands-on labs that run in the browser. Kids train small, real AIs — for example, Doodle Brain, which learns from their drawings.",
+    a: "Bot Camp is fourteen free hands-on labs that run in the browser. Kids train small, real AIs — for example, Doodle Brain, which learns from their drawings.",
   },
   {
     q: "What ages?",
@@ -344,7 +344,7 @@ export function botCampTeachersJsonLd() {
     "@id": `${url}#resource`,
     name: "Free Doodle Brain AI lesson for teachers (grades 3–6)",
     description:
-      "A free Doodle Brain lesson plan and student worksheet. Bot Camp has nine free browser labs for grades 3–6. No sign-up, no student accounts, and drawings stay on the device.",
+      "A free Doodle Brain lesson plan and student worksheet. Bot Camp has fourteen free browser labs for grades 3–6. No sign-up, no student accounts, and drawings stay on the device.",
     url,
     image: absoluteUrl("/og/bot-camp-teachers"),
     learningResourceType: ["Lesson plan", "Worksheet"],

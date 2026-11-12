@@ -37,7 +37,7 @@ const PAGES: Record<string, OgCard> = {
     kicker: "Free hands-on labs · Ages 6–10",
     title: "Bot Camp",
     sub: "Don't just read about AI. Train one.",
-    alt: "Bot Camp: nine free hands-on labs where kids train small, real AIs in the browser. No sign-up.",
+    alt: "Bot Camp: fourteen free hands-on labs where kids train small, real AIs in the browser. No sign-up.",
     accent: "#33c4b0",
   },
   "bot-camp-teachers": {
