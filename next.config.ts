@@ -50,6 +50,13 @@ const BOT_CAMP_CSP = [
   "upgrade-insecure-requests",
 ].join("; ");
 
+// Teachers form posts to Kit from the browser. Keep the site CSP, but allow
+// connect-src to Kit's form endpoint. Do not apply the lab-page Google Fonts CSP.
+const BOT_CAMP_TEACHERS_CSP = CSP.replace(
+  "connect-src 'self'",
+  "connect-src 'self' https://app.kit.com",
+);
+
 const SECURITY_HEADERS = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "Content-Security-Policy", value: CSP },
@@ -103,6 +110,10 @@ const nextConfig: NextConfig = {
           { key: "Content-Security-Policy", value: BOT_CAMP_CSP },
           { key: "Link", value: '<https://howaiworksforkids.com/bot-camp>; rel="canonical"' },
         ],
+      },
+      {
+        source: "/bot-camp/teachers",
+        headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_TEACHERS_CSP }],
       },
     ];
   },
