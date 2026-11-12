@@ -30,6 +30,30 @@ export function kitGradeField(): string {
   return (process.env.KIT_GRADE_FIELD || "grade").trim() || "grade";
 }
 
+/** Kit custom field key for the "Email me when new lessons come out" checkbox. */
+export const KIT_NEW_LESSONS_FIELD = "new_lessons_opt_in";
+
+/**
+ * Custom fields for a Kit form subscription. Grade is included when provided.
+ * new_lessons_opt_in is included only when the box is ticked. No tags.
+ */
+export function kitSubscriptionFields(input: { grade: string; newLessons: boolean }): Record<string, string> {
+  const fields: Record<string, string> = {};
+  if (input.grade) fields[kitGradeField()] = input.grade;
+  if (input.newLessons) fields[KIT_NEW_LESSONS_FIELD] = "true";
+  return fields;
+}
+
+/** URL-encoded body for https://app.kit.com/forms/{id}/subscriptions (no API key, no tags). */
+export function kitSubscriptionBody(email: string, fields: Record<string, string>): string {
+  const params = new URLSearchParams();
+  params.set("email_address", email);
+  for (const [key, value] of Object.entries(fields)) {
+    params.set(`fields[${key}]`, value);
+  }
+  return params.toString();
+}
+
 export function isKitConfigured(): boolean {
   return kitFormId().length > 0;
 }
@@ -40,7 +64,7 @@ export function packRedirectTarget(): string {
   return url || "/bot-camp/teachers";
 }
 
-export type CounterKind = "visits" | "pack";
+export type CounterKind = "visits" | "pack" | "sample";
 
 export type DayCount = {
   n: number;
@@ -50,18 +74,21 @@ export type DayCount = {
 /**
  * Hobby Blob includes 2,000 advanced operations (put/list) per month.
  * Each increment is one put. These daily write caps keep a 31-day month
- * under that limit (40 visit writes + 20 pack writes × 31 = 1,860), leaving
+ * under that limit (35 visit + 15 pack + 10 sample writes × 31 = 1,860), leaving
  * a little room for retries and store setup.
  */
-export const BLOB_VISIT_WRITE_CAP = 40;
-export const BLOB_PACK_WRITE_CAP = 20;
+export const BLOB_VISIT_WRITE_CAP = 35;
+export const BLOB_PACK_WRITE_CAP = 15;
+export const BLOB_SAMPLE_WRITE_CAP = 10;
 /** First this many writes of the day are exact (+1 each). */
 export const BLOB_EXACT_WRITES = 15;
 /** After the exact phase, a write adds this many and happens with probability 1/weight. */
 export const BLOB_SAMPLE_WEIGHT = 10;
 
 export function writeCap(kind: CounterKind): number {
-  return kind === "visits" ? BLOB_VISIT_WRITE_CAP : BLOB_PACK_WRITE_CAP;
+  if (kind === "visits") return BLOB_VISIT_WRITE_CAP;
+  if (kind === "pack") return BLOB_PACK_WRITE_CAP;
+  return BLOB_SAMPLE_WRITE_CAP;
 }
 
 export function counterBlobPath(kind: CounterKind, day: string): string {

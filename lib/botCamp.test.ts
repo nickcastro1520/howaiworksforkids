@@ -4,10 +4,13 @@ import {
   BLOB_EXACT_WRITES,
   BLOB_PACK_WRITE_CAP,
   BLOB_SAMPLE_WEIGHT,
+  BLOB_SAMPLE_WRITE_CAP,
   BLOB_VISIT_WRITE_CAP,
   chicagoDate,
   counterBlobPath,
   isBotCampVisitPath,
+  kitSubscriptionBody,
+  kitSubscriptionFields,
   planIncrement,
 } from "./botCamp";
 
@@ -78,5 +81,23 @@ test("planIncrement counts exactly through the exact phase, then samples, then c
 });
 
 test("hobby monthly put budget stays under 2,000 advanced operations", () => {
-  assert.ok((BLOB_VISIT_WRITE_CAP + BLOB_PACK_WRITE_CAP) * 31 < 2000);
+  assert.ok((BLOB_VISIT_WRITE_CAP + BLOB_PACK_WRITE_CAP + BLOB_SAMPLE_WRITE_CAP) * 31 < 2000);
+});
+
+test("kit subscription fields include grade and opt-in only when ticked, and never tags", () => {
+  assert.deepEqual(kitSubscriptionFields({ grade: "4", newLessons: true }), {
+    grade: "4",
+    new_lessons_opt_in: "true",
+  });
+  assert.deepEqual(kitSubscriptionFields({ grade: "4", newLessons: false }), { grade: "4" });
+  assert.deepEqual(kitSubscriptionFields({ grade: "", newLessons: true }), { new_lessons_opt_in: "true" });
+  assert.deepEqual(kitSubscriptionFields({ grade: "", newLessons: false }), {});
+
+  const body = kitSubscriptionBody("nick@example.com", kitSubscriptionFields({ grade: "4", newLessons: true }));
+  const params = new URLSearchParams(body);
+  assert.equal(params.get("email_address"), "nick@example.com");
+  assert.equal(params.get("fields[grade]"), "4");
+  assert.equal(params.get("fields[new_lessons_opt_in]"), "true");
+  assert.equal(params.get("tags[]"), null);
+  assert.equal(params.get("tags"), null);
 });

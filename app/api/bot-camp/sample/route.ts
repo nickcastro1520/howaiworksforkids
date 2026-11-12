@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
-import { isKitConfigured, kitApiKey, kitFormId, kitGradeField, kitNewLessonsTagId } from "@/lib/botCamp";
+import {
+  incrementCounter,
+  isKitConfigured,
+  kitApiKey,
+  kitFormId,
+  kitSubscriptionBody,
+  kitSubscriptionFields,
+} from "@/lib/botCamp";
 
 type Body = {
   email?: string;
@@ -14,6 +21,7 @@ function invalid(message: string, status = 400) {
 /**
  * Forwards a teacher/parent sample request to Kit. We do not store the email.
  * Returns a friendly "coming soon" error if KIT_FORM_ID is not set.
+ * On a successful Kit subscribe, increments the daily sample-sent total only.
  */
 export async function POST(request: Request) {
   if (!isKitConfigured()) {
@@ -38,37 +46,23 @@ export async function POST(request: Request) {
   const newLessons = Boolean(body.newLessons);
   const formId = kitFormId();
   const apiKey = kitApiKey();
-  const tagId = kitNewLessonsTagId();
-  const field = kitGradeField();
+  const fields = kitSubscriptionFields({ grade, newLessons });
 
   try {
     if (apiKey) {
-      const payload: Record<string, unknown> = {
-        api_key: apiKey,
-        email,
-        fields: grade ? { [field]: grade } : {},
-      };
-      if (newLessons && tagId) {
-        const tag = Number(tagId);
-        payload.tags = Number.isFinite(tag) && tag > 0 ? [tag] : [tagId];
-      }
       const res = await fetch(`https://api.convertkit.com/v3/forms/${encodeURIComponent(formId)}/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ api_key: apiKey, email, fields }),
       });
       if (!res.ok) {
         return NextResponse.json({ ok: false, error: "kit_failed" }, { status: 502 });
       }
     } else {
-      const params = new URLSearchParams();
-      params.set("email_address", email);
-      if (grade) params.set(`fields[${field}]`, grade);
-      if (newLessons && tagId) params.append("tags[]", tagId);
       const res = await fetch(`https://app.kit.com/forms/${encodeURIComponent(formId)}/subscriptions`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
-        body: params.toString(),
+        body: kitSubscriptionBody(email, fields),
       });
       if (!res.ok) {
         return NextResponse.json({ ok: false, error: "kit_failed" }, { status: 502 });
@@ -76,6 +70,12 @@ export async function POST(request: Request) {
     }
   } catch {
     return NextResponse.json({ ok: false, error: "kit_failed" }, { status: 502 });
+  }
+
+  try {
+    await incrementCounter("sample");
+  } catch {
+    // The lesson email was accepted; a missed count must not fail the request.
   }
 
   return NextResponse.json({ ok: true });
