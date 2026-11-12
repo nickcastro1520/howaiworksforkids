@@ -1,7 +1,10 @@
 /**
  * Bot Camp helpers: Kit form config and aggregate counters.
- * Never records what kids draw or type. Emails go to Kit only, not our storage.
+ * Never records what kids draw or type, or IPs or user agents.
+ * Emails go to Kit only, not our storage.
  */
+
+import { BlobNotFoundError, get, put } from "@vercel/blob";
 
 const CHICAGO = "America/Chicago";
 
@@ -37,21 +40,90 @@ export function packRedirectTarget(): string {
   return url || "/bot-camp/teachers";
 }
 
-export type KvConfig = { url: string; token: string };
+export type CounterKind = "visits" | "pack";
 
-export function kvConfig(): KvConfig | null {
-  const url = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "").trim().replace(/\/$/, "");
-  const token = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "").trim();
-  if (!url || !token) return null;
-  return { url, token };
+export type DayCount = {
+  n: number;
+  writes: number;
+};
+
+/**
+ * Hobby Blob includes 2,000 advanced operations (put/list) per month.
+ * Each increment is one put. These daily write caps keep a 31-day month
+ * under that limit (40 visit writes + 20 pack writes × 31 = 1,860), leaving
+ * a little room for retries and store setup.
+ */
+export const BLOB_VISIT_WRITE_CAP = 40;
+export const BLOB_PACK_WRITE_CAP = 20;
+/** First this many writes of the day are exact (+1 each). */
+export const BLOB_EXACT_WRITES = 15;
+/** After the exact phase, a write adds this many and happens with probability 1/weight. */
+export const BLOB_SAMPLE_WEIGHT = 10;
+
+export function writeCap(kind: CounterKind): number {
+  return kind === "visits" ? BLOB_VISIT_WRITE_CAP : BLOB_PACK_WRITE_CAP;
 }
 
-export function visitCountKey(day: string): string {
-  return `botcamp:visits:${day}`;
+export function counterBlobPath(kind: CounterKind, day: string): string {
+  return `bc/${kind}/${day}.json`;
 }
 
-export function packCountKey(day: string): string {
-  return `botcamp:pack:${day}`;
+export function isBlobConfigured(): boolean {
+  return Boolean((process.env.BLOB_READ_WRITE_TOKEN || "").trim() || (process.env.BLOB_STORE_ID || "").trim());
+}
+
+/**
+ * Decide whether to write a new daily total, and what the next stored values are.
+ * `rand` is a number in [0, 1), like Math.random().
+ */
+export function planIncrement(
+  current: DayCount,
+  cap: number,
+  exactWrites = BLOB_EXACT_WRITES,
+  sampleWeight = BLOB_SAMPLE_WEIGHT,
+  rand = Math.random(),
+): { write: false } | { write: true; next: DayCount } {
+  if (current.writes >= cap) return { write: false };
+  if (current.writes < exactWrites) {
+    return { write: true, next: { n: current.n + 1, writes: current.writes + 1 } };
+  }
+  if (rand >= 1 / sampleWeight) return { write: false };
+  return { write: true, next: { n: current.n + sampleWeight, writes: current.writes + 1 } };
+}
+
+const EMPTY: DayCount = { n: 0, writes: 0 };
+
+function normalizeCount(data: unknown): DayCount {
+  if (!data || typeof data !== "object") return { ...EMPTY };
+  const rec = data as { n?: unknown; writes?: unknown };
+  const n = Number(rec.n);
+  const writes = Number(rec.writes);
+  return {
+    n: Number.isFinite(n) && n >= 0 ? n : 0,
+    writes: Number.isFinite(writes) && writes >= 0 ? writes : 0,
+  };
+}
+
+async function readDayCount(path: string): Promise<DayCount> {
+  try {
+    const res = await get(path, { access: "private", useCache: false });
+    if (!res || res.statusCode !== 200 || !res.stream) return { ...EMPTY };
+    const text = await new Response(res.stream).text();
+    return normalizeCount(JSON.parse(text) as unknown);
+  } catch (err) {
+    if (err instanceof BlobNotFoundError) return { ...EMPTY };
+    throw err;
+  }
+}
+
+async function writeDayCount(path: string, count: DayCount): Promise<void> {
+  await put(path, JSON.stringify(count), {
+    access: "private",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    cacheControlMaxAge: 0,
+    contentType: "application/json",
+  });
 }
 
 /** Lab page visits only, not the teachers form or the pack redirect. */
@@ -59,29 +131,17 @@ export function isBotCampVisitPath(pathname: string): boolean {
   return pathname === "/bot-camp" || pathname === "/bot-camp/index.html";
 }
 
-export async function incrementCounter(key: string): Promise<void> {
-  const kv = kvConfig();
-  if (!kv) return;
-  const res = await fetch(`${kv.url}/incr/${encodeURIComponent(key)}`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${kv.token}` },
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`KV incr failed (${res.status}): ${text.slice(0, 200)}`);
-  }
+export async function incrementCounter(kind: CounterKind, now = new Date()): Promise<void> {
+  if (!isBlobConfigured()) return;
+  const day = chicagoDate(now);
+  const path = counterBlobPath(kind, day);
+  const current = await readDayCount(path);
+  const planned = planIncrement(current, writeCap(kind));
+  if (!planned.write) return;
+  await writeDayCount(path, planned.next);
 }
 
-export async function readCounter(key: string): Promise<number | null> {
-  const kv = kvConfig();
-  if (!kv) return null;
-  const res = await fetch(`${kv.url}/get/${encodeURIComponent(key)}`, {
-    headers: { Authorization: `Bearer ${kv.token}` },
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  const data = (await res.json()) as { result?: string | number | null };
-  const n = Number(data.result);
-  return Number.isFinite(n) ? n : 0;
+export async function readCounter(kind: CounterKind, day: string): Promise<DayCount> {
+  if (!isBlobConfigured()) return { ...EMPTY };
+  return readDayCount(counterBlobPath(kind, day));
 }

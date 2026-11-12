@@ -12,7 +12,15 @@ export function Breadcrumbs({ items, tone = "dark" }: { items: Crumb[]; tone?: "
         <ol>
           {all.map((c, i) => (
             <li key={c.path}>
-              {i < all.length - 1 ? <Link href={c.path}>{c.name}</Link> : <span aria-current="page">{c.name}</span>}
+              {i < all.length - 1 ? (
+                c.path === "/bot-camp" || c.path === "/bot-camp/index.html" ? (
+                  <a href={c.path}>{c.name}</a>
+                ) : (
+                  <Link href={c.path}>{c.name}</Link>
+                )
+              ) : (
+                <span aria-current="page">{c.name}</span>
+              )}
             </li>
           ))}
         </ol>

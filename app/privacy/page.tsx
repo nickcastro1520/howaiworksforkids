@@ -147,7 +147,8 @@ export default function PrivacyPage() {
       </p>
       <p>
         We may also count visits to the Bot Camp labs page and clicks on &ldquo;Get the classroom pack&rdquo; as daily totals
-        only. Those counts do not include names, emails, or anything anyone draws or types in the labs.
+        only, stored in our hosting provider&rsquo;s file storage. Those counts do not include names, emails, IP addresses,
+        browser types, or anything anyone draws or types in the labs.
       </p>
 
       <h2>Hosting</h2>

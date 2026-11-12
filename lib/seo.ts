@@ -319,6 +319,49 @@ export function teacherKitJsonLd() {
   };
 }
 
+/** Visible FAQ on /bot-camp/teachers. Facts only. */
+export const BOT_CAMP_TEACHERS_FAQ = [
+  {
+    q: "What is Bot Camp?",
+    a: "Bot Camp is nine free hands-on labs that run in the browser. Kids train small, real AIs — for example, Doodle Brain, which learns from their drawings.",
+  },
+  {
+    q: "What ages?",
+    a: "The labs are made for grades 3–6.",
+  },
+  {
+    q: "Do kids need an account?",
+    a: "No. There is no sign-up and no student accounts. Drawings stay on the device; they are not saved or sent anywhere.",
+  },
+];
+
+/** The Bot Camp teachers sample page (lesson plan request, not a student form). */
+export function botCampTeachersJsonLd() {
+  const url = absoluteUrl("/bot-camp/teachers");
+  return {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "@id": `${url}#resource`,
+    name: "Free Doodle Brain AI lesson for teachers (grades 3–6)",
+    description:
+      "A free Doodle Brain lesson plan and student worksheet. Bot Camp has nine free browser labs for grades 3–6. No sign-up, no student accounts, and drawings stay on the device.",
+    url,
+    image: absoluteUrl("/og/bot-camp-teachers"),
+    learningResourceType: ["Lesson plan", "Worksheet"],
+    educationalLevel: "Grade 3 through grade 6",
+    isAccessibleForFree: true,
+    inLanguage: "en-US",
+    audience: {
+      "@type": "EducationalAudience",
+      educationalRole: "teacher",
+      audienceType: "Teachers, homeschool parents, and club leaders of grades 3–6",
+    },
+    author: { "@id": IDS.person },
+    publisher: { "@id": IDS.org },
+    isPartOf: { "@type": "WebPage", "@id": url, url, name: "Bot Camp for teachers", isAccessibleForFree: true },
+  };
+}
+
 /** The full course with every lesson as a LearningResource. */
 export function courseJsonLd() {
   return {

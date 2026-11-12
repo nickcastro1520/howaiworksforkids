@@ -88,7 +88,10 @@ const nextConfig: NextConfig = {
       // Do not apply this to /bot-camp/teachers or /bot-camp/pack (those use the site layout).
       {
         source: "/bot-camp",
-        headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
+        headers: [
+          { key: "Content-Security-Policy", value: BOT_CAMP_CSP },
+          { key: "Link", value: '<https://howaiworksforkids.com/bot-camp>; rel="canonical"' },
+        ],
       },
       {
         source: "/bot-camp/",
@@ -96,7 +99,10 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/bot-camp/index.html",
-        headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
+        headers: [
+          { key: "Content-Security-Policy", value: BOT_CAMP_CSP },
+          { key: "Link", value: '<https://howaiworksforkids.com/bot-camp>; rel="canonical"' },
+        ],
       },
     ];
   },

@@ -1,14 +1,19 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { chicagoDate, incrementCounter, isBotCampVisitPath, visitCountKey } from "@/lib/botCamp";
+import { incrementCounter, isBotCampVisitPath } from "@/lib/botCamp";
 
 /**
  * Count visits to the Bot Camp lab page only (aggregate numbers, no kid content).
- * No-ops until an Upstash/Vercel KV URL and token are set in the environment.
+ * No-ops until BLOB_READ_WRITE_TOKEN or BLOB_STORE_ID is set.
+ * /bot-camp is a static HTML file, so ?_rsc= prefetches must not 404.
  */
 export function proxy(request: NextRequest, event: NextFetchEvent) {
-  if (request.method === "GET" && isBotCampVisitPath(request.nextUrl.pathname)) {
-    event.waitUntil(incrementCounter(visitCountKey(chicagoDate())).catch(() => undefined));
+  const path = request.nextUrl.pathname;
+  if (isBotCampVisitPath(path) && request.nextUrl.searchParams.has("_rsc")) {
+    return new NextResponse(null, { status: 204 });
+  }
+  if (request.method === "GET" && isBotCampVisitPath(path)) {
+    event.waitUntil(incrementCounter("visits").catch(() => undefined));
   }
   return NextResponse.next();
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { chicagoDate, incrementCounter, packCountKey, packRedirectTarget } from "@/lib/botCamp";
+import { incrementCounter, packRedirectTarget } from "@/lib/botCamp";
 
 /**
  * Placeholder classroom-pack click counter.
@@ -9,7 +9,7 @@ import { chicagoDate, incrementCounter, packCountKey, packRedirectTarget } from 
  */
 export async function GET(request: Request) {
   try {
-    await incrementCounter(packCountKey(chicagoDate()));
+    await incrementCounter("pack");
   } catch {
     // Still send the visitor on; a missing counter must not block the click.
   }
