@@ -25,34 +25,15 @@ export function kitNewLessonsTagId(): string {
   return (process.env.KIT_NEW_LESSONS_TAG_ID || process.env.NEXT_PUBLIC_KIT_NEW_LESSONS_TAG_ID || "").trim();
 }
 
-/** ConvertKit/Kit custom field key for "What grade do you teach?" */
-export function kitGradeField(): string {
-  return (process.env.KIT_GRADE_FIELD || "grade").trim() || "grade";
-}
-
-/** Kit custom field key for the "Email me when new lessons come out" checkbox. */
-export const KIT_NEW_LESSONS_FIELD = "new_lessons_opt_in";
-
-/**
- * Custom fields for a Kit form subscription. Grade is included when provided.
- * new_lessons_opt_in is included only when the box is ticked. No tags.
- */
-export function kitSubscriptionFields(input: { grade: string; newLessons: boolean }): Record<string, string> {
-  const fields: Record<string, string> = {};
-  if (input.grade) fields[kitGradeField()] = input.grade;
-  if (input.newLessons) fields[KIT_NEW_LESSONS_FIELD] = "true";
-  return fields;
-}
-
-/** URL-encoded body for https://app.kit.com/forms/{id}/subscriptions (no API key, no tags). */
-export function kitSubscriptionBody(email: string, fields: Record<string, string>): string {
-  const params = new URLSearchParams();
-  params.set("email_address", email);
-  for (const [key, value] of Object.entries(fields)) {
-    params.set(`fields[${key}]`, value);
-  }
-  return params.toString();
-}
+export {
+  KIT_NEW_LESSONS_FIELD,
+  kitChallengeUrl,
+  kitGradeField,
+  kitSubscribeUrl,
+  kitSubscriptionBody,
+  kitSubscriptionFields,
+  isKitSubscribeAccepted,
+} from "@/lib/kitForm";
 
 export function isKitConfigured(): boolean {
   return kitFormId().length > 0;
