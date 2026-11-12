@@ -114,6 +114,10 @@ export default function TeachersPage() {
             Start with the free print-and-go Lesson 1 kit, an AI lesson plan for elementary classrooms (K&ndash;5).
           </p>
           <p className="grownups-only">This page is for grown-ups. Kids can head to the <Link href="/lessons">lesson trail</Link>.</p>
+          <p className="page-lead">
+            Looking for Bot Camp? Get the free Doodle Brain lesson plan on the{" "}
+            <Link href="/bot-camp/teachers">Bot Camp for teachers</Link> page.
+          </p>
         </div>
       </header>
 

@@ -18,7 +18,7 @@ export default function PrivacyPage() {
   return (
     <article className="wrap narrow privacy">
       <Breadcrumbs items={[{ name: "Privacy", path: "/privacy" }]} />
-      <p className="small-cap">Updated October 2026</p>
+      <p className="small-cap">Updated November 2026</p>
       <h1 className="page-title">Privacy</h1>
       <p className="page-lead">
         The short version: we don&rsquo;t collect information from kids. No ads, no accounts, no chat with an AI. Progress stays in your
@@ -131,6 +131,23 @@ export default function PrivacyPage() {
       <p>
         We may use Google Search Console to see how people find the site in Google Search (for example, which searches show our pages).
         It uses search data Google already has and does not add any tracking to this site.
+      </p>
+
+      <h2>Bot Camp teacher sample</h2>
+      <p>
+        The Bot Camp page at <a href="/bot-camp">/bot-camp</a> is a set of hands-on labs. Drawings and typed words in those
+        labs stay on the device. They are not saved or sent anywhere.
+      </p>
+      <p>
+        Grown-ups can request a free Doodle Brain lesson on <a href="/bot-camp/teachers">/bot-camp/teachers</a>. That form is
+        for teachers and parents. We don&rsquo;t collect anything from kids. The form asks for an email address (required),
+        the grade you teach (optional), and whether you want emails when new lessons come out. Those details are sent
+        through our email service (Kit) so we can send the lesson and, if you ticked the box, occasional new-lesson notes.
+        You can unsubscribe any time. We do not store those emails in our own database.
+      </p>
+      <p>
+        We may also count visits to the Bot Camp labs page and clicks on &ldquo;Get the classroom pack&rdquo; as daily totals
+        only. Those counts do not include names, emails, or anything anyone draws or types in the labs.
       </p>
 
       <h2>Hosting</h2>

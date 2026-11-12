@@ -37,7 +37,14 @@ const PAGES: Record<string, OgCard> = {
     kicker: "Free hands-on labs · Ages 6–10",
     title: "Bot Camp",
     sub: "Don't just read about AI. Train one.",
-    alt: "Bot Camp: seven free hands-on labs where kids train small, real AIs in the browser. No sign-up.",
+    alt: "Bot Camp: nine free hands-on labs where kids train small, real AIs in the browser. No sign-up.",
+    accent: "#33c4b0",
+  },
+  "bot-camp-teachers": {
+    kicker: "For teachers and parents",
+    title: "Free AI lesson: Doodle Brain",
+    sub: "Teach your first AI lesson tomorrow.",
+    alt: "Free Doodle Brain lesson plan and worksheet for teachers: students train a neural network on their drawings.",
     accent: "#33c4b0",
   },
   home: {

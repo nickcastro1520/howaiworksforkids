@@ -320,6 +320,18 @@ main{min-width:0}
 .tt-twin b{font-family:var(--f-sign);font-size:16px;color:var(--ink)}
 .tt-twin.on{border-color:var(--ink);background:var(--bg2)}
 
+/* 90-eyes.css */
+/* Robot Eyes */
+.ey-duo{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ey-duo canvas{touch-action:none;cursor:crosshair}
+.ey-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ey-k{display:grid;grid-template-columns:repeat(3,44px);gap:4px;flex:none}
+.ey-k button{height:44px;border:2.5px solid var(--ink);border-radius:8px;background:var(--card);font-family:var(--f-sign);font-weight:800;font-size:18px;cursor:pointer;touch-action:manipulation}
+.ey-k button.pos{background:var(--pine);color:var(--on-accent)}
+.ey-k button.neg{background:var(--berry);color:var(--on-accent)}
+.ey-math{flex:1;min-width:180px;font-size:14.5px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+@media (max-width:520px){.ey-duo{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -2335,6 +2347,117 @@ BC.register({
       sGen.val.textContent = sim.gen; sHit.val.textContent = R.reached(sim); sRec.val.textContent = sim.record;
     });
     return function(){ stop(); st.destroy(); cs.destroy(); };
+  }
+});
+})(window.BC);
+
+/* 90-eyes.js */
+(function(BC){
+'use strict';
+/* ================= Robot Eyes: pure logic (no DOM) ================= */
+var N = 12;
+var PICS = {
+  rocket: ['000000000000', '000009900000', '000099990000', '000099990000', '000095590000', '000095590000', '000099990000', '000099990000', '009999999900', '099099990990', '000005500000', '000000000000'],
+  face: ['000000000000', '000999999000', '009999999900', '099099990990', '099099990990', '099999999990', '099999999990', '099099990990', '099900009990', '009999999900', '000999999000', '000000000000'],
+  tree: ['000000000000', '000005500000', '000055550000', '000555555000', '005555555500', '000055550000', '000555555000', '005555555500', '055555555550', '000009900000', '000009900000', '000000000000']
+};
+var FILTERS = {
+  side: { name: 'Find left-right edges', k: [-1, 0, 1, -1, 0, 1, -1, 0, 1] },
+  top: { name: 'Find up-down edges', k: [-1, -1, -1, 0, 0, 0, 1, 1, 1] },
+  all: { name: 'Find every edge', k: [-1, -1, -1, -1, 8, -1, -1, -1, -1] },
+  blur: { name: 'Blur', k: [1, 1, 1, 1, 1, 1, 1, 1, 1] }
+};
+function load(name){ var a = new Uint8Array(N * N); PICS[name].forEach(function(row, y){ for (var x = 0; x < N; x++) a[y * N + x] = +row[x]; }); return a; }
+function at(img, x, y){ x = x < 0 ? 0 : x >= N ? N - 1 : x; y = y < 0 ? 0 : y >= N ? N - 1 : y; return img[y * N + x]; }
+function conv(img, k){
+  var out = new Float32Array(N * N), sum = 0, i; for (i = 0; i < 9; i++) sum += k[i];
+  for (var y = 0; y < N; y++) for (var x = 0; x < N; x++){ var s = 0; for (var j = 0; j < 3; j++) for (i = 0; i < 3; i++) s += at(img, x + i - 1, y + j - 1) * k[j * 3 + i]; out[y * N + x] = sum > 1 ? s / sum : Math.abs(s); }
+  return out;
+}
+var E = BC.sim.eyes = { N: N, PICS: PICS, FILTERS: FILTERS, load: load, conv: conv, at: at };
+
+function drawGrid(ctx, vals, max, C, numbers, hi){
+  var s = 300 / N, x, y;
+  ctx.fillStyle = C.ink; ctx.fillRect(0, 0, 300, 300);
+  for (y = 0; y < N; y++) for (x = 0; x < N; x++){
+    var v = Math.min(1, vals[y * N + x] / max); ctx.globalAlpha = v; ctx.fillStyle = C.woodink; ctx.fillRect(x * s, y * s, s, s); ctx.globalAlpha = 1;
+    if (numbers){ ctx.fillStyle = v > 0.5 ? C.wood2 : C.woodink; ctx.font = '700 10.5px Verdana, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(Math.round(vals[y * N + x])), x * s + s / 2, y * s + s / 2 + 0.5); }
+  }
+  ctx.strokeStyle = C.ink2; ctx.lineWidth = 0.5; ctx.globalAlpha = 0.6; ctx.beginPath(); for (x = 1; x < N; x++){ ctx.moveTo(x * s, 0); ctx.lineTo(x * s, 300); ctx.moveTo(0, x * s); ctx.lineTo(300, x * s); } ctx.stroke(); ctx.globalAlpha = 1;
+  if (hi){ ctx.strokeStyle = C.ember; ctx.lineWidth = 3; ctx.strokeRect(hi.x * s + 1.5, hi.y * s + 1.5, hi.w * s - 3, hi.w * s - 3); }
+}
+
+BC.register({
+  id: 'eyes', order: 90, name: 'Robot Eyes', minutes: 8, thread: '--pine', big: [1],
+  tagline: 'To a computer, a picture is a grid of numbers. See what it does with them.',
+  does: 'Turn a picture into numbers, edit it by changing numbers, and use a small filter to find edges the way vision systems do.',
+  icon: '<path d="M13 32c5-8 12-12 19-12s14 4 19 12c-5 8-12 12-19 12s-14-4-19-12z"/><circle cx="32" cy="32" r="5.5"/>',
+  missions: [
+    { id: 'numbers', text: 'Switch to Numbers. This is what the robot really gets.' },
+    { id: 'paint', text: 'Change 5 squares of the picture by tapping them.' },
+    { id: 'edge', text: 'Pick Find left-right edges. Tap a bright square in the result to see the math.' },
+    { id: 'own', text: 'Change the numbers in the filter to invent your own. What does it find?' }
+  ],
+  how: [
+    'A camera chops a picture into tiny squares called <b>pixels</b>. Each pixel is stored as a number: 0 is dark and 9 is bright. The robot never gets the picture. It only gets the numbers.',
+    'To find shapes, the robot slides a small window over the numbers. The window is a <b>filter</b>: nine numbers of its own. It multiplies, adds up, and writes down the answer.',
+    'When the window sits on a flat area, the answer is zero. When it sits where dark meets bright, the answer is big. That is an edge.',
+    'Doodle Brain and Self-Driving School both start from numbers like these. Bigger AIs stack many layers of filters, and they learn the filter numbers by practice instead of being given them.'
+  ],
+  words: [
+    ['pixel', 'One tiny square of a picture, stored as a number.'],
+    ['filter', 'A small grid of numbers that slides over a picture to find something.'],
+    ['edge', 'A place where the picture changes from dark to bright.'],
+    ['perception', 'How a machine takes in the world through sensors.']
+  ],
+  ask: [
+    'You changed the picture by changing numbers. What does that tell you about photos on a computer?',
+    'Why is the answer zero when the window sits on a flat area?',
+    'Which filter would help a robot find a doorway? Why?',
+    'Your eyes do not send your brain a grid of numbers. Or do they? What do you think?'
+  ],
+  grown: '<p>This station shows an image as a 12 by 12 matrix of intensities and applies a 3 by 3 <strong>convolution</strong>. The edge presets are the Prewitt operators and a Laplacian. Blur is a box filter. Edge results show the absolute value of the response.</p><p>Convolutional neural networks are built from this operation. The difference is that their filter values are learned from data, and many layers of filters are stacked so that later layers respond to textures, parts and whole objects.</p><p>This is a good place to connect to Doodle Brain, where the same kind of grid is the input to a network.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, w, h); var pic = PICS.face, s = 6.5, ox = 18, oy = 11, k = Math.floor((t * 5) % 100), bx = k % 10, by = Math.floor(k / 10);
+    for (var y = 0; y < N; y++) for (var x = 0; x < N; x++){ ctx.fillStyle = +pic[y][x] ? C.woodink : C.ink; ctx.fillRect(ox + x * s, oy + y * s, s - 0.6, s - 0.6); }
+    ctx.strokeStyle = C.ember; ctx.lineWidth = 2; ctx.strokeRect(ox + bx * s, oy + by * s, s * 3, s * 3);
+    ctx.fillStyle = C.ink; ctx.font = '700 9px Verdana, sans-serif'; ctx.textAlign = 'left'; ['0 9 9', '0 9 0', '9 9 0'].forEach(function(r, i){ ctx.fillText(r, 112, 34 + i * 14); });
+  },
+  mount: function(root, api){
+    var el = BC.el, img = E.load('rocket'), numbers = false, pen = 9, fid = 'side', k = FILTERS.side.k.slice(), painted = 0, pick = null, custom = false;
+    var inCv = el('canvas', { 'aria-label': 'The picture as a 12 by 12 grid. Tap squares to change them.' }), outCv = el('canvas', { 'aria-label': 'The result after the filter slides over the picture. Tap a square to see the math.' });
+    var note = el('p', { class: 'note' }), kBox = el('div', { class: 'ey-k' }), math = el('p', { class: 'ey-math' });
+    function say(s){ note.textContent = s; }
+    var viewSeg = BC.seg([{ id: 'p', label: 'Picture' }, { id: 'n', label: 'Numbers' }], 'p', function(id){ numbers = id === 'n'; if (numbers){ api.mission('numbers'); say('This is all I get: 144 numbers. 0 is dark, 9 is bright.'); } draw(); }, 'View');
+    var picSeg = BC.seg([{ id: 'rocket', label: 'Rocket' }, { id: 'face', label: 'Face' }, { id: 'tree', label: 'Tree' }], 'rocket', function(id){ img = E.load(id); pick = null; draw(); BC.sfx('tap'); }, 'Picture');
+    var penSeg = BC.seg([{ id: '0', label: 'Dark 0' }, { id: '5', label: 'Gray 5' }, { id: '9', label: 'Bright 9' }], '9', function(id){ pen = +id; }, 'Paint with');
+    var fSeg = BC.seg(Object.keys(FILTERS).map(function(id){ return { id: id, label: FILTERS[id].name.replace('Find ', '') }; }), 'side', function(id){ fid = id; k = FILTERS[id].k.slice(); custom = false; pick = null; renderK(); draw(); BC.sfx('tap'); say(id === 'blur' ? 'Blur replaces each square with the average of its neighbors.' : 'Bright squares in the result are where I found that kind of edge.'); }, 'Filter');
+    function renderK(){ kBox.innerHTML = ''; k.forEach(function(v, i){ kBox.appendChild(el('button', { type: 'button', class: v > 0 ? 'pos' : v < 0 ? 'neg' : '', text: String(v), 'aria-label': 'Filter number ' + (i + 1) + ' is ' + v + '. Tap to change.', onclick: function(){ k[i] = k[i] >= 2 ? -2 : k[i] + 1; custom = true; api.mission('own'); BC.sfx('pop'); renderK(); draw(); say('Your own filter! Look at what lights up now.'); } })); }); }
+    function cell(st, e){ var p = st.pt(e); return { x: BC.clamp(Math.floor(p.x / 25), 0, N - 1), y: BC.clamp(Math.floor(p.y / 25), 0, N - 1) }; }
+    var down = false;
+    function paint(e){ var c = cell(si, e), i = c.y * N + c.x; if (img[i] !== pen){ img[i] = pen; painted++; if (painted >= 5) api.mission('paint'); draw(); } }
+    inCv.addEventListener('pointerdown', function(e){ e.preventDefault(); down = true; try { inCv.setPointerCapture(e.pointerId); } catch (x) {} paint(e); BC.sfx('pop'); });
+    inCv.addEventListener('pointermove', function(e){ if (down) paint(e); });
+    ['pointerup', 'pointercancel'].forEach(function(ev){ inCv.addEventListener(ev, function(){ down = false; }); });
+    outCv.addEventListener('pointerdown', function(e){ e.preventDefault(); pick = cell(so, e); BC.sfx('tap'); draw(); var res = E.conv(img, k), v = res[pick.y * N + pick.x]; if (fid === 'side' && !custom && v >= 9) api.mission('edge'); });
+    function draw(){
+      var C = BC.colors(), res = E.conv(img, k), mx = 9, i; for (i = 0; i < res.length; i++) if (res[i] > mx) mx = res[i];
+      drawGrid(si.begin(), img, 9, C, numbers, pick ? { x: pick.x - 1, y: pick.y - 1, w: 3 } : null);
+      drawGrid(so.begin(), res, mx, C, numbers, pick ? { x: pick.x, y: pick.y, w: 1 } : null);
+      if (!pick){ math.textContent = 'Tap a square in the result to see how the robot worked it out.'; return; }
+      var parts = [], s = 0, sum = 0; for (var j = 0; j < 3; j++) for (i = 0; i < 3; i++){ var a = E.at(img, pick.x + i - 1, pick.y + j - 1), b = k[j * 3 + i]; sum += b; if (b !== 0){ parts.push(a + '×' + (b < 0 ? '(' + b + ')' : b)); s += a * b; } }
+      math.textContent = (parts.join(' + ') || '0') + ' = ' + s + (sum > 1 ? ', divided by ' + sum + ' = ' + Math.round(s / sum * 10) / 10 : s < 0 ? ', and the robot drops the minus sign: ' + (-s) : '') + '.';
+    }
+    root.appendChild(el('div', { class: 'row' }, viewSeg, picSeg));
+    root.appendChild(el('div', { class: 'duo ey-duo' }, el('figure', null, inCv, el('figcaption', { class: 'cap', text: 'The picture. Tap to paint.' })), el('figure', null, outCv, el('figcaption', { class: 'cap', text: 'What the filter found' }))));
+    root.appendChild(el('div', { class: 'row' }, el('span', { class: 'cap', text: 'Paint with' }), penSeg));
+    root.appendChild(note);
+    root.appendChild(el('div', { class: 'row' }, el('span', { class: 'cap', text: 'Filter' }), fSeg));
+    root.appendChild(el('div', { class: 'ey-row' }, kBox, math));
+    var si = BC.stage(inCv, 300, 300), so = BC.stage(outCv, 300, 300); si.onresize = so.onresize = draw;
+    var off = BC.onTheme(draw);
+    renderK(); draw(); say('You see a rocket. I see a grid of numbers. Switch to Numbers to see what I get.');
+    return function(){ si.destroy(); so.destroy(); off(); };
   }
 });
 })(window.BC);

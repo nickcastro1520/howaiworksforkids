@@ -84,7 +84,8 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: SECURITY_HEADERS,
       },
-      // Last matching CSP wins. Scoped to Bot Camp so Google Fonts can load there only.
+      // Last matching CSP wins. Only the self-contained lab page needs Google Fonts.
+      // Do not apply this to /bot-camp/teachers or /bot-camp/pack (those use the site layout).
       {
         source: "/bot-camp",
         headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
@@ -94,7 +95,7 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
       },
       {
-        source: "/bot-camp/:path*",
+        source: "/bot-camp/index.html",
         headers: [{ key: "Content-Security-Policy", value: BOT_CAMP_CSP }],
       },
     ];
