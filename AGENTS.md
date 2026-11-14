@@ -4,7 +4,7 @@
 A kid-safe, interactive site that explains AI to kids ages 6–10. Kids learn by teaching a tiny AI named Pip.
 It is also a portfolio piece for Nick Castro's job hunt in AI enablement and training. His sons Nathan (8) and Nolan (11) are the test users.
 
-## Current status (updated 2026-11-12)
+## Current status (updated 2026-11-14)
 **Live:**
 - 15 lessons in 2 sections (Section 1: lessons 1–7; Section 2 "Pip Grows Up": lessons 8–15), a final quiz, and a certificate.
 - Progress tracking, a 15-badge shelf, and Next lesson cards.
@@ -14,7 +14,7 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 - CI (GitHub Actions): lint, unit tests, build, and scripts/check-site.mjs.
 - Parent guide /explain-ai-to-kids ("How to explain AI to an 8-year-old"): live since 2026-10-22 (PR #19).
 - SEO internal links live since 2026-11-04 (PR #21): homepage FAQ intro links /explain-ai-to-kids; "Play it again →" at the end of Lessons 2 and 3.
-- Bot Camp at /bot-camp: the 14-station lab page (Doodle Brain, Self-Driving School, Treat Hunt, Parrot Bot, Guess Machine, Fair or Unfair?, Taste Twins, Smart Rockets, Robot Eyes, Beat the Keeper, Moon Lander School, Tic-Tac-Toe Trainer, Head to Head, Camp Finale), served as-is from Claude's Nov 12, 2026 handoff (sha256 fbad3a2f…). Homepage card: "Don't just read about AI. Train one. Fourteen free hands-on labs." /bot-camp/teachers uses the Launch Kit wording; the sample form is live (KIT_FORM_ID 10178091). The browser posts to Kit; our sample route reports ok and increments the counter only when Kit returns an accepted status, not a quarantined 200. /bot-camp/pack 302s to /bot-camp/teachers until BOT_CAMP_PACK_URL is set. packUrl in index.html is empty until the classroom pack listing is live. Visit, pack-click, and sample-sent counters use a private Vercel Blob store on the Hobby free tier (daily write caps so monthly advanced operations stay under 2,000). The teachers form is connected to Kit (form ID in KIT_FORM_ID); KIT_NEW_LESSONS_TAG_ID stays unset on the free plan, and the opt-in is sent as fields[new_lessons_opt_in] only when the box is ticked. /bot-camp and /bot-camp/index.html send a Link canonical header; the HTML file itself is unchanged (sha256 fbad3a2f…). The classroom pack and free sample still cover the first nine stations and were not changed. The paid classroom pack PDF is not published.
+- Bot Camp at /bot-camp: the 15-station lab page (Doodle Brain, Self-Driving School, Treat Hunt, Parrot Bot, Guess Machine, Fair or Unfair?, Taste Twins, Smart Rockets, Robot Eyes, Beat the Keeper, Moon Lander School, Tic-Tac-Toe Trainer, Head to Head, Build-a-Bot Workshop, Camp Finale), served as-is from Claude's Nov 14, 2026 handoff (sha256 e3aedc4f…). Homepage card: "Don't just read about AI. Train one. Fifteen free hands-on labs." /bot-camp/teachers uses the Launch Kit wording; the sample form is live (KIT_FORM_ID 10178091). The browser posts to Kit; our sample route reports ok and increments the counter only when Kit returns an accepted status, not a quarantined 200. /bot-camp/pack 302s to /bot-camp/teachers until BOT_CAMP_PACK_URL is set. packUrl in index.html is empty until the classroom pack listing is live. Visit, pack-click, and sample-sent counters use a private Vercel Blob store on the Hobby free tier (daily write caps so monthly advanced operations stay under 2,000). The teachers form is connected to Kit (form ID in KIT_FORM_ID); KIT_NEW_LESSONS_TAG_ID stays unset on the free plan, and the opt-in is sent as fields[new_lessons_opt_in] only when the box is ticked. /bot-camp and /bot-camp/index.html send a Link canonical header; the HTML file itself is unchanged (sha256 e3aedc4f…). The classroom pack and free sample still cover the first nine stations and were not changed. The paid classroom pack PDF is not published.
 
 **Open pull requests:**
 - #20 (/is-ai-safe-for-kids parent guide) — preview only, waiting on Nick's OK.
@@ -22,6 +22,8 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 **In progress:** a weekly SEO report, run Mondays. During the approval period (Oct 26 to Nov 16), it only proposes changes and publishes nothing without Nick's OK.
 
 ## Decisions (newest first)
+
+- **2026-11-14 (PR #30, main `4b8e7fe`):** Bot Camp updated to 15 stations from Claude's Nov 14 handoff. The self-contained /bot-camp/index.html was replaced byte-for-byte (sha256 e3aedc4f…); packUrl stayed empty. New station 14: Build-a-Bot Workshop (kids build a retrieval chatbot with a persona, fact packs, taught facts, a banned word, and a "Check answers before sending" output filter; nothing typed leaves the device). Camp Finale is now station 15 and unlocks after the other 14 patches. Site copy fourteen → fifteen: app/page.tsx homepage card, lib/og.tsx OG alt, lib/seo.ts teachers FAQ and JSON-LD description, app/bot-camp/teachers/page.tsx meta description. Live checks (Playwright, 390x844 and 1280x800, fresh storage) passed with zero console errors. The classroom pack PDF and free sample were not changed.
 
 - **2026-11-12:** Bot Camp updated to 14 stations from Claude's handoff. The self-contained /bot-camp/index.html was replaced as-is (no edit, split, minify, or wrap); packUrl stayed empty. New stations: Beat the Keeper, Moon Lander School, Tic-Tac-Toe Trainer, Head to Head, and Camp Finale (unlocks after the other 13 patches). Homepage card and other site copy that said nine labs now say fourteen. The classroom pack PDF and free sample were not changed and still cover the first nine stations. Saved patches in the browser carry over. Do not add any script to index.html.
 
@@ -55,7 +57,7 @@ It is also a portfolio piece for Nick Castro's job hunt in AI enablement and tra
 
 ## Next steps
 - Confirm Bot-Camp-Free-Sample.pdf is attached to the Kit form confirmation email.
-- Classroom pack store listing at $12 still needs Nick's OK on the seller plan before publishing; do not set packUrl until it is live. The pack and free sample still cover only the first nine of the fourteen stations.
+- Classroom pack store listing at $12 still needs Nick's OK on the seller plan before publishing; do not set packUrl until it is live. The pack and free sample still cover only the first nine of the fifteen stations.
 - Nathan and Nolan test Section 2 and the bonus games. Use only their real feedback on the site.
 - Fix the 53px sideways scroll on 320px-wide screens.
 - Keep an eye on home-page speed variance.
