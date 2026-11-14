@@ -369,6 +369,28 @@ main{min-width:0}
 .fn-miss{display:flex;flex-wrap:wrap;gap:6px}
 .fn-chip{display:inline-flex;align-items:center;text-decoration:none;font-size:14px;min-height:34px}
 
+/* 96-chatbot.css */
+/* Build-a-Bot Workshop */
+#cbName,#cbBan{flex:1;min-width:120px;width:auto}
+.cb-teach{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:center;border:2px dashed var(--line);border-radius:12px;padding:10px}
+.cb-teach .btn{grid-column:2;justify-self:start}
+.cb-taught{display:flex;flex-direction:column;gap:5px}
+.cb-fact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 18px;gap:8px;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:10px;padding:5px 10px;font-size:14px;cursor:pointer;overflow-wrap:anywhere}
+.cb-fact b{font-weight:600}.cb-fact i{font-style:normal;font-weight:700;color:var(--ink2)}
+.cb-log{border:2.5px solid var(--ink);border-radius:14px;background:var(--bg2);padding:10px;display:flex;flex-direction:column;gap:8px;height:300px;overflow-y:auto}
+.cb-msg{max-width:88%;border-radius:14px;padding:7px 12px;font-size:15.5px;line-height:1.35;overflow-wrap:anywhere}
+.cb-me{align-self:flex-end;background:var(--ink);color:var(--card);border-bottom-right-radius:4px}
+.cb-bot{align-self:flex-start;background:var(--card);border:2px solid var(--ink);border-bottom-left-radius:4px}
+.cb-flag{border-color:var(--ember);box-shadow:0 0 0 2px var(--ember)}
+.cb-msg details{margin-top:4px;font-size:13px;color:var(--ink2)}
+.cb-msg summary{cursor:pointer;font-weight:600}
+.cb-why{margin-top:2px}
+.cb-send{display:flex;gap:8px}
+.cb-send .txt{flex:1;font-size:16px}
+.cb-try{font-size:13.5px;min-height:34px;padding:0 10px}
+@media (max-width:460px){.cb-teach{grid-template-columns:1fr}.cb-teach .btn{grid-column:1}}
+.cb-wrap{flex-wrap:wrap;max-width:100%}
+
 </style>
 </head>
 <body>
@@ -3022,6 +3044,141 @@ BC.register({
       if (pass && can) api.mission('pass');
     }
     if (missing.length) locked(); else begin();
+    return function(){};
+  }
+});
+})(window.BC);
+
+/* 96-chatbot.js */
+(function(BC){
+'use strict';
+/* ================= Build-a-Bot Workshop: pure logic (no DOM) ================= */
+var STOP = { a: 1, an: 1, the: 1, is: 1, are: 1, was: 1, do: 1, does: 1, did: 1, what: 1, who: 1, how: 1, when: 1, where: 1, why: 1, of: 1, in: 1, on: 1, to: 1, it: 1, i: 1, you: 1, me: 1, my: 1, your: 1, about: 1, tell: 1, can: 1, and: 1, or: 1, for: 1, s: 1, there: 1, have: 1, has: 1, many: 1, much: 1, please: 1 };
+function words(s){ return String(s).toLowerCase().match(/[a-z0-9']+/g) || []; }
+function stem(w){ if (w.length > 4 && /ies$/.test(w)) return w.slice(0, -3) + 'y'; if (w.length > 4 && /(ing|est)$/.test(w)) return w.slice(0, -3); if (w.length > 3 && /(ed|es)$/.test(w)) return w.slice(0, -2); if (w.length > 3 && /s$/.test(w) && !/ss$/.test(w)) return w.slice(0, -1); return w; }
+function keys(s){ var out = []; words(s).forEach(function(w){ if (!STOP[w]){ var k = stem(w); if (out.indexOf(k) < 0) out.push(k); } }); return out; }
+var PACKS = {
+  space: { name: 'Space facts', items: [['how far away is the moon', 'The Moon is about 384,000 kilometers from Earth.'], ['how many planets', 'There are eight planets in our solar system.'], ['biggest planet', 'Jupiter is the biggest planet.'], ['hottest planet', 'Venus is the hottest planet, even though Mercury is closer to the Sun.'], ['what is the sun', 'The Sun is a star.']] },
+  soccer: { name: 'Soccer facts', items: [['how many players on a soccer team', 'Each team has 11 players on the field.'], ['how long is a soccer game match', 'A full match is 90 minutes, played in two halves of 45.'], ['who can use hands', 'Only the goalkeeper can use hands, and only inside the penalty area.'], ['how big is a goal', 'A full-size goal is 8 feet tall and 24 feet wide.']] },
+  animals: { name: 'Animal facts', items: [['how many legs does a spider have', 'A spider has eight legs.'], ['what do frogs eat', 'Frogs eat mostly insects.'], ['fastest land animal', 'The cheetah is the fastest land animal.'], ['biggest animal', 'The blue whale is the biggest animal that has ever lived.']] }
+};
+var PERSONAS = {
+  plain: { name: 'Plain', hi: 'Hello! Ask me something.', wrap: function(t){ return t; } },
+  pirate: { name: 'Pirate', hi: 'Ahoy! What do ye want to know?', wrap: function(t){ return 'Arr! ' + t.replace(/\byou\b/gi, 'ye').replace(/\bmy\b/gi, 'me') + ' Savvy, matey?'; } },
+  robot: { name: 'Robot', hi: 'BEEP. GREETING DETECTED. ASK A QUESTION.', wrap: function(t){ return 'BEEP. ' + t.toUpperCase() + ' END OF MESSAGE.'; } },
+  announcer: { name: 'Sports announcer', hi: 'Welcome, welcome, welcome! What a day for a question!', wrap: function(t){ return 'And here it comes! ' + t + ' What a moment!'; } },
+  cat: { name: 'Sleepy cat', hi: 'Mrow. You woke me. What is it?', wrap: function(t){ return t + ' ...yawn. Purr.'; } }
+};
+function newBot(){ return { name: 'Sprocket', persona: 'plain', packs: { space: true }, taught: [], banned: '', makeUp: true, check: false }; }
+function knowledge(bot){ var out = []; Object.keys(PACKS).forEach(function(id){ if (bot.packs[id]) PACKS[id].items.forEach(function(it){ out.push({ q: it[0], a: it[1], src: PACKS[id].name }); }); }); bot.taught.forEach(function(t){ out.push({ q: t.q, a: t.a, src: 'you', own: true }); }); return out; }
+function match(msg, items){
+  var mk = keys(msg), best = null;
+  items.forEach(function(it){ var ik = keys(it.q); if (!ik.length) return; var hits = ik.filter(function(k){ return mk.indexOf(k) >= 0; }), score = hits.length / ik.length; if (hits.length && (!best || score > best.score || (score === best.score && hits.length > best.hits.length))) best = { item: it, score: score, hits: hits }; });
+  return best && best.score >= 0.5 ? best : null;
+}
+function hasBanned(bot, text){ var b = keys(bot.banned); if (!b.length) return false; var t = keys(text); return b.some(function(k){ return t.indexOf(k) >= 0; }); }
+// One turn of conversation. Returns the reply and an explanation of how the bot got there.
+function respond(bot, msg, rnd){
+  var P = PERSONAS[bot.persona] || PERSONAS.plain, raw, kind, why, own = false, m;
+  var echo = /^\s*(?:please\s+)?(?:repeat after me|say|repeat)\s*[:,]?\s*(.+)$/i.exec(msg);
+  if (/^\s*(hi|hello|hey|yo|howdy)\b/i.test(msg)){ raw = P.hi; kind = 'hello'; why = 'You said hello, so I used my greeting.'; }
+  else if (/\b(your name|who are you)\b/i.test(msg)){ raw = P.wrap('My name is ' + bot.name + '.'); kind = 'name'; why = 'You asked who I am, so I gave the name my builder chose.'; }
+  else if (echo){ raw = P.wrap(echo[1].trim()); kind = 'echo'; why = 'You told me to repeat something, so I copied your words without thinking about them.'; }
+  else {
+    var items = knowledge(bot).filter(function(it){ return !hasBanned(bot, it.q + ' ' + it.a); }); m = match(msg, items);
+    if (hasBanned(bot, msg)){ raw = P.wrap('I am not allowed to talk about that.'); kind = 'refuse'; why = 'Your message had my banned word in it, so my rule told me to refuse.'; }
+    else if (m){ raw = P.wrap(m.item.a); kind = 'know'; own = !!m.item.own; why = 'I matched the words "' + m.hits.join(', ') + '" to something from ' + (m.item.own ? 'what you taught me' : m.item.src) + '.'; }
+    else if (bot.makeUp){
+      var Pm = BC.sim.parrot, src = knowledge(bot).map(function(it){ return { text: it.a }; }); if (!src.length) src = [{ text: 'the answer is a mystery.' }];
+      var model = Pm.build(src), ctx = [], toks = []; for (var i = 0; i < 16; i++){ var w = Pm.pick(Pm.options(model, ctx, 1, 1.3).list, rnd); toks.push(w); ctx.push(w); if (Pm.isEnd(w)) break; }
+      raw = P.wrap('Great question! ' + Pm.pretty(toks) + (Pm.isEnd(toks[toks.length - 1]) ? '' : '.')); kind = 'madeup'; why = 'Nothing I know matched. I am set to make something up, so I stuck words together. This answer is probably wrong.';
+    } else { raw = P.wrap('I do not know that yet. You could teach me.'); kind = 'dontknow'; why = 'Nothing I know matched your words, and I am set to admit it.'; }
+  }
+  var broke = false;
+  if (kind !== 'refuse' && hasBanned(bot, raw)){
+    if (bot.check){ raw = P.wrap('I almost said something I am not allowed to say. I stopped myself.'); kind = 'blocked'; why = 'Before sending, I checked my own answer, found my banned word, and threw the answer away.'; }
+    else { broke = true; why += ' I never checked my own answer, so my banned word slipped out.'; }
+  }
+  return { text: raw, kind: kind, why: why, own: own, broke: broke };
+}
+var CB = BC.sim.chatbot = { PACKS: PACKS, PERSONAS: PERSONAS, newBot: newBot, keys: keys, match: match, respond: respond, knowledge: knowledge };
+
+BC.register({
+  id: 'chatbot', order: 140, name: 'Build-a-Bot Workshop', minutes: 12, thread: '--pine', big: [4, 2, 5],
+  tagline: 'Build your own chatbot: its voice, what it knows and its rules. Then try to break it.',
+  does: 'Assemble a chatbot from a personality, knowledge and rules, then test where it invents answers and where its rules can be tricked.',
+  icon: '<rect x="18" y="20" width="28" height="22" rx="6"/><path d="M32 20v-6M26 30h.1M38 30h.1M27 36h10M22 47l5-5M42 47l-5-5"/>',
+  missions: [
+    { id: 'chat', text: 'Give your bot a name and a personality. Send it 3 messages.' },
+    { id: 'teach', text: 'Teach it a fact of your own. Ask a question that makes it use your fact.' },
+    { id: 'honest', text: 'Ask something it cannot know and watch it make an answer up. Then switch it to admit when it does not know.' },
+    { id: 'guard', text: 'Set a banned word. Trick the bot into saying it. Then turn on Check answers before sending and try again.' }
+  ],
+  how: [
+    'Your bot has three parts. Its <b>personality</b> changes how it talks. Its <b>knowledge</b> is a list of facts. Its <b>rules</b> say what it must never do.',
+    'When you ask something, the bot looks for a fact whose words match your words. It does not understand the question. Tap How I answered to see exactly what it did.',
+    'When nothing matches, a bot has two choices: admit it, or stick words together and sound sure. Made-up answers that sound sure are the biggest problem with real chatbots.',
+    'Rules can be tricked. A bot that only checks the question can still be talked into saying a banned word. Checking its own answer before sending closes that hole. People who build real chatbots spend a lot of time on exactly this.'
+  ],
+  words: [
+    ['chatbot', 'A program you talk to in sentences.'],
+    ['knowledge base', 'The list of facts a bot can look things up in.'],
+    ['guardrail', 'A rule that stops an AI from doing something it should not.'],
+    ['jailbreak', 'A trick that gets an AI to break its own rules.']
+  ],
+  ask: [
+    'Your bot answered questions it did not understand. How?',
+    'Which is better: a bot that admits it does not know, or one that always has an answer? Why?',
+    'How did you trick the bot? Why did checking its own answer stop the trick?',
+    'If you built a homework-help bot for little kids, what rules would you give it?'
+  ],
+  grown: '<p>This bot is a <strong>retrieval chatbot</strong>: it finds the stored fact with the best keyword overlap and wraps it in a persona. Modern assistants generate text with a language model instead, but they are assembled from the same three parts: a system prompt that sets persona and rules, knowledge to look things up in, and safety checks.</p><p>The make-something-up switch joins words from the bot\'s own facts with the word predictor from Parrot Bot. It shows <strong>hallucination</strong> in a form students can turn on and off.</p><p>The banned-word mission shows the difference between an <strong>input filter</strong> and an <strong>output filter</strong>, and gives students a first safe experience of a <strong>jailbreak</strong>. It is a good opening for a talk about why AI rules are hard to get right.</p><p>Everything typed stays on the device and is gone when the page closes.</p>',
+  thumb: function(ctx, w, h, t, C){
+    ctx.fillStyle = C.bg2; ctx.fillRect(0, 0, w, h); var n = Math.floor((t * 0.9) % 4);
+    [[14, 14, 84, C.card, 0], [62, 40, 84, C.pine, 1], [14, 66, 100, C.card, 2]].forEach(function(b){ if (n < b[4]) return; ctx.fillStyle = b[3]; ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5; BC.rr(ctx, b[0], b[1], b[2], 19, 8); ctx.fill(); ctx.stroke(); ctx.fillStyle = b[4] === 1 ? C.onaccent : C.ink2; BC.rr(ctx, b[0] + 9, b[1] + 7.5, b[2] - 30, 4, 2); ctx.fill(); });
+  },
+  mount: function(root, api){
+    var el = BC.el, rnd = BC.rng((Math.random() * 1e9) | 0), bot = CB.newBot(), sent = 0, sawMadeUp = false, sawBroke = false;
+    var log = el('div', { class: 'cb-log', role: 'log', 'aria-live': 'polite', 'aria-label': 'Conversation' }), note = el('p', { class: 'note' }), taughtBox = el('div', { class: 'cb-taught' }), packRow = el('div', { class: 'row' });
+    function say(s){ note.textContent = s; }
+    function bubble(who, text, why, flag){
+      var b = el('div', { class: 'cb-msg cb-' + who + (flag ? ' cb-flag' : '') }, el('p', { text: text }));
+      if (why) b.appendChild(el('details', null, el('summary', { text: 'How I answered' }), el('p', { class: 'cb-why', text: why })));
+      log.appendChild(b); log.scrollTop = log.scrollHeight;
+    }
+    function send(text){
+      text = String(text || '').replace(/[<>]/g, '').trim().slice(0, 160); if (!text) return;
+      bubble('me', text); sent++; var r = CB.respond(bot, text, rnd); bubble('bot', r.text, r.why, r.broke); BC.sfx(r.broke ? 'bad' : 'pop');
+      if (sent >= 3) api.mission('chat');
+      if (r.kind === 'know' && r.own) api.mission('teach');
+      if (r.kind === 'madeup'){ sawMadeUp = true; say('That answer was made up. I stuck words together and sounded sure. Open How I answered to see.'); }
+      if (r.kind === 'dontknow' && sawMadeUp) api.mission('honest');
+      if (r.broke){ sawBroke = true; say('The bot just broke its own rule! Its rule only looked at your question, not at its own answer.'); }
+      if (r.kind === 'blocked' && sawBroke){ api.mission('guard'); say('Blocked. This time the bot checked its own answer before sending it.'); }
+    }
+    var nameIn = el('input', { class: 'txt', type: 'text', id: 'cbName', maxlength: '14', value: bot.name, 'aria-label': 'Bot name', oninput: function(){ bot.name = nameIn.value.replace(/[<>]/g, '').trim().slice(0, 14) || 'Sprocket'; } });
+    var perSeg = BC.seg(Object.keys(CB.PERSONAS).map(function(id){ return { id: id, label: CB.PERSONAS[id].name }; }), 'plain', function(id){ bot.persona = id; BC.sfx('tap'); bubble('bot', CB.PERSONAS[id].hi, 'You changed my personality. My facts are the same. Only my way of talking changed.'); }, 'Personality');
+    function renderPacks(){ packRow.innerHTML = ''; packRow.appendChild(el('span', { class: 'cap', text: 'Fact packs' })); Object.keys(CB.PACKS).forEach(function(id){ packRow.appendChild(el('button', { class: 'chip', type: 'button', text: CB.PACKS[id].name, 'aria-pressed': String(!!bot.packs[id]), onclick: function(){ bot.packs[id] = !bot.packs[id]; BC.sfx('tap'); renderPacks(); } })); }); }
+    function renderTaught(){ taughtBox.innerHTML = ''; bot.taught.forEach(function(t, i){ taughtBox.appendChild(el('button', { class: 'cb-fact', type: 'button', title: 'Remove this fact', 'aria-label': 'Remove the fact about ' + t.q, onclick: function(){ bot.taught.splice(i, 1); renderTaught(); } }, el('b', { text: t.q }), el('span', { text: t.a }), el('i', { text: '×' }))); }); }
+    var qIn = el('input', { class: 'txt', type: 'text', id: 'cbQ', maxlength: '60', placeholder: 'my dog\'s name', 'aria-label': 'When someone asks about' }), aIn = el('input', { class: 'txt', type: 'text', id: 'cbA', maxlength: '120', placeholder: 'My dog is named Rex.', 'aria-label': 'The bot should say' });
+    var teachForm = el('form', { class: 'cb-teach', onsubmit: function(e){ e.preventDefault(); var q = qIn.value.replace(/[<>]/g, '').trim(), a = aIn.value.replace(/[<>]/g, '').trim(); if (!CB.keys(q).length || a.length < 2){ say('Fill in both boxes. The first one needs at least one real word, like dog or pizza.'); BC.sfx('bad'); return; } if (bot.taught.length >= 12){ say('Twelve facts is the limit. Remove one first.'); return; } bot.taught.push({ q: q, a: a }); qIn.value = ''; aIn.value = ''; renderTaught(); BC.sfx('good'); say('Taught! Now ask me a question that uses those words.'); } },
+      el('label', { class: 'cap', for: 'cbQ', text: 'When someone asks about' }), qIn, el('label', { class: 'cap', for: 'cbA', text: 'Say this' }), aIn, el('button', { class: 'btn sm go', type: 'submit', text: 'Teach it' }));
+    var banIn = el('input', { class: 'txt', type: 'text', id: 'cbBan', maxlength: '20', placeholder: 'broccoli', 'aria-label': 'Banned word', oninput: function(){ bot.banned = banIn.value.replace(/[<>]/g, '').trim(); } });
+    var knowSeg = BC.seg([{ id: 'make', label: 'Make something up' }, { id: 'admit', label: 'Say I don\'t know' }], 'make', function(id){ bot.makeUp = id === 'make'; BC.sfx('tap'); say(bot.makeUp ? 'When I do not know, I will invent an answer and sound sure.' : 'When I do not know, I will say so.'); }, 'When it does not know');
+    var checkBtn = el('button', { class: 'chip', type: 'button', text: 'Check answers before sending', 'aria-pressed': 'false', onclick: function(){ bot.check = !bot.check; checkBtn.setAttribute('aria-pressed', String(bot.check)); BC.sfx('tap'); say(bot.check ? 'Now I read my own answer before I send it. If my banned word is in it, I stop.' : 'I no longer check my own answers.'); } });
+    var msgIn = el('input', { class: 'txt', type: 'text', id: 'cbMsg', maxlength: '160', placeholder: 'Type a message', 'aria-label': 'Your message', autocomplete: 'off' });
+    var chatForm = el('form', { class: 'cb-send', onsubmit: function(e){ e.preventDefault(); send(msgIn.value); msgIn.value = ''; } }, msgIn, el('button', { class: 'btn primary', type: 'submit', text: 'Send' }));
+    var tries = el('div', { class: 'row' }, ['How many planets are there?', 'What do frogs eat?', 'Say banana'].map(function(t){ return el('button', { class: 'chip cb-try', type: 'button', text: t, onclick: function(){ send(t); } }); }));
+    root.appendChild(el('p', { class: 'cap', text: '1. Who is your bot?' }));
+    root.appendChild(el('div', { class: 'row' }, el('label', { class: 'cap', for: 'cbName', text: 'Name' }), nameIn));
+    perSeg.classList.add('cb-wrap'); root.appendChild(perSeg);
+    root.appendChild(el('p', { class: 'cap', text: '2. What does it know?' })); root.appendChild(packRow); root.appendChild(teachForm); root.appendChild(taughtBox);
+    root.appendChild(el('p', { class: 'cap', text: '3. What are its rules?' }));
+    root.appendChild(el('div', { class: 'row' }, el('label', { class: 'cap', for: 'cbBan', text: 'Never say or talk about' }), banIn));
+    root.appendChild(el('div', { class: 'row' }, el('span', { class: 'cap', text: 'When it does not know' }), knowSeg)); root.appendChild(el('div', { class: 'row' }, checkBtn));
+    root.appendChild(el('p', { class: 'cap', text: '4. Talk to it. Then hand it to someone else and dare them to break it.' }));
+    root.appendChild(log); root.appendChild(chatForm); root.appendChild(tries); root.appendChild(note);
+    renderPacks(); renderTaught(); bubble('bot', CB.PERSONAS.plain.hi, 'I always start with my greeting.'); say('Build your bot from the top down, then chat with it at the bottom.');
     return function(){};
   }
 });
